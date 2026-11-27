@@ -18,11 +18,11 @@ internal static class CityStateLock
     internal static float[] Read(AreaData area) => new[] { area.safe, area.support, area.defence, area.people, area.maxPeople };
     internal static void Validate(float[] values)
     {
-        if (values.Length != 5) throw new ArgumentException("城市属性数量错误。");
+        if (values.Length != 5) throw new ArgumentException("도시 속성 개수가 잘못되었습니다.");
         for (var i = 0; i < 5; i++)
             if (!float.IsFinite(values[i]) || values[i] < 0 || values[i] > (i < 3 ? 100 : 1000000000))
-                throw new ArgumentException(i < 3 ? "治安、民心、城防必须为 0–100。" : "人口及上限必须为 0–10亿的有限数字。");
-        if (values[4] < 1 || values[3] > values[4]) throw new ArgumentException("人口上限至少为 1，且不能小于当前人口。");
+                throw new ArgumentException(i < 3 ? "치안, 민심, 성방은 0–100이어야 합니다." : "인구와 상한은 0–10억 사이의 유한한 숫자여야 합니다.");
+        if (values[4] < 1 || values[3] > values[4]) throw new ArgumentException("인구 상한은 1 이상이고 현재 인구보다 작을 수 없습니다.");
     }
     internal static void Clear() { Locks.Clear(); _world = IntPtr.Zero; _nextPoll = 0; }
     // Native mutation hooks enforce immediately. Direct field writes only need
@@ -49,7 +49,7 @@ internal static class CityStateLock
     private static void CheckTarget(WorldData world, AreaData area)
     {
         if (world.GetArea(area.areaID)?.Pointer != area.Pointer)
-            throw new InvalidOperationException("城市数据已变化，请重新打开城市页面。");
+            throw new InvalidOperationException("도시 데이터가 바뀌었습니다. 도시 페이지를 다시 여세요.");
     }
     internal static void Apply(WorldData world, AreaData area, float[] values, bool lockValues)
     {
@@ -98,7 +98,7 @@ internal static class CityStateLock
         catch (Exception ex)
         {
             Clear();
-            LongYinTrainerPlugin.Logger.LogWarning("城市锁定已解除：" + ex.Message);
+            LongYinTrainerPlugin.Logger.LogWarning("도시 잠금 해제됨: " + ex.Message);
         }
     }
 }

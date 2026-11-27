@@ -47,7 +47,7 @@ internal static class NativeKungfuEditor
             var editor = CustomSkillCreateController.Instance;
             var db = GameDataController.Instance;
             if (editor == null || GameController.Instance?.worldData?.Player() == null || db?.kungfuSkillDataBase == null)
-                throw new InvalidOperationException("官方编辑器或存档尚未就绪");
+                throw new InvalidOperationException("공식 편집기 또는 세이브가 아직 준비되지 않았습니다");
             var id = -1; // Only a temporary native UI bootstrap; selection is mandatory.
             if (id < 0)
             {
@@ -55,20 +55,20 @@ internal static class NativeKungfuEditor
                 foreach (var pair in db.kungfuSkillDataBase)
                     if (pair.Key >= 0 && pair.Key < 900000 && pair.Value != null && pair.Value.type == 3 && !pair.Value.summonSkill)
                         best = Math.Min(best, pair.Key);
-                if (best == int.MaxValue) throw new InvalidOperationException("找不到拳掌母版");
+                if (best == int.MaxValue) throw new InvalidOperationException("권장 템플릿을 찾을 수 없습니다");
                 id = best;
             }
-            if (!db.kungfuSkillDataBase.ContainsKey(id)) throw new InvalidOperationException("指定母版不存在");
+            if (!db.kungfuSkillDataBase.ContainsKey(id)) throw new InvalidOperationException("지정한 템플릿이 없습니다");
             LongYinTrainerPlugin.Logger.LogInfo("Native editor: opening official window, template=" + id);
             editor.ShowCreatePanel(id);
             _activeDraft = editor.draftSkillData?.Pointer ?? IntPtr.Zero;
-            if (_activeDraft == IntPtr.Zero) throw new InvalidOperationException("官方草稿创建失败");
+            if (_activeDraft == IntPtr.Zero) throw new InvalidOperationException("공식 초안 생성 실패");
             HideBudget(editor);
             RefreshEffectLimit(editor);
             if (editor.skillPointText != null && editor.skillPointText.gameObject.activeSelf)
-                throw new InvalidOperationException("点数文本未成功隐藏");
+                throw new InvalidOperationException("포인트 문구를 숨기지 못했습니다");
             if (CustomSkillCreateController.GetEffectBudget(editor.draftSkillData) < 1000000000f)
-                throw new InvalidOperationException("草稿预算补丁未生效");
+                throw new InvalidOperationException("초안 예산 패치가 적용되지 않았습니다");
             ChoosingBase = true;
             NativeKungfuFields.ChooseBaseCategory();
         }
@@ -86,7 +86,7 @@ internal static class NativeKungfuEditor
         editor.ShowCreatePanel(id);
         _activeDraft = editor.draftSkillData?.Pointer ?? IntPtr.Zero;
         var donor = GameDataController.Instance.kungfuSkillDataBase[id];
-        TrainerBehaviour.ApplyNativeVisualSource(editor.draftSkillData ?? throw new InvalidOperationException("官方草稿创建失败"), donor, "all");
+        TrainerBehaviour.ApplyNativeVisualSource(editor.draftSkillData ?? throw new InvalidOperationException("공식 초안 생성 실패"), donor, "all");
         if (donor.targetType == SkillTargetType.EmptyGridSummon)
         {
             editor.draftSkillData.targetType = donor.targetType;
@@ -129,7 +129,7 @@ internal static class NativeKungfuEditor
         var button = __instance.chooseNewSpeAddDataButton.GetComponent<Selectable>();
         if (button != null) button.interactable = true;
         var text = __instance.chooseNewSpeAddDataButton.GetComponentInChildren<Text>(true);
-        if (text != null) text.text = "新增特效（已有 " + __instance.GetSpeAddDataCount() + "）";
+        if (text != null) text.text = "특수 효과 추가(현재 " + __instance.GetSpeAddDataCount() + ")";
     }
 
     private static bool OpenUnlimitedEffects(CustomSkillCreateController __instance)

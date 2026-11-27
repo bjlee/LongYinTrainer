@@ -25,11 +25,11 @@ public static partial class TrainerBehaviour
         InputField quantity=null!, level=null!, rarity=null!;
         Action updateBookFilters = () => {};
 
-        AddText(p, "物品图鉴", Vector2.zero, new Vector2(160,34),22);
+        AddText(p, "물품 도감", Vector2.zero, new Vector2(160,34),22);
         var search = AddInput(p,_catalogSearch,new Vector2(160,0),new Vector2(245,34));
-        AddButton(p,"搜索",new Vector2(415,0),new Vector2(80,34),()=> { _catalogSearch=search.text.Trim(); _catalogPage=0; UpdateGrid(); });
-        AddButton(p,"清空",new Vector2(505,0),new Vector2(80,34),()=> { search.text=""; _catalogSearch=""; _catalogPage=0; UpdateGrid(); });
-        AddButton(p,"刷新数据",new Vector2(595,0),new Vector2(100,34),()=> {
+        AddButton(p,"검색",new Vector2(415,0),new Vector2(80,34),()=> { _catalogSearch=search.text.Trim(); _catalogPage=0; UpdateGrid(); });
+        AddButton(p,"비우기",new Vector2(505,0),new Vector2(80,34),()=> { search.text=""; _catalogSearch=""; _catalogPage=0; UpdateGrid(); });
+        AddButton(p,"데이터 새로고침",new Vector2(595,0),new Vector2(100,34),()=> {
             Catalog.Clear(); _catalogSelected=null; EnsureCatalog(); RefreshRuntimeIconIndex(); UpdateGrid(); UpdateDetails();
         });
         for(var i=0;i<categories.Count;i++) {
@@ -57,22 +57,22 @@ public static partial class TrainerBehaviour
             gems[i]=UiObject("Rarity",cards[i].transform,new Vector2(18,18),new Vector2(57,-7)).AddComponent<Image>();
             gems[i].preserveAspect=true; gems[i].raycastTarget=false;
             names[i]=AddText(paper.transform,"",new Vector2(3,90),new Vector2(118,21),14,TextAnchor.MiddleCenter);
-            missing[i]=AddText(paper.transform,"暂无图标",new Vector2(6,26),new Vector2(112,40),14,TextAnchor.MiddleCenter);
+            missing[i]=AddText(paper.transform,"아이콘 없음",new Vector2(6,26),new Vector2(112,40),14,TextAnchor.MiddleCenter);
         }
-        AddButton(p,"上一页",new Vector2(140,452),new Vector2(120,34),()=> { if(_catalogPage>0) { _catalogPage--; UpdateGrid(); } });
+        AddButton(p,"이전 페이지",new Vector2(140,452),new Vector2(120,34),()=> { if(_catalogPage>0) { _catalogPage--; UpdateGrid(); } });
         pageLabel=AddText(p,"",new Vector2(270,452),new Vector2(250,34),16,TextAnchor.MiddleCenter);
-        AddButton(p,"下一页",new Vector2(530,452),new Vector2(120,34),()=> { if(_catalogPage+1<pageCount) { _catalogPage++; UpdateGrid(); } });
+        AddButton(p,"다음 페이지",new Vector2(530,452),new Vector2(120,34),()=> { if(_catalogPage+1<pageCount) { _catalogPage++; UpdateGrid(); } });
         title=AddText(p,"",new Vector2(730,48),new Vector2(330,38),21,TextAnchor.MiddleCenter);
         detail=AddText(p,"",new Vector2(730,90),new Vector2(330,82),16);
-        AddText(p,"数量",new Vector2(730,190),new Vector2(80,34));
+        AddText(p,"수량",new Vector2(730,190),new Vector2(80,34));
         quantity=AddInput(p,_catalogQuantity,new Vector2(815,190),new Vector2(130,34));
-        levelLabel=AddText(p,"等级",new Vector2(730,234),new Vector2(80,34));
+        levelLabel=AddText(p,"등급",new Vector2(730,234),new Vector2(80,34));
         level=AddInput(p,_catalogLevel,new Vector2(815,234),new Vector2(130,34));
-        rareLabel=AddText(p,"稀有度",new Vector2(730,278),new Vector2(80,34));
+        rareLabel=AddText(p,"희귀도",new Vector2(730,278),new Vector2(80,34));
         rarity=AddInput(p,_catalogRarity,new Vector2(815,278),new Vector2(130,34));
         preview=AddText(p,"",new Vector2(730,316),new Vector2(330,52),14);
-        AddButton(p,"添加到主角背包",new Vector2(730,380),new Vector2(300,44),()=> { SaveInputs(); AddCatalogItem(_catalogSelected,_catalogQuantity,_catalogLevel,_catalogRarity); });
-        AddText(p,"稀有度说明\n"+BuildRarityGuide(),new Vector2(730,438),new Vector2(330,160),15);
+        AddButton(p,"주인공 가방에 추가",new Vector2(730,380),new Vector2(300,44),()=> { SaveInputs(); AddCatalogItem(_catalogSelected,_catalogQuantity,_catalogLevel,_catalogRarity); });
+        AddText(p,"희귀도 설명\n"+BuildRarityGuide(),new Vector2(730,438),new Vector2(330,160),15);
         updateBookFilters = BuildBookCatalogFilters(p, UpdateGrid, editingItem: false);
         UpdateGrid(); UpdateDetails();
         LongYinTrainerPlugin.Logger.LogInfo("Catalog UI pool built: 12 reusable cards; runtime icons only.");
@@ -101,20 +101,20 @@ public static partial class TrainerBehaviour
                 missing[i].gameObject.SetActive(!icons[i].enabled);
                 gems[i].sprite=GetItemSprite("RareLv"+Math.Clamp(CatalogDisplayGrade(e),0,5)); gems[i].enabled=gems[i].sprite!=null;
             }
-            pageLabel.text=$"第 {_catalogPage+1} / {pageCount} 页　共 {filtered.Count} 项";
+            pageLabel.text=$"{_catalogPage+1} / {pageCount} 페이지　총 {filtered.Count}개";
             UpdateSelection();
             LongYinTrainerPlugin.Logger.LogInfo($"Catalog runtime icons: {found}/{shown} visible cards resolved; PNG fallback DISABLED.");
         }
         void UpdateDetails() {
             var e=_catalogSelected;
-            title.text=e?.Name ?? "从左侧图鉴选择物品";
-            detail.text=e != null ? e.Detail + (e.Category is "药品" or "食物" ? $"\n原生等级：{LevelName(e.BaseLevel)}（{e.BaseLevel}）" : "") : "列表直接读取当前游戏版本的数据。\n即使背包里没有，也可以直接添加。";
-            var usesLevel=e!=null && (e.IsEquipment || e.Category=="材料" || e.Category=="宝物");
-            var usesRarity=e!=null && (usesLevel || e.Category=="秘籍" || e.Category=="药品" || e.Category=="食物");
+            title.text=e?.Name ?? "왼쪽 도감에서 물품을 선택하세요";
+            detail.text=e != null ? e.Detail + (e.Category is "약품" or "음식" ? $"\n기본 등급: {LevelName(e.BaseLevel)} ({e.BaseLevel})" : "") : "목록은 현재 게임 버전의 데이터를 바로 읽습니다.\n가방에 없어도 바로 추가할 수 있습니다.";
+            var usesLevel=e!=null && (e.IsEquipment || e.Category=="재료" || e.Category=="보물");
+            var usesRarity=e!=null && (usesLevel || e.Category=="비급" || e.Category=="약품" || e.Category=="음식");
             levelLabel.gameObject.SetActive(usesLevel); level.gameObject.SetActive(usesLevel);
             rareLabel.gameObject.SetActive(usesRarity); rarity.gameObject.SetActive(usesRarity);
             _catalogLevelInput=usesLevel ? level : null; _catalogRarityInput=usesRarity ? rarity : null; _catalogPreviewText=preview;
-            preview.text=e==null ? "" : $"原始等级 {e.BaseLevel}｜{RarityName(e.RareLv)}";
+            preview.text=e==null ? "" : $"원래 등급 {e.BaseLevel}｜{RarityName(e.RareLv)}";
             UpdateCatalogPreview();
         }
     }

@@ -28,12 +28,12 @@ internal static class DateFreezeControl
 
     internal static void SetEnabled(bool enabled)
     {
-        if (_setting == null) throw new InvalidOperationException("日期开关尚未初始化");
+        if (_setting == null) throw new InvalidOperationException("날짜 스위치가 아직 초기화되지 않았습니다");
         if (_setting.Value != enabled) _setting.Value = enabled;
         else Apply(enabled);
         // Also reconcile an already-false setting: turning off must remove any
         // remaining patches, not merely update a checkbox or a config value.
-        if (_enabled != enabled) throw new InvalidOperationException("日期开关未能切换到请求状态");
+        if (_enabled != enabled) throw new InvalidOperationException("날짜 스위치를 요청한 상태로 바꾸지 못했습니다");
     }
 
     private static bool AllowDay() => !_enabled;
@@ -46,7 +46,7 @@ internal static class DateFreezeControl
         {
             foreach (var target in Targets)
             {
-                if (target == null) throw new InvalidOperationException("找不到原生换日入口");
+                if (target == null) throw new InvalidOperationException("게임의 날짜 넘김 진입점을 찾을 수 없습니다");
                 Patcher.Unpatch(target, HarmonyPatchType.Prefix, Owner);
                 if (enabled) Patcher.Patch(target, prefix: new HarmonyMethod(Gate));
             }

@@ -86,7 +86,7 @@ public static partial class TrainerBehaviour
         var before = _customDraft;
         FailTemplate = true;
         SwitchCustomKungfuCategory(1);
-        Check(ReferenceEquals(before, _customDraft) && _customStatus.Contains("失败"), "missing template leaves draft intact");
+        Check(ReferenceEquals(before, _customDraft) && _customStatus.Contains("실패"), "missing template leaves draft intact");
         FailTemplate = false;
         _customDraft = new() { Type = 0, Id = 900002 };
         SwitchCustomKungfuCategory(2);

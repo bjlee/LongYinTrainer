@@ -17,10 +17,10 @@ public static partial class TrainerBehaviour
                 if (force != null && force.forceID > 0) choices.Add(force);
             }
         choices.Sort((a, b) => a.forceID.CompareTo(b.forceID));
-        AddText(p, "其他门派 · 兑换功绩", new Vector2(540, 415), new Vector2(490, 32), 18);
+        AddText(p, "다른 문파 · 교환 공적", new Vector2(540, 415), new Vector2(490, 32), 18);
         if (choices.Count == 0)
         {
-            AddText(p, "请先读取存档。", new Vector2(540, 455), new Vector2(490, 34));
+            AddText(p, "먼저 세이브를 불러오세요.", new Vector2(540, 455), new Vector2(490, 34));
             return;
         }
 
@@ -33,24 +33,24 @@ public static partial class TrainerBehaviour
         }
         var label = AddText(p, "", new Vector2(610, 454), new Vector2(345, 36), 17);
         var value = AddInput(p, "0", new Vector2(610, 499), new Vector2(195, 36));
-        AddText(p, "功绩", new Vector2(540, 499), new Vector2(65, 36));
+        AddText(p, "공적", new Vector2(540, 499), new Vector2(65, 36));
         void ReadSelection()
         {
             var target = choices[selected];
             label.text = $"{target.GetForceName(true)}（ID {target.forceID}）";
             value.text = target.playerOutForceContribution.ToString("R", CultureInfo.InvariantCulture);
         }
-        AddButton(p, "上个", new Vector2(540, 454), new Vector2(65, 36), () =>
+        AddButton(p, "이전", new Vector2(540, 454), new Vector2(65, 36), () =>
         {
             selected = (selected + choices.Count - 1) % choices.Count;
             ReadSelection();
         });
-        AddButton(p, "下个", new Vector2(960, 454), new Vector2(65, 36), () =>
+        AddButton(p, "다음", new Vector2(960, 454), new Vector2(65, 36), () =>
         {
             selected = (selected + 1) % choices.Count;
             ReadSelection();
         });
-        AddButton(p, "应用功绩", new Vector2(815, 499), new Vector2(210, 36), () =>
+        AddButton(p, "공적 적용", new Vector2(815, 499), new Vector2(210, 36), () =>
         {
             try
             {
@@ -59,41 +59,41 @@ public static partial class TrainerBehaviour
                 if (world == null || liveWorld == null || liveWorld.Pointer != world.Pointer ||
                     liveWorld.GetForce(target.forceID)?.Pointer != target.Pointer)
                 {
-                    _status = "存档或门派数据已变化，请重新打开势力页再修改。";
+                    _status = "세이브 또는 문파 데이터가 바뀌었습니다. 세력 페이지를 다시 연 뒤 수정하세요.";
                     RequestPageRebuild();
                     return;
                 }
                 if (!float.TryParse(value.text, NumberStyles.Float, CultureInfo.InvariantCulture, out var amount) ||
                     !float.IsFinite(amount) || amount < 0 || amount > 100000000)
                 {
-                    _status = "功绩请输入 0–100000000 之间的有效数字。";
+                    _status = "공적은 0–100000000 사이의 올바른 숫자로 입력하세요.";
                     return;
                 }
                 target.playerOutForceContribution = amount;
                 ReadSelection();
-                _status = $"{target.GetForceName(true)}的兑换功绩已设为 {value.text}，其他门派不变。请在游戏中保存存档。";
+                _status = $"{target.GetForceName(true)}의 교환 공적을 {value.text}(으)로 설정했습니다. 다른 문파는 그대로입니다. 게임에서 세이브를 저장하세요.";
                 // Refresh only the open exchange panel for this exact faction.
                 var exchange = OtherForceContributionExchangeController.Instance;
                 if (exchange?.exchangeUIPanel != null && exchange.exchangeUIPanel.activeInHierarchy &&
                     exchange.targetForceData?.Pointer == target.Pointer)
                 {
                     try { exchange.RefreshExchangeUI(); }
-                    catch (Exception ex) { LongYinTrainerPlugin.Logger.LogWarning("功绩已写入，兑换界面刷新失败：" + ex.Message); }
+                    catch (Exception ex) { LongYinTrainerPlugin.Logger.LogWarning("공적은 기록했지만 교환 화면 새로고침에 실패했습니다: " + ex.Message); }
                 }
             }
-            catch (Exception ex) { _status = "修改门派功绩失败：" + ex.Message; }
+            catch (Exception ex) { _status = "문파 공적 수정 실패: " + ex.Message; }
         });
-        AddButton(p, "读取当前兑换门派", new Vector2(540, 544), new Vector2(290, 36), () =>
+        AddButton(p, "현재 교환 문파 읽기", new Vector2(540, 544), new Vector2(290, 36), () =>
         {
             var exchange = OtherForceContributionExchangeController.Instance;
             var index = exchange?.exchangeUIPanel != null && exchange.exchangeUIPanel.activeInHierarchy && exchange.targetForceData != null
                 ? choices.FindIndex(f => f.Pointer == exchange.targetForceData.Pointer) : -1;
-            if (index < 0) { _status = "请先打开目标门派的功绩兑换界面。"; return; }
+            if (index < 0) { _status = "먼저 대상 문파의 공적 교환 화면을 여세요."; return; }
             selected = index;
             ReadSelection();
         });
-        AddButton(p, "重读数值", new Vector2(840, 544), new Vector2(185, 36), ReadSelection);
-        AddText(p, "逐门派独立修改；切换会重读数值，请先应用。\n此处对应兑换界面的“功绩”，修改后请保存游戏。", new Vector2(540, 589), new Vector2(490, 54), 15);
+        AddButton(p, "수치 다시 읽기", new Vector2(840, 544), new Vector2(185, 36), ReadSelection);
+        AddText(p, "문파마다 따로 수정합니다. 바꾸면 수치를 다시 읽으니 먼저 적용하세요.\n여기는 교환 화면의 “공적”에 해당하며, 수정 후 게임을 저장하세요.", new Vector2(540, 589), new Vector2(490, 54), 15);
         ReadSelection();
     }
 }

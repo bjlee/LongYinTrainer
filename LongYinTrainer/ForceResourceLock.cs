@@ -16,35 +16,35 @@ public static partial class TrainerBehaviour
     {
         try
         {
-            if (IsForceLocked(force)) { ClearForceLock(); _status="资源锁定已解除。"; return; }
+            if (IsForceLocked(force)) { ClearForceLock(); _status="자원 잠금을 해제했습니다."; return; }
             var world=GameController.Instance?.worldData;
             if(force==null || world==null || world.GetForce(force.forceID)?.Pointer!=force.Pointer)
-                throw new InvalidOperationException("势力已改变，请重新打开势力页面。");
+                throw new InvalidOperationException("세력이 바뀌었습니다. 세력 페이지를 다시 여세요.");
             CaptureForceLock(force);
             _lockedWorld=world.Pointer;
             _lockedForcePointer=force.Pointer;
             _lockedForceId=force.forceID;
-            _status=$"已锁定 {force.forceName} 的金钱和 {_lockedResources.Length} 项资源。";
+            _status=$"{force.forceName}의 돈과 자원 {_lockedResources.Length}개를 잠갔습니다.";
             RefreshForceLockLabel();
         }
-        catch(Exception ex) { _status="锁定失败："+ex.Message; }
+        catch(Exception ex) { _status="잠금 실패: "+ex.Message; }
     }
 
     private static void CaptureForceLock(ForceData force)
     {
         var values=new float[force.resourceStore?.Count ?? 0];
         var money=force.forceStorage?.money ?? 0;
-        if(money<0) throw new InvalidOperationException("金钱不能为负数。");
+        if(money<0) throw new InvalidOperationException("돈은 음수일 수 없습니다.");
         for(var i=0;i<values.Length;i++) {
             values[i]=force.resourceStore![i];
-            if(!float.IsFinite(values[i]) || values[i]<0) throw new InvalidOperationException("资源必须是非负有限数值。");
+            if(!float.IsFinite(values[i]) || values[i]<0) throw new InvalidOperationException("자원은 음수가 아닌 유한한 수치여야 합니다.");
         }
         _lockedMoney=money; _lockedResources=values;
     }
 
     private static void RefreshForceLockLabel()
     {
-        if(_forceLockButtonText!=null) _forceLockButtonText.text=_lockedForceId==_forceLockPageId ? "解除资源锁定" : "锁定当前资源";
+        if(_forceLockButtonText!=null) _forceLockButtonText.text=_lockedForceId==_forceLockPageId ? "자원 잠금 해제" : "현재 자원 잠금";
     }
     private static void ClearForceLock()
     {

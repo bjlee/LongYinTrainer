@@ -29,9 +29,9 @@ public static partial class TrainerBehaviour
             _customEffectSelectedKey = "";
             _customEffectEditorField = "";
             _customPickerPreviewSkillId = int.MinValue;
-            _customStatus = $"已切换到{CustomKungfuTypeName(category)}专属模板与内容；上一类别草稿已暂存，尚未保存。";
+            _customStatus = $"{CustomKungfuTypeName(category)} 전용 템플릿과 내용으로 바꿨습니다. 이전 분류의 초안은 임시 보관되며 아직 저장되지 않았습니다.";
         }
-        catch (Exception ex) { _customStatus = "类别切换失败，原草稿保留：" + ex.Message; }
+        catch (Exception ex) { _customStatus = "분류 전환 실패, 기존 초안 유지: " + ex.Message; }
     }
 
     private static HashSet<string> GetCategoryEffectKeys(string field)

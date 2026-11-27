@@ -850,8 +850,8 @@ public static partial class TrainerBehaviour
         public int Id;
         public bool EditOriginal;
         public bool RemovedContent;
-        public string Name = "自创功法";
-        public string Description = "由藏经阁推演而成的自创功法。";
+        public string Name = "자작 무공";
+        public string Description = "장경각에서 연구해 만든 자작 무공.";
         public int Type;
         public int RareLv;
         public int ForceId = -1;
@@ -1072,7 +1072,7 @@ public static partial class TrainerBehaviour
     private static int _customEffectCatalogGroup;
     private static string _customEffectSelectedKey = "";
     private static CustomKungfuRecord? _customDraft;
-    private static string _customStatus = "在建筑内推演功法；保存前不会写入存档。";
+    private static string _customStatus = "건물 안에서 무공을 연구합니다. 저장하기 전에는 세이브에 기록되지 않습니다.";
     private static bool _customBattlePreviewActive;
     private static int _customBattlePreviewSkillId = int.MinValue;
     private static float _customBattlePreviewStartedAt;
@@ -1195,7 +1195,7 @@ public static partial class TrainerBehaviour
     private static readonly Dictionary<int, GameObject> PageRoots = new();
     private static readonly Dictionary<int, List<UiClick>> PageClickCache = new();
     private static readonly HashSet<int> DirtyPages = new();
-    private static string _status = "已就绪：点击背包物品可选中物品，打开角色详情可选中角色。";
+    private static string _status = "준비 완료: 가방 물품을 누르면 물품이, 캐릭터 상세를 열면 캐릭터가 선택됩니다.";
     private static int _fieldHeroId = int.MinValue;
     private static readonly Dictionary<string, string> Fields = new();
     private static string _itemName = "";
@@ -1230,9 +1230,9 @@ public static partial class TrainerBehaviour
     };
     private static readonly string[] HeroLabels =
     {
-        "金钱", "名气", "恶名", "好感度", "政府贡献", "势力贡献",
-        "生命", "生命上限", "内力", "内力上限", "体力", "体力上限",
-        "外伤", "内伤", "毒伤", "忠诚度", "邪恶值", "混乱值", "性格编号"
+        "돈", "명성", "악명", "호감도", "관부 공헌", "세력 공헌",
+        "생명", "생명 상한", "내력", "내력 상한", "체력", "체력 상한",
+        "외상", "내상", "독상", "충성도", "사악도", "혼란도", "성격 번호"
     };
 
     private static readonly string[] AffixPresets =
@@ -1243,14 +1243,14 @@ public static partial class TrainerBehaviour
     };
     private static readonly string[] AffixPresetLabels =
     {
-        "生命上限", "内力上限", "体力上限", "伤害", "护甲", "护甲率", "速度", "命中",
-        "闪避", "暴击率", "反击率", "连击率", "移动范围", "战斗技能经验",
-        "读书经验", "生活技能经验", "装备重量"
+        "생명 상한", "내력 상한", "체력 상한", "피해", "호갑", "방어율", "속도", "명중",
+        "회피", "치명타율", "반격률", "연격률", "이동 범위", "전투 기술 경험",
+        "독서 경험", "생활 기술 경험", "장비 무게"
     };
-    private static readonly string[] AttributeAffixLabels = { "力道", "灵巧", "智力", "意志", "体质", "经脉" };
-    private static readonly string[] FightSkillAffixLabels = { "内功", "轻功技能", "绝技", "拳掌", "剑法", "刀法", "长兵", "奇门", "射术" };
-    private static readonly string[] LivingSkillAffixLabels = { "医术", "毒术", "学识", "口才", "采伐", "木植", "锻造", "炼药", "烹饪" };
-    private static readonly string[] PosturePartAffixLabels = { "第一部位", "第二部位", "第三部位", "第四部位", "第五部位", "第六部位" };
+    private static readonly string[] AttributeAffixLabels = { "근력", "민첩", "지력", "의지", "체질", "경맥" };
+    private static readonly string[] FightSkillAffixLabels = { "내공", "경공 기술", "절기", "권장", "검법", "도법", "장병", "기문", "사술" };
+    private static readonly string[] LivingSkillAffixLabels = { "의술", "독술", "학식", "언변", "벌채", "재배", "단조", "제약", "요리" };
+    private static readonly string[] PosturePartAffixLabels = { "첫째 부위", "둘째 부위", "셋째 부위", "넷째 부위", "다섯째 부위", "여섯째 부위" };
 
     public static bool Visible => _visible;
     private static int _lastModalInputFrame = -1;
@@ -1277,7 +1277,7 @@ public static partial class TrainerBehaviour
         catch (Exception ex)
         {
             _customKungfuStoreLoadFailed = true;
-            _customStatus = "自创功法配置读取失败；为避免覆盖原文件，本次禁止保存：" + ex.Message;
+            _customStatus = "자작 무공 구성을 읽지 못했습니다. 원본 파일을 덮어쓰지 않도록 이번에는 저장을 막습니다: " + ex.Message;
             LongYinTrainerPlugin.Logger.LogError($"Custom kungfu definition load failed safely: {ex}");
         }
     }
@@ -1585,10 +1585,10 @@ public static partial class TrainerBehaviour
         if (record.RemovedContent)
         {
             var donor = OriginalKungfu(database, record.EditOriginal ? record.Id : record.BaseDonorId);
-            if (donor == null || donor.type != record.Type) throw new InvalidOperationException("删除占位的同类原版母版不存在");
-            var placeholder = donor.Clone()?.TryCast<KungfuSkillData>() ?? throw new InvalidOperationException("无法复制删除占位母版");
+            if (donor == null || donor.type != record.Type) throw new InvalidOperationException("삭제 자리표시용 같은 종류 원본 템플릿이 없습니다");
+            var placeholder = donor.Clone()?.TryCast<KungfuSkillData>() ?? throw new InvalidOperationException("삭제 자리표시용 템플릿을 복사할 수 없습니다");
             placeholder.skillID = record.Id;
-            if (!record.EditOriginal) placeholder.name = "[已删除] " + donor.name;
+            if (!record.EditOriginal) placeholder.name = "[삭제됨] " + donor.name;
             return placeholder;
         }
         NormalizeCustomKungfuRecord(record);
@@ -1621,7 +1621,7 @@ public static partial class TrainerBehaviour
         result.summonSkill = originalTarget?.summonSkill ?? false;
         if (originalTarget != null) result.summonID = originalTarget.summonID;
         result.skillID = record.Id;
-        result.name = string.IsNullOrWhiteSpace(record.Name) ? $"自创功法 {record.Id}" : record.Name.Trim();
+        result.name = string.IsNullOrWhiteSpace(record.Name) ? $"자작 무공 {record.Id}" : record.Name.Trim();
         result.describe = record.Description?.Trim() ?? "";
         result.type = Math.Max(0, record.Type);
         result.rareLv = Math.Clamp(record.RareLv, 0, Math.Max(0, (database.rareLvData?.Count ?? 6) - 1));
@@ -1686,9 +1686,9 @@ public static partial class TrainerBehaviour
     private static KungfuSkillData InstallCustomKungfuDefinition(GameDataController database, CustomKungfuRecord record)
     {
         var definitions = database.kungfuSkillDataBase
-            ?? throw new InvalidOperationException("功法数据库尚未载入");
+            ?? throw new InvalidOperationException("무공 데이터베이스를 아직 불러오지 않았습니다");
         var rebuilt = BuildCustomKungfuDefinition(database, record)
-            ?? throw new InvalidOperationException($"无法生成自创功法定义 {record.Id}");
+            ?? throw new InvalidOperationException($"자작 무공 정의 {record.Id}를 생성할 수 없습니다");
         if (definitions.ContainsKey(record.Id))
         {
             var installed = definitions[record.Id];
@@ -1892,17 +1892,17 @@ public static partial class TrainerBehaviour
         if (CustomKungfuIconTextures.TryGetValue(file, out var cached) && cached != null) return cached;
         if (IconRetryAt.TryGetValue(file, out var retry) && Time.realtimeSinceStartup < retry) return null;
         var path = Path.Combine(CustomKungfuIconDirectory(), file);
-        var stage = "读取文件";
+        var stage = "파일 읽기";
         Texture2D? texture = null;
         try
         {
             var bytes = File.ReadAllBytes(path);
-            stage = $"解码图片（{bytes.Length} 字节）";
+            stage = $"이미지 디코딩({bytes.Length}바이트)";
             texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
             Il2CppStructArray<byte> nativeBytes = bytes;
             if (!ImageConversion.LoadImage(texture, nativeBytes, false))
-                throw new InvalidOperationException("Unity LoadImage 返回 false");
-            stage = $"缩放图片（{texture.width}×{texture.height}）";
+                throw new InvalidOperationException("Unity LoadImage가 false를 반환함");
+            stage = $"이미지 크기 조정({texture.width}×{texture.height})";
             texture = DownscaleCustomKungfuIcon(texture);
             texture.name = "LongYinTrainerCustomKungfu_" + Path.GetFileNameWithoutExtension(file);
             texture.filterMode = FilterMode.Bilinear;
@@ -1924,7 +1924,7 @@ public static partial class TrainerBehaviour
 
     private static void RecordIconLoadError(string file, string path, string stage, Exception ex)
     {
-        IconLoadErrors[file] = $"{stage}失败：{ex.GetType().Name}：{ex.Message}";
+        IconLoadErrors[file] = $"{stage} 실패: {ex.GetType().Name}: {ex.Message}";
         IconRetryAt[file] = Time.realtimeSinceStartup + 5f;
         LongYinTrainerPlugin.Logger.LogWarning($"Custom icon failure: stage={stage}, path={path}\n{ex}");
     }
@@ -1999,7 +1999,7 @@ public static partial class TrainerBehaviour
             cropped.filterMode = FilterMode.Bilinear; cropped.wrapMode = TextureWrapMode.Clamp;
             UnityEngine.Object.DontDestroyOnLoad(cropped);
             var sprite = Sprite.Create(cropped, new Rect(0f, 0f, side, side), new Vector2(0.5f, 0.5f), 100f);
-            if (sprite == null) throw new InvalidOperationException("Unity Sprite.Create 返回空对象");
+            if (sprite == null) throw new InvalidOperationException("Unity Sprite.Create가 빈 객체를 반환함");
             sprite.name = "LongYinTrainerCustomKungfuSprite_" + Path.GetFileNameWithoutExtension(file);
             UnityEngine.Object.DontDestroyOnLoad(sprite);
             CustomKungfuIconSprites[file] = sprite;
@@ -2007,7 +2007,7 @@ public static partial class TrainerBehaviour
         }
         catch (Exception ex)
         {
-            RecordIconLoadError(file, Path.Combine(CustomKungfuIconDirectory(), file), "创建预览 Sprite", ex);
+            RecordIconLoadError(file, Path.Combine(CustomKungfuIconDirectory(), file), "미리보기 Sprite 생성", ex);
             return null;
         }
     }
@@ -2019,12 +2019,12 @@ public static partial class TrainerBehaviour
         try
         {
             var selected = ShowCustomKungfuIconFilePicker();
-            if (string.IsNullOrEmpty(selected)) { _customStatus = "已取消选择图片；也可以在下方粘贴图片完整路径导入。"; return; }
+            if (string.IsNullOrEmpty(selected)) { _customStatus = "이미지 선택을 취소했습니다. 아래에 이미지 전체 경로를 붙여 넣어 가져올 수도 있습니다."; return; }
             ImportCustomKungfuIconPath(selected);
         }
         catch (Exception ex)
         {
-            _customStatus = "文件选择窗口打开失败，请改用下方路径导入：" + ex.Message;
+            _customStatus = "파일 선택 창을 열지 못했습니다. 아래 경로 가져오기를 사용하세요: " + ex.Message;
             LongYinTrainerPlugin.Logger.LogWarning("Custom icon file picker failed: " + ex);
         }
     }
@@ -2038,13 +2038,13 @@ public static partial class TrainerBehaviour
             var fileName = CopyCustomKungfuIcon(selected, out var displayName, out var validatedWidth, out var validatedHeight);
             _customDraft.CustomIconFile = fileName;
             if (_customBattlePreviewActive) SetRuntimeCustomKungfuIconFile(_customBattlePreviewSkillId, fileName);
-            _customStatus = $"已导入本地图标：{displayName}（{validatedWidth}×{validatedHeight}）；保存功法后永久生效。";
+            _customStatus = $"로컬 아이콘을 가져왔습니다: {displayName}({validatedWidth}×{validatedHeight}). 무공을 저장하면 영구 적용됩니다.";
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         }
         catch (Exception ex)
         {
-            _customStatus = "本地图标导入失败：" + ex.Message;
+            _customStatus = "로컬 아이콘 가져오기 실패: " + ex.Message;
             LongYinTrainerPlugin.Logger.LogWarning($"Custom kungfu icon import failed: path={selected}, exception={ex}");
         }
     }
@@ -2061,12 +2061,12 @@ public static partial class TrainerBehaviour
     private static string CopyCustomKungfuIcon(string selected, out string displayName, out int validatedWidth, out int validatedHeight)
     {
             selected = selected.Trim().Trim('"');
-            if (string.IsNullOrWhiteSpace(selected)) throw new InvalidOperationException("请先粘贴图片的完整路径");
+            if (string.IsNullOrWhiteSpace(selected)) throw new InvalidOperationException("먼저 이미지 전체 경로를 붙여 넣으세요");
             var info = new FileInfo(selected);
-            if (!info.Exists) throw new InvalidOperationException("所选图片不存在");
-            if (info.Length <= 0 || info.Length > 8 * 1024 * 1024) throw new InvalidOperationException("图片大小必须在 8 MB 以内");
+            if (!info.Exists) throw new InvalidOperationException("선택한 이미지가 없습니다");
+            if (info.Length <= 0 || info.Length > 8 * 1024 * 1024) throw new InvalidOperationException("이미지 크기는 8 MB 이하여야 합니다");
             var extension = Path.GetExtension(info.Name).ToLowerInvariant();
-            if (extension is not (".png" or ".jpg" or ".jpeg")) throw new InvalidOperationException("只支持 PNG、JPG、JPEG 图片");
+            if (extension is not (".png" or ".jpg" or ".jpeg")) throw new InvalidOperationException("PNG, JPG, JPEG 이미지만 지원합니다");
             var bytes = File.ReadAllBytes(info.FullName);
             var validationTexture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
             validatedWidth = 0;
@@ -2074,9 +2074,9 @@ public static partial class TrainerBehaviour
             try
             {
                 Il2CppStructArray<byte> nativeBytes = bytes;
-                if (!ImageConversion.LoadImage(validationTexture, nativeBytes, false)) throw new InvalidOperationException("图片格式无法识别");
-                if (validationTexture.width < 16 || validationTexture.height < 16) throw new InvalidOperationException("图片尺寸不能小于 16×16");
-                if (validationTexture.width > 4096 || validationTexture.height > 4096) throw new InvalidOperationException("图片尺寸不能超过 4096×4096");
+                if (!ImageConversion.LoadImage(validationTexture, nativeBytes, false)) throw new InvalidOperationException("이미지 형식을 알 수 없습니다");
+                if (validationTexture.width < 16 || validationTexture.height < 16) throw new InvalidOperationException("이미지 크기는 16×16보다 작을 수 없습니다");
+                if (validationTexture.width > 4096 || validationTexture.height > 4096) throw new InvalidOperationException("이미지 크기는 4096×4096을 넘을 수 없습니다");
                 validatedWidth = validationTexture.width;
                 validatedHeight = validationTexture.height;
             }
@@ -2087,7 +2087,7 @@ public static partial class TrainerBehaviour
             var destination = Path.Combine(CustomKungfuIconDirectory(), fileName);
             if (!File.Exists(destination)) File.Copy(info.FullName, destination, false);
             IconRetryAt.Remove(fileName); // Explicit import always retries a previous failure.
-            if (GetCustomKungfuIconSprite(fileName) == null) throw new InvalidOperationException(IconLoadErrors.TryGetValue(fileName, out var reason) ? reason : "无法生成预览；请查看 BepInEx/LogOutput.log");
+            if (GetCustomKungfuIconSprite(fileName) == null) throw new InvalidOperationException(IconLoadErrors.TryGetValue(fileName, out var reason) ? reason : "미리보기를 만들 수 없습니다. BepInEx/LogOutput.log를 확인하세요");
             displayName = info.Name;
             return fileName;
     }
@@ -2105,7 +2105,7 @@ public static partial class TrainerBehaviour
             {
                 structSize = Marshal.SizeOf<OpenFileName>(),
                 owner = GetForegroundWindow(),
-                filter = "图片文件 (*.png;*.jpg;*.jpeg)\0*.png;*.jpg;*.jpeg\0PNG 图片 (*.png)\0*.png\0JPEG 图片 (*.jpg;*.jpeg)\0*.jpg;*.jpeg\0所有文件 (*.*)\0*.*\0\0",
+                filter = "이미지 파일 (*.png;*.jpg;*.jpeg)\0*.png;*.jpg;*.jpeg\0PNG 이미지 (*.png)\0*.png\0JPEG 이미지 (*.jpg;*.jpeg)\0*.jpg;*.jpeg\0모든 파일 (*.*)\0*.*\0\0",
                 customFilter = null!,
                 filterIndex = 1,
                 file = fileBuffer,
@@ -2113,14 +2113,14 @@ public static partial class TrainerBehaviour
                 fileTitle = titleBuffer,
                 maxFileTitle = 1024,
                 initialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
-                title = "选择自创功法图标",
+                title = "자작 무공 아이콘 선택",
                 flags = 0x00080000 | 0x00001000 | 0x00000800 | 0x00000008,
                 defaultExtension = "png",
                 templateName = null!
             };
             if (GetOpenFileName(ref dialog)) return Marshal.PtrToStringUni(fileBuffer);
             var error = CommDlgExtendedError();
-            if (error != 0) throw new InvalidOperationException($"文件对话框错误 0x{error:X}");
+            if (error != 0) throw new InvalidOperationException($"파일 대화상자 오류 0x{error:X}");
             return null;
         }
         finally
@@ -2135,7 +2135,7 @@ public static partial class TrainerBehaviour
         if (_customDraft == null) return;
         _customDraft.CustomIconFile = "";
         if (_customBattlePreviewActive) SetRuntimeCustomKungfuIconFile(_customBattlePreviewSkillId, "");
-        _customStatus = "已恢复使用来源功法图标；尚未保存。";
+        _customStatus = "출처 무공 아이콘으로 되돌렸습니다. 아직 저장되지 않았습니다.";
         InvalidateCustomKungfuPages();
         ShowCustomKungfuTab();
     }
@@ -2304,7 +2304,7 @@ public static partial class TrainerBehaviour
             var buttons = grid.GetComponentsInChildren<BuildingButtonController>(true);
             if (NativeKungfuEditor.Enabled && !System.Linq.Enumerable.Any(buttons, b => b?.areaBuildingChoice?.callFuc == "CustomSkillEntry"))
                 controller.CreateBuildingButton(new AreaBuildingChoice {
-                    text = "自创武学", describe = "选择基础功法，进入游戏原生自创武学编辑器。",
+                    text = "무공 창설", describe = "기반 무공을 선택해 게임 기본 무공 창설 편집기로 들어갑니다.",
                     callFuc = "CustomSkillEntry", callFucParam = "", justNeedOneCondition = true,
                     mainCondition = new Il2CppSystem.Collections.Generic.List<string>(),
                     subCondition = new Il2CppSystem.Collections.Generic.List<string>()
@@ -2314,8 +2314,8 @@ public static partial class TrainerBehaviour
 
             var choice = new AreaBuildingChoice
             {
-                text = "自创功法",
-                describe = "拆分现有功法的参数、范围、姿态、动作、弹道与特效，在建筑内推演新的功法。",
+                text = "자작 무공",
+                describe = "기존 무공의 수치, 범위, 자세, 동작, 탄도, 특수 효과를 분해해 건물 안에서 새 무공을 연구합니다.",
                 justNeedOneCondition = true,
                 mainCondition = new Il2CppSystem.Collections.Generic.List<string>(),
                 subCondition = new Il2CppSystem.Collections.Generic.List<string>(),
@@ -2354,7 +2354,7 @@ public static partial class TrainerBehaviour
         // hero/list.  Never retain one across a hero switch.
         ClearSelectedItem();
         _fieldHeroId = int.MinValue;
-        _status = $"已选择角色：{hero.heroName}（ID {hero.heroID}）";
+        _status = $"선택한 캐릭터: {hero.heroName}(ID {hero.heroID})";
         InvalidatePages(1, 2, 3, 5);
     }
 
@@ -2454,10 +2454,10 @@ public static partial class TrainerBehaviour
             {
                 ClearBigMapEventOverlays();
                 BigMapController.Instance?.RecreatAllBigMapRandomEvent();
-                _status = "已恢复原版视野；已经发现的事件不会撤销发现。";
+                _status = "원래 시야로 되돌렸습니다. 이미 발견한 사건의 발견은 취소되지 않습니다.";
             }
         }
-        catch (Exception ex) { _status = "切换大地图事件显示失败：" + ex.Message; }
+        catch (Exception ex) { _status = "대지도 사건 표시 전환 실패: " + ex.Message; }
     }
 
     public static void QueueItemSelection(int ownerId, int listHint, int itemId, int itemType, int itemSubType)
@@ -2470,7 +2470,7 @@ public static partial class TrainerBehaviour
         _pendingItemSubType = itemSubType;
         _pendingItemSelectionFrame = Time.frameCount + 2;
         _pendingItemSelection = true;
-        _status = "正在安全读取所选物品……";
+        _status = "선택한 물품을 안전하게 읽는 중……";
     }
 
     public static void QueueItemSelectionFromClick(int ownerId, int listHint, int itemId, int itemType, int itemSubType, IntPtr itemPointer)
@@ -2506,7 +2506,7 @@ public static partial class TrainerBehaviour
         var item = ResolveSelectedItem();
         if (item == null)
         {
-            _status = "所选物品已被背包刷新，请再点击一次。";
+            _status = "가방이 새로고침되어 선택한 물품이 바뀌었습니다. 한 번 더 누르세요.";
             return;
         }
         try
@@ -2521,13 +2521,13 @@ public static partial class TrainerBehaviour
             _itemWeight = item.weight.ToString(CultureInfo.InvariantCulture);
             _itemPoison = item.poisonNum.ToString(CultureInfo.InvariantCulture);
             InvalidatePages(2, 3);
-            _status = $"已选择物品：{item.Name(false)}（ID {item.itemID}）。点击上方“物品修改”页签载入。";
+            _status = $"선택한 물품: {item.Name(false)}(ID {item.itemID}). 위의 “물품 수정” 탭을 눌러 불러오세요.";
             LongYinTrainerPlugin.Logger.LogInfo($"Inventory selection committed safely: owner={_selectedItemOwnerId}, index={_selectedItemIndex}, itemID={_selectedItemId}, type={_selectedItemType}, subType={_selectedItemSubType}.");
         }
         catch
         {
             ClearSelectedItem();
-            _status = "读取物品时背包已刷新，请再点击一次。";
+            _status = "물품을 읽는 동안 가방이 새로고침되었습니다. 한 번 더 누르세요.";
         }
     }
 
@@ -2562,7 +2562,7 @@ public static partial class TrainerBehaviour
         _itemRare = item.rareLv.ToString(CultureInfo.InvariantCulture);
         _itemWeight = item.weight.ToString(CultureInfo.InvariantCulture);
         _itemPoison = item.poisonNum.ToString(CultureInfo.InvariantCulture);
-        _status = $"已选择物品：{item.Name(false)}（ID {item.itemID}）";
+        _status = $"선택한 물품: {item.Name(false)}(ID {item.itemID})";
         InvalidatePages(2, 3);
     }
 
@@ -2669,7 +2669,7 @@ public static partial class TrainerBehaviour
         {
             _nextHotkeyTime = Time.realtimeSinceStartup + 0.75f;
             OpenCustomKungfuEditor();
-            _customStatus = "试演场编辑器已打开。修改后按 H 或 Esc 应用草稿并返回完整网格。";
+            _customStatus = "시연장 편집기를 열었습니다. 수정 후 H 또는 Esc를 누르면 초안을 적용하고 전체 격자로 돌아갑니다.";
             if (_customUiStatus != null) _customUiStatus.text = _customStatus;
             hotkeyPressed = false;
         }
@@ -2677,7 +2677,7 @@ public static partial class TrainerBehaviour
         {
             _nextHotkeyTime = Time.realtimeSinceStartup + 1.0f;
             _visible = !_visible;
-            _status = _visible ? "修改器面板已打开。" : "修改器面板已关闭。";
+            _status = _visible ? "트레이너 패널을 열었습니다." : "트레이너 패널을 닫았습니다.";
             if (!_visible) ClearSelectedItem();
             LongYinTrainerPlugin.Logger.LogInfo($"Trainer panel {(_visible ? "opened" : "closed")} by {LongYinTrainerPlugin.ToggleKey.Value}.");
             if (_visible)
@@ -2812,11 +2812,11 @@ public static partial class TrainerBehaviour
             var title = UiObject("Title", panel.transform, new Vector2(1280, 44), new Vector2(20, 14));
             var titleImage = title.AddComponent<Image>();
             titleImage.color = DeepInk;
-            var titleText = AddText(title.transform, "藏经阁 · 自创功法", new Vector2(18, 0), new Vector2(780, 44), 23, TextAnchor.MiddleLeft);
+            var titleText = AddText(title.transform, "장경각 · 자작 무공", new Vector2(18, 0), new Vector2(780, 44), 23, TextAnchor.MiddleLeft);
             titleText.color = LightText;
-            AddCustomKungfuButton(title.transform, "关闭  Esc", new Vector2(1090, 4), new Vector2(170, 36), CloseCustomKungfuEditor, true);
+            AddCustomKungfuButton(title.transform, "닫기  Esc", new Vector2(1090, 4), new Vector2(170, 36), CloseCustomKungfuEditor, true);
 
-            var tabs = new[] { "基本参数", "修炼／效果", "范围／姿态", "动作／特效", "保存／管理" };
+            var tabs = new[] { "기본 수치", "수련／효과", "범위／자세", "동작／특수 효과", "저장／관리" };
             for (var i = 0; i < tabs.Length; i++)
             {
                 var captured = i;
@@ -2848,7 +2848,7 @@ public static partial class TrainerBehaviour
         catch (Exception ex)
         {
             _customVisible = false; // Retry only on an explicit reopen, never every frame.
-            _customStatus = "自创功法界面创建失败：" + ex.Message;
+            _customStatus = "자작 무공 화면 생성 실패: " + ex.Message;
             _status = _customStatus;
             InvalidateCustomKungfuPages();
             CustomPermanentClicks.Clear();
@@ -2962,11 +2962,11 @@ public static partial class TrainerBehaviour
                 donorId = pair.Key;
             }
         }
-        if (category.HasValue && donor == null) throw new InvalidOperationException("未找到该类别的原版模板");
+        if (category.HasValue && donor == null) throw new InvalidOperationException("이 분류의 원본 템플릿을 찾지 못했습니다");
         var draft = new CustomKungfuRecord
         {
-            Name = "自创功法",
-            Description = "由藏经阁推演而成的自创功法。",
+            Name = "자작 무공",
+            Description = "장경각에서 연구해 만든 자작 무공.",
             Type = donor?.type ?? 0,
             RareLv = donor?.rareLv ?? 0,
             ForceId = donor?.belongForceID ?? -1,
@@ -3001,7 +3001,7 @@ public static partial class TrainerBehaviour
     private static CustomKungfuRecord CloneCustomKungfuRecord(CustomKungfuRecord source)
     {
         var json = JsonSerializer.Serialize(source, CustomKungfuJsonOptions);
-        var clone = JsonSerializer.Deserialize<CustomKungfuRecord>(json, CustomKungfuJsonOptions) ?? throw new InvalidOperationException("复制自创功法定义失败");
+        var clone = JsonSerializer.Deserialize<CustomKungfuRecord>(json, CustomKungfuJsonOptions) ?? throw new InvalidOperationException("자작 무공 정의 복사 실패");
         NormalizeCustomKungfuRecord(clone);
         return clone;
     }
@@ -3068,21 +3068,21 @@ public static partial class TrainerBehaviour
             "force" => $"{value} · {CustomKungfuForceName(value)}",
             "target" => $"{value} · {SkillTargetTypeName(value)}",
             "order" => $"{value} · {SkillDamageOrderName(value)}",
-            "trail" => value == 0 ? "0 · 无／默认" : $"{value} · 拖尾样式 {value}",
+            "trail" => value == 0 ? "0 · 없음／기본" : $"{value} · 잔상 스타일 {value}",
             _ => value.ToString(CultureInfo.InvariantCulture)
         };
     }
 
     private static string CustomKungfuForceName(int forceId)
     {
-        if (forceId < 0) return "通用／无势力";
+        if (forceId < 0) return "공용／세력 없음";
         try
         {
             var force = GameController.Instance?.worldData?.GetForce(forceId);
             if (force != null) return force.GetForceName(true);
         }
         catch { }
-        return "未知势力";
+        return "알 수 없는 세력";
     }
 
     private static List<CustomBasicChoice> GetCustomKungfuBasicChoices(string field, int current)
@@ -3108,7 +3108,7 @@ public static partial class TrainerBehaviour
         }
         else if (field == "force")
         {
-            Add(-1, "-1 · 通用／无势力");
+            Add(-1, "-1 · 공용／세력 없음");
 
             try
             {
@@ -3132,7 +3132,7 @@ public static partial class TrainerBehaviour
         }
         else if (field == "trail")
         {
-            Add(0, "0 · 无／默认");
+            Add(0, "0 · 없음／기본");
             try
             {
                 var skills = GameDataController.Instance?.kungfuSkillDataBase;
@@ -3141,7 +3141,7 @@ public static partial class TrainerBehaviour
                     {
                         var skill = pair.Value;
                         if (pair.Key >= CustomKungfuIdMin || skill == null || skill.hide || seen.Contains(skill.trailID)) continue;
-                        Add(skill.trailID, $"{skill.trailID} · 示例：{skill.name}");
+                        Add(skill.trailID, $"{skill.trailID} · 예시: {skill.name}");
                     }
             }
             catch { }
@@ -3217,33 +3217,33 @@ public static partial class TrainerBehaviour
             case "order": draft.DamageOrder = Math.Max(0, value); break;
             case "trail": draft.TrailId = Math.Max(0, value); break;
         }
-        _customStatus = $"已选择：{CustomBasicChoiceLabel(field, value)}；尚未保存。";
+        _customStatus = $"선택: {CustomBasicChoiceLabel(field, value)}. 아직 저장되지 않았습니다.";
     }
 
     private static void BuildCustomKungfuBasicPage(Transform parent)
     {
         var draft = _customDraft!;
-        AddText(parent, !draft.EditOriginal && draft.Id == 0 ? "新功法（尚未分配 ID）" : $"正在编辑：{draft.Name}（ID {draft.Id}）", new Vector2(10, 8), new Vector2(900, 38), 22);
-        AddText(parent, draft.EditOriginal ? "原版编辑：沿用原 ID，保存后影响所有使用该功法的角色。" : "只有点击“保存”后才会写入模组配置；游戏存档只保存自创功法 ID。", new Vector2(10, 48), new Vector2(1180, 32), 15);
-        AddCustomKungfuField(parent, "名称", "name", draft.Name, 10, 92, 430);
-        AddText(parent, "描述", new Vector2(10, 142), new Vector2(130, 36), 17);
+        AddText(parent, !draft.EditOriginal && draft.Id == 0 ? "새 무공(ID 미배정)" : $"편집 중: {draft.Name}(ID {draft.Id})", new Vector2(10, 8), new Vector2(900, 38), 22);
+        AddText(parent, draft.EditOriginal ? "원본 편집: 원래 ID를 그대로 쓰며, 저장하면 이 무공을 쓰는 모든 캐릭터에 영향을 줍니다." : "“저장”을 눌러야 모드 구성에 기록됩니다. 게임 세이브에는 자작 무공 ID만 저장됩니다.", new Vector2(10, 48), new Vector2(1180, 32), 15);
+        AddCustomKungfuField(parent, "이름", "name", draft.Name, 10, 92, 430);
+        AddText(parent, "설명", new Vector2(10, 142), new Vector2(130, 36), 17);
         var description = AddInput(parent, draft.Description, new Vector2(140, 142), new Vector2(1030, 92));
         description.lineType = InputField.LineType.MultiLineNewline;
         description.textComponent.alignment = TextAnchor.UpperLeft;
         CustomInputs["description"] = description;
 
-        AddCustomKungfuChoiceField(parent, "类别", "type", CustomBasicChoiceLabel("type", draft.Type), 10, 260);
-        AddCustomKungfuChoiceField(parent, "稀有度", "rare", CustomBasicChoiceLabel("rare", draft.RareLv), 430, 260);
-        AddCustomKungfuChoiceField(parent, "所属势力", "force", CustomBasicChoiceLabel("force", draft.ForceId), 850, 260);
-        AddCustomKungfuChoiceField(parent, "目标", "target", CustomBasicChoiceLabel("target", draft.TargetType), 10, 310);
-        AddCustomKungfuField(parent, "基础伤害", "damage", draft.BaseDamage.ToString("0.###", CultureInfo.InvariantCulture), 430, 310);
-        AddCustomKungfuField(parent, "内力消耗", "mana", draft.ManaCost.ToString("0.###", CultureInfo.InvariantCulture), 850, 310);
-        AddCustomKungfuField(parent, "经验系数", "exp", draft.ExpRatio.ToString("0.###", CultureInfo.InvariantCulture), 10, 360);
-        AddCustomKungfuField(parent, "战斗次数", "uses", draft.BattleMaxUseTime.ToString(CultureInfo.InvariantCulture), 430, 360);
-        AddCustomKungfuField(parent, "冷却 CD", "cooldown", draft.CooldownTime.ToString("0.###", CultureInfo.InvariantCulture), 850, 360);
-        AddCustomKungfuChoiceField(parent, "结算顺序", "order", CustomBasicChoiceLabel("order", draft.DamageOrder), 10, 410);
-        AddCustomKungfuChoiceField(parent, "武器拖尾", "trail", CustomBasicChoiceLabel("trail", draft.TrailId), 430, 410);
-        AddCustomKungfuButton(parent, draft.AutoMove ? "角色位移：开启" : "角色位移：关闭", new Vector2(980, 410), new Vector2(240, 38), () =>
+        AddCustomKungfuChoiceField(parent, "분류", "type", CustomBasicChoiceLabel("type", draft.Type), 10, 260);
+        AddCustomKungfuChoiceField(parent, "희귀도", "rare", CustomBasicChoiceLabel("rare", draft.RareLv), 430, 260);
+        AddCustomKungfuChoiceField(parent, "소속 세력", "force", CustomBasicChoiceLabel("force", draft.ForceId), 850, 260);
+        AddCustomKungfuChoiceField(parent, "대상", "target", CustomBasicChoiceLabel("target", draft.TargetType), 10, 310);
+        AddCustomKungfuField(parent, "기본 피해", "damage", draft.BaseDamage.ToString("0.###", CultureInfo.InvariantCulture), 430, 310);
+        AddCustomKungfuField(parent, "내력 소모", "mana", draft.ManaCost.ToString("0.###", CultureInfo.InvariantCulture), 850, 310);
+        AddCustomKungfuField(parent, "경험 계수", "exp", draft.ExpRatio.ToString("0.###", CultureInfo.InvariantCulture), 10, 360);
+        AddCustomKungfuField(parent, "전투 횟수", "uses", draft.BattleMaxUseTime.ToString(CultureInfo.InvariantCulture), 430, 360);
+        AddCustomKungfuField(parent, "쿨다운 CD", "cooldown", draft.CooldownTime.ToString("0.###", CultureInfo.InvariantCulture), 850, 360);
+        AddCustomKungfuChoiceField(parent, "정산 순서", "order", CustomBasicChoiceLabel("order", draft.DamageOrder), 10, 410);
+        AddCustomKungfuChoiceField(parent, "무기 잔상", "trail", CustomBasicChoiceLabel("trail", draft.TrailId), 430, 410);
+        AddCustomKungfuButton(parent, draft.AutoMove ? "캐릭터 이동: 켜짐" : "캐릭터 이동: 꺼짐", new Vector2(980, 410), new Vector2(240, 38), () =>
         {
             SyncCustomKungfuDraftFromInputs();
             draft.AutoMove = !draft.AutoMove;
@@ -3252,28 +3252,28 @@ public static partial class TrainerBehaviour
         });
 
         _customBasicSummaryText = AddText(parent, CustomKungfuBasicSummary(draft), new Vector2(10, 455), new Vector2(1035, 34), 15);
-        AddCustomKungfuButton(parent, "刷新编号说明", new Vector2(1060, 453), new Vector2(160, 36), () =>
+        AddCustomKungfuButton(parent, "번호 설명 새로고침", new Vector2(1060, 453), new Vector2(160, 36), () =>
         {
             SyncCustomKungfuDraftFromInputs();
             UpdateCustomKungfuBasicSummary();
         });
-        AddText(parent, "冷却 CD：-1 沿用游戏原生计算，0 表示无冷却，正数为指定冷却；战斗次数填 0 表示无限制。修改编号后切换标签页即可刷新说明。", new Vector2(10, 486), new Vector2(1210, 38), 14);
-        AddDonorRow(parent, "总母版", "base", 10, 530, 820);
-        AddCustomKungfuButton(parent, "将总母版复制到全部元素", new Vector2(850, 530), new Vector2(370, 42), () =>
+        AddText(parent, "쿨다운 CD: -1은 게임 기본 계산, 0은 쿨다운 없음, 양수는 지정 쿨다운입니다. 전투 횟수 0은 제한 없음입니다. 번호를 바꾼 뒤 탭을 바꾸면 설명이 새로고침됩니다.", new Vector2(10, 486), new Vector2(1210, 38), 14);
+        AddDonorRow(parent, "총 템플릿", "base", 10, 530, 820);
+        AddCustomKungfuButton(parent, "총 템플릿을 모든 요소에 복사", new Vector2(850, 530), new Vector2(370, 42), () =>
         {
             SyncCustomKungfuDraftFromInputs();
             if (!ApplyFullKungfuDonor(draft.BaseDonorId, true)) return;
-            _customStatus = "已把总母版同步到全部可选元素；尚未保存。";
+            _customStatus = "총 템플릿을 선택 가능한 모든 요소에 동기화했습니다. 아직 저장되지 않았습니다.";
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
-        AddCustomKungfuButton(parent, "载入原版功法编辑", new Vector2(10, 590), new Vector2(300, 42), () => OpenCustomKungfuDonorPicker("editOriginal"));
-        AddText(parent, "先选类别：模板与词条按九类分别提供；切换类别会保留本次各类草稿，保存只写入当前类别。", new Vector2(330, 586), new Vector2(900, 54), 16);
+        AddCustomKungfuButton(parent, "원본 무공 불러와 편집", new Vector2(10, 590), new Vector2(300, 42), () => OpenCustomKungfuDonorPicker("editOriginal"));
+        AddText(parent, "먼저 분류를 고르세요. 템플릿과 옵션은 아홉 분류별로 제공됩니다. 분류를 바꿔도 분류별 초안은 유지되며, 저장은 현재 분류에만 기록됩니다.", new Vector2(330, 586), new Vector2(900, 54), 16);
         if (!string.IsNullOrEmpty(_customBasicChoiceField)) BuildCustomKungfuBasicChoicePopup(parent);
     }
 
     private static string CustomKungfuBasicSummary(CustomKungfuRecord draft) =>
-        $"当前编号说明：类别 {draft.Type}＝{CustomKungfuTypeName(draft.Type)}　｜　稀有度 {draft.RareLv}＝{RarityName(draft.RareLv)}　｜　目标 {draft.TargetType}＝{SkillTargetTypeName(draft.TargetType)}　｜　结算 {draft.DamageOrder}＝{SkillDamageOrderName(draft.DamageOrder)}";
+        $"현재 번호 설명: 분류 {draft.Type}＝{CustomKungfuTypeName(draft.Type)}　｜　희귀도 {draft.RareLv}＝{RarityName(draft.RareLv)}　｜　대상 {draft.TargetType}＝{SkillTargetTypeName(draft.TargetType)}　｜　정산 {draft.DamageOrder}＝{SkillDamageOrderName(draft.DamageOrder)}";
 
     private static void UpdateCustomKungfuBasicSummary()
     {
@@ -3285,17 +3285,17 @@ public static partial class TrainerBehaviour
     {
         var names = GlobalData.FightSkillName;
         return names != null && type >= 0 && type < names.Count
-            ? names[type] : "未知类别";
+            ? names[type] : "알 수 없는 분류";
     }
 
     private static string SkillTargetTypeName(int value) => Math.Clamp(value, 0, 5) switch
     {
-        0 => "敌人", 1 => "己方队伍", 2 => "自己", 3 => "队友", 4 => "空地召唤", _ => "空地跳跃"
+        0 => "적", 1 => "아군 대열", 2 => "자신", 3 => "동료", 4 => "빈 칸 소환", _ => "빈 칸 도약"
     };
 
     private static string SkillDamageOrderName(int value) => Math.Clamp(value, 0, 2) switch
     {
-        0 => "同时结算", 1 => "按距离", _ => "随机顺序"
+        0 => "동시 정산", 1 => "거리순", _ => "무작위 순서"
     };
 
     private static void BuildCustomKungfuEffectPage(Transform parent)
@@ -3305,24 +3305,24 @@ public static partial class TrainerBehaviour
             BuildCustomKungfuEffectEntryEditor(parent);
             return;
         }
-        AddText(parent, "修炼与战斗效果", new Vector2(10, 8), new Vector2(700, 40), 22);
-        AddText(parent, "五组都支持逐条自选、逐条改值；也可以先选择原版来源，再一键导入后删改。", new Vector2(10, 48), new Vector2(1120, 32), 16);
-        AddDonorRowWithSummary(parent, "威力加成", "ratio", 10, 92, 590);
-        AddDonorRowWithSummary(parent, "修炼需求", "needs", 650, 92, 590);
-        AddDonorRowWithSummary(parent, "升级效果", "upgrade", 10, 205, 590);
-        AddDonorRowWithSummary(parent, "装备效果", "equip", 650, 205, 590);
-        AddDonorRowWithSummary(parent, "使用效果", "use", 10, 318, 590);
-        AddText(parent, "“升级效果”决定升级后加成；“装备效果”是运功/装配加成；“使用效果”提供施放词条，能否触发取决于类别与原生规则。", new Vector2(10, 438), new Vector2(1220, 48), 16);
-        AddText(parent, "点击每组右侧“逐条自选”进入编辑器。百分比词条输入 50 会按 50% 保存，其他词条按显示数值保存。", new Vector2(10, 500), new Vector2(1220, 52), 16);
-        AddText(parent, "这些数据会按原功法的升级规则计算，不会把突破卡牌的稀有度倍率误写成基础值。", new Vector2(10, 566), new Vector2(1220, 42), 15);
+        AddText(parent, "수련과 전투 효과", new Vector2(10, 8), new Vector2(700, 40), 22);
+        AddText(parent, "다섯 그룹 모두 항목별 선택과 수치 수정을 지원합니다. 원본 출처를 먼저 골라 한 번에 가져온 뒤 지우거나 고칠 수도 있습니다.", new Vector2(10, 48), new Vector2(1120, 32), 16);
+        AddDonorRowWithSummary(parent, "위력 보너스", "ratio", 10, 92, 590);
+        AddDonorRowWithSummary(parent, "수련 요건", "needs", 650, 92, 590);
+        AddDonorRowWithSummary(parent, "강화 효과", "upgrade", 10, 205, 590);
+        AddDonorRowWithSummary(parent, "장비 효과", "equip", 650, 205, 590);
+        AddDonorRowWithSummary(parent, "사용 효과", "use", 10, 318, 590);
+        AddText(parent, "“강화 효과”는 레벨업 후 보너스, “장비 효과”는 운공/장착 보너스, “사용 효과”는 시전 옵션을 제공하며 발동 여부는 분류와 기본 규칙에 달려 있습니다.", new Vector2(10, 438), new Vector2(1220, 48), 16);
+        AddText(parent, "각 그룹 오른쪽 “항목별 선택”을 눌러 편집기로 들어갑니다. 퍼센트 옵션에 50을 입력하면 50%로 저장되고, 다른 옵션은 표시 수치대로 저장됩니다.", new Vector2(10, 500), new Vector2(1220, 52), 16);
+        AddText(parent, "이 데이터는 원래 무공의 강화 규칙대로 계산되며, 돌파 카드의 희귀도 배율이 기본값으로 잘못 기록되지 않습니다.", new Vector2(10, 566), new Vector2(1220, 42), 15);
     }
 
     private static void BuildCustomKungfuRangePage(Transform parent)
     {
-        AddText(parent, "范围与姿态（可直接编辑）", new Vector2(10, 8), new Vector2(650, 40), 22);
-        AddCustomKungfuButton(parent, _customBattlePreviewActive ? "返回原生战斗" : "原生战斗试用", new Vector2(625, 8), new Vector2(180, 38), ToggleCustomBattlePreviewFromEditor);
-        AddCustomKungfuButton(parent, _customRangeSubTab == 0 ? "● 范围编辑" : "范围编辑", new Vector2(820, 8), new Vector2(190, 38), () => SwitchCustomRangeSubTab(0));
-        AddCustomKungfuButton(parent, _customRangeSubTab == 1 ? "● 姿态编辑" : "姿态编辑", new Vector2(1025, 8), new Vector2(190, 38), () => SwitchCustomRangeSubTab(1));
+        AddText(parent, "범위와 자세(직접 편집 가능)", new Vector2(10, 8), new Vector2(650, 40), 22);
+        AddCustomKungfuButton(parent, _customBattlePreviewActive ? "기본 전투로 돌아가기" : "기본 전투 시험", new Vector2(625, 8), new Vector2(180, 38), ToggleCustomBattlePreviewFromEditor);
+        AddCustomKungfuButton(parent, _customRangeSubTab == 0 ? "● 범위 편집" : "범위 편집", new Vector2(820, 8), new Vector2(190, 38), () => SwitchCustomRangeSubTab(0));
+        AddCustomKungfuButton(parent, _customRangeSubTab == 1 ? "● 자세 편집" : "자세 편집", new Vector2(1025, 8), new Vector2(190, 38), () => SwitchCustomRangeSubTab(1));
         if (_customRangeSubTab == 0) BuildCustomKungfuDirectRangeEditor(parent);
         else BuildCustomKungfuDirectPostureEditor(parent);
     }
@@ -3339,10 +3339,10 @@ public static partial class TrainerBehaviour
     {
         var draft = _customDraft!;
         NormalizeCustomKungfuRecord(draft);
-        AddText(parent, "攻击范围＝施法时可以选择的目标格；伤害范围＝以目标格为中心实际覆盖的格。来源模式直接复制原功法，自定义模式使用下面的形状和距离。", new Vector2(10, 50), new Vector2(1210, 42), 15);
-        AddDonorRow(parent, "攻击范围来源", "attackRange", 10, 96, 590);
-        AddDonorRow(parent, "伤害范围来源", "damageRange", 650, 96, 590);
-        AddCustomKungfuButton(parent, draft.UseCustomAttackRange ? "自定义攻击范围：开启" : "自定义攻击范围：关闭", new Vector2(10, 150), new Vector2(285, 38), () =>
+        AddText(parent, "공격 범위＝시전 시 고를 수 있는 대상 칸, 피해 범위＝대상 칸을 중심으로 실제로 덮는 칸입니다. 출처 모드는 원래 무공을 그대로 복사하고, 사용자 모드는 아래 모양과 거리를 씁니다.", new Vector2(10, 50), new Vector2(1210, 42), 15);
+        AddDonorRow(parent, "공격 범위 출처", "attackRange", 10, 96, 590);
+        AddDonorRow(parent, "피해 범위 출처", "damageRange", 650, 96, 590);
+        AddCustomKungfuButton(parent, draft.UseCustomAttackRange ? "사용자 공격 범위: 켜짐" : "사용자 공격 범위: 꺼짐", new Vector2(10, 150), new Vector2(285, 38), () =>
         {
             SyncCustomKungfuDraftFromInputs();
             draft.UseCustomAttackRange = !draft.UseCustomAttackRange;
@@ -3350,14 +3350,14 @@ public static partial class TrainerBehaviour
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
-        AddCustomKungfuButton(parent, "从来源重新载入", new Vector2(305, 150), new Vector2(220, 38), () =>
+        AddCustomKungfuButton(parent, "출처에서 다시 불러오기", new Vector2(305, 150), new Vector2(220, 38), () =>
         {
             LoadAttackRangesFromDonor(draft);
             draft.UseCustomAttackRange = true;
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
-        AddCustomKungfuButton(parent, draft.UseCustomDamageRange ? "自定义伤害范围：开启" : "自定义伤害范围：关闭", new Vector2(650, 150), new Vector2(285, 38), () =>
+        AddCustomKungfuButton(parent, draft.UseCustomDamageRange ? "사용자 피해 범위: 켜짐" : "사용자 피해 범위: 꺼짐", new Vector2(650, 150), new Vector2(285, 38), () =>
         {
             SyncCustomKungfuDraftFromInputs();
             draft.UseCustomDamageRange = !draft.UseCustomDamageRange;
@@ -3365,7 +3365,7 @@ public static partial class TrainerBehaviour
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
-        AddCustomKungfuButton(parent, "从来源重新载入", new Vector2(945, 150), new Vector2(220, 38), () =>
+        AddCustomKungfuButton(parent, "출처에서 다시 불러오기", new Vector2(945, 150), new Vector2(220, 38), () =>
         {
             LoadDamageRangeFromDonor(draft);
             draft.UseCustomDamageRange = true;
@@ -3373,12 +3373,12 @@ public static partial class TrainerBehaviour
             ShowCustomKungfuTab();
         });
 
-        AddText(parent, "攻击范围层（多层取并集，最多 4 层）", new Vector2(10, 205), new Vector2(600, 34), 18);
+        AddText(parent, "공격 범위 층(여러 층은 합집합, 최대 4층)", new Vector2(10, 205), new Vector2(600, 34), 18);
         for (var i = 0; i < draft.CustomAttackRanges.Count; i++)
         {
             var index = i;
             var range = draft.CustomAttackRanges[i];
-            AddText(parent, $"第 {i + 1} 层", new Vector2(10, 246 + i * 48), new Vector2(80, 36), 16);
+            AddText(parent, $"{i + 1}층", new Vector2(10, 246 + i * 48), new Vector2(80, 36), 16);
             AddCustomKungfuButton(parent, AttackRangeTypeLabel(range.Type), new Vector2(90, 246 + i * 48), new Vector2(185, 36), () =>
             {
                 SyncCustomKungfuDraftFromInputs();
@@ -3386,11 +3386,11 @@ public static partial class TrainerBehaviour
                 InvalidateCustomKungfuPages();
                 ShowCustomKungfuTab();
             });
-            AddText(parent, "最小", new Vector2(286, 246 + i * 48), new Vector2(46, 36), 15);
+            AddText(parent, "최소", new Vector2(286, 246 + i * 48), new Vector2(46, 36), 15);
             CustomInputs[$"attackMin{i}"] = AddInput(parent, range.Min.ToString(CultureInfo.InvariantCulture), new Vector2(334, 246 + i * 48), new Vector2(68, 36));
-            AddText(parent, "最大", new Vector2(412, 246 + i * 48), new Vector2(46, 36), 15);
+            AddText(parent, "최대", new Vector2(412, 246 + i * 48), new Vector2(46, 36), 15);
             CustomInputs[$"attackMax{i}"] = AddInput(parent, range.Max.ToString(CultureInfo.InvariantCulture), new Vector2(460, 246 + i * 48), new Vector2(68, 36));
-            AddCustomKungfuButton(parent, "删除", new Vector2(538, 246 + i * 48), new Vector2(78, 36), () =>
+            AddCustomKungfuButton(parent, "삭제", new Vector2(538, 246 + i * 48), new Vector2(78, 36), () =>
             {
                 SyncCustomKungfuDraftFromInputs();
                 if (draft.CustomAttackRanges.Count > 1) draft.CustomAttackRanges.RemoveAt(index);
@@ -3399,7 +3399,7 @@ public static partial class TrainerBehaviour
             });
         }
         if (draft.CustomAttackRanges.Count < 4)
-            AddCustomKungfuButton(parent, "+ 添加一层攻击范围", new Vector2(10, 246 + draft.CustomAttackRanges.Count * 48), new Vector2(265, 36), () =>
+            AddCustomKungfuButton(parent, "+ 공격 범위 층 추가", new Vector2(10, 246 + draft.CustomAttackRanges.Count * 48), new Vector2(265, 36), () =>
             {
                 SyncCustomKungfuDraftFromInputs();
                 draft.CustomAttackRanges.Add(new CustomAttackRangeSpec());
@@ -3407,7 +3407,7 @@ public static partial class TrainerBehaviour
                 ShowCustomKungfuTab();
             });
 
-        AddText(parent, "伤害范围", new Vector2(650, 205), new Vector2(170, 34), 18);
+        AddText(parent, "피해 범위", new Vector2(650, 205), new Vector2(170, 34), 18);
         AddCustomKungfuButton(parent, DamageRangeTypeLabel(draft.CustomDamageRangeType), new Vector2(650, 246), new Vector2(220, 36), () =>
         {
             SyncCustomKungfuDraftFromInputs();
@@ -3415,11 +3415,11 @@ public static partial class TrainerBehaviour
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
-        AddText(parent, "最小", new Vector2(880, 246), new Vector2(46, 36), 15);
+        AddText(parent, "최소", new Vector2(880, 246), new Vector2(46, 36), 15);
         CustomInputs["damageRangeMin"] = AddInput(parent, draft.CustomDamageRangeMin.ToString(CultureInfo.InvariantCulture), new Vector2(928, 246), new Vector2(68, 36));
-        AddText(parent, "最大", new Vector2(1006, 246), new Vector2(46, 36), 15);
+        AddText(parent, "최대", new Vector2(1006, 246), new Vector2(46, 36), 15);
         CustomInputs["damageRangeMax"] = AddInput(parent, draft.CustomDamageRangeMax.ToString(CultureInfo.InvariantCulture), new Vector2(1054, 246), new Vector2(68, 36));
-        AddCustomKungfuButton(parent, "刷新示意图", new Vector2(1132, 246), new Vector2(105, 36), () =>
+        AddCustomKungfuButton(parent, "미리보기 새로고침", new Vector2(1132, 246), new Vector2(105, 36), () =>
         {
             SyncCustomKungfuDraftFromInputs();
             InvalidateCustomKungfuPages();
@@ -3427,18 +3427,18 @@ public static partial class TrainerBehaviour
         });
         var grid = AddText(parent, BuildRangePreviewGrid(draft), new Vector2(650, 300), new Vector2(590, 300), 16, TextAnchor.UpperCenter);
         grid.font = Resources.GetBuiltinResource<Font>("Arial.ttf") ?? grid.font;
-        AddText(parent, "图例：◎左图为施法者、右图为目标点；■是可选攻击格，●是伤害覆盖格。方向类统一朝上示意；最终以战斗网格为准。", new Vector2(650, 575), new Vector2(590, 60), 15);
-        AddText(parent, "形状按钮可循环切换：圆形、方形、直线、斜线、方向。最小/最大是格数；输入后点“刷新示意图”。", new Vector2(10, 585), new Vector2(610, 52), 15);
+        AddText(parent, "범례: ◎ 왼쪽은 시전자, 오른쪽은 대상 지점입니다. ■는 선택 가능한 공격 칸, ●는 피해가 덮는 칸입니다. 방향형은 모두 위쪽 기준으로 표시하며, 최종 결과는 전투 격자를 따릅니다.", new Vector2(650, 575), new Vector2(590, 60), 15);
+        AddText(parent, "모양 버튼을 누르면 원형, 사각형, 직선, 사선, 방향 순으로 바뀝니다. 최소/최대는 칸 수이며, 입력 후 “미리보기 새로고침”을 누르세요.", new Vector2(10, 585), new Vector2(610, 52), 15);
     }
 
     private static void BuildCustomKungfuDirectPostureEditor(Transform parent)
     {
         var draft = _customDraft!;
         NormalizeCustomKungfuRecord(draft);
-        AddText(parent, "进攻姿态表示技能对目标各部位造成的架势变化；防御姿态表示使用功法时自身获得的部位架势。负数会削减，正数会增加。", new Vector2(10, 50), new Vector2(1210, 42), 15);
-        AddDonorRow(parent, "进攻姿态来源", "attackPosture", 10, 96, 590);
-        AddDonorRow(parent, "防御姿态来源", "defensePosture", 650, 96, 590);
-        AddCustomKungfuButton(parent, draft.UseCustomAttackPosture ? "自定义进攻姿态：开启" : "自定义进攻姿态：关闭", new Vector2(10, 155), new Vector2(285, 38), () =>
+        AddText(parent, "공격 자세는 기술이 대상 각 부위에 주는 자세 변화, 방어 자세는 무공을 쓸 때 자신이 얻는 부위 자세입니다. 음수는 깎고 양수는 늘립니다.", new Vector2(10, 50), new Vector2(1210, 42), 15);
+        AddDonorRow(parent, "공격 자세 출처", "attackPosture", 10, 96, 590);
+        AddDonorRow(parent, "방어 자세 출처", "defensePosture", 650, 96, 590);
+        AddCustomKungfuButton(parent, draft.UseCustomAttackPosture ? "사용자 공격 자세: 켜짐" : "사용자 공격 자세: 꺼짐", new Vector2(10, 155), new Vector2(285, 38), () =>
         {
             SyncCustomKungfuDraftFromInputs();
             draft.UseCustomAttackPosture = !draft.UseCustomAttackPosture;
@@ -3446,14 +3446,14 @@ public static partial class TrainerBehaviour
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
-        AddCustomKungfuButton(parent, "从来源重新载入", new Vector2(305, 155), new Vector2(220, 38), () =>
+        AddCustomKungfuButton(parent, "출처에서 다시 불러오기", new Vector2(305, 155), new Vector2(220, 38), () =>
         {
             LoadAttackPostureFromDonor(draft);
             draft.UseCustomAttackPosture = true;
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
-        AddCustomKungfuButton(parent, draft.UseCustomDefensePosture ? "自定义防御姿态：开启" : "自定义防御姿态：关闭", new Vector2(650, 155), new Vector2(285, 38), () =>
+        AddCustomKungfuButton(parent, draft.UseCustomDefensePosture ? "사용자 방어 자세: 켜짐" : "사용자 방어 자세: 꺼짐", new Vector2(650, 155), new Vector2(285, 38), () =>
         {
             SyncCustomKungfuDraftFromInputs();
             draft.UseCustomDefensePosture = !draft.UseCustomDefensePosture;
@@ -3461,15 +3461,15 @@ public static partial class TrainerBehaviour
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
-        AddCustomKungfuButton(parent, "从来源重新载入", new Vector2(945, 155), new Vector2(220, 38), () =>
+        AddCustomKungfuButton(parent, "출처에서 다시 불러오기", new Vector2(945, 155), new Vector2(220, 38), () =>
         {
             LoadDefensePostureFromDonor(draft);
             draft.UseCustomDefensePosture = true;
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
-        AddText(parent, "进攻姿态（目标部位）", new Vector2(10, 220), new Vector2(570, 34), 19, TextAnchor.MiddleCenter);
-        AddText(parent, "防御姿态（自身部位）", new Vector2(650, 220), new Vector2(570, 34), 19, TextAnchor.MiddleCenter);
+        AddText(parent, "공격 자세(대상 부위)", new Vector2(10, 220), new Vector2(570, 34), 19, TextAnchor.MiddleCenter);
+        AddText(parent, "방어 자세(자신 부위)", new Vector2(650, 220), new Vector2(570, 34), 19, TextAnchor.MiddleCenter);
         for (var i = 0; i < 6; i++)
         {
             var x = i % 3 * 190;
@@ -3480,16 +3480,16 @@ public static partial class TrainerBehaviour
             AddText(parent, label, new Vector2(650 + x, y), new Vector2(80, 36), 16);
             CustomInputs[$"defensePosture{i}"] = AddInput(parent, draft.CustomDefensePosture[i].ToString("0.###", CultureInfo.InvariantCulture), new Vector2(730 + x, y), new Vector2(90, 36));
         }
-        AddCustomKungfuButton(parent, "应用输入并刷新说明", new Vector2(10, 410), new Vector2(1210, 42), () =>
+        AddCustomKungfuButton(parent, "입력 적용 후 설명 새로고침", new Vector2(10, 410), new Vector2(1210, 42), () =>
         {
             SyncCustomKungfuDraftFromInputs();
-            _customStatus = "已更新自定义姿态草稿；保存后才写入定义。";
+            _customStatus = "사용자 자세 초안을 갱신했습니다. 저장해야 정의에 기록됩니다.";
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
-        AddText(parent, "当前进攻姿态：" + CustomPostureSummary(draft.CustomAttackPosture), new Vector2(10, 475), new Vector2(590, 60), 16);
-        AddText(parent, "当前防御姿态：" + CustomPostureSummary(draft.CustomDefensePosture), new Vector2(650, 475), new Vector2(590, 60), 16);
-        AddText(parent, "关闭自定义时仍保留输入值，但实际使用来源功法的数据；再次开启即可继续编辑。若组合后不能结算，可先恢复同一来源测试。", new Vector2(10, 570), new Vector2(1210, 55), 15);
+        AddText(parent, "현재 공격 자세: " + CustomPostureSummary(draft.CustomAttackPosture), new Vector2(10, 475), new Vector2(590, 60), 16);
+        AddText(parent, "현재 방어 자세: " + CustomPostureSummary(draft.CustomDefensePosture), new Vector2(650, 475), new Vector2(590, 60), 16);
+        AddText(parent, "사용자 설정을 꺼도 입력값은 남지만 실제로는 출처 무공의 데이터를 씁니다. 다시 켜면 이어서 편집할 수 있습니다. 조합 후 정산이 안 되면 같은 출처로 되돌려 시험해 보세요.", new Vector2(10, 570), new Vector2(1210, 55), 15);
     }
 
     private static KungfuSkillData? CustomDonorSkill(int donorId)
@@ -3530,13 +3530,13 @@ public static partial class TrainerBehaviour
 
     private static string AttackRangeTypeLabel(int type) => Math.Clamp(type, 0, 4) switch
     {
-        0 => "圆形／距离环", 1 => "方形", 2 => "十字直线", 3 => "对角斜线", _ => "朝向区域"
+        0 => "원형／거리 고리", 1 => "사각형", 2 => "십자 직선", 3 => "대각 사선", _ => "방향 구역"
     };
 
     private static string DamageRangeTypeLabel(int type) => Math.Clamp(type, 0, 8) switch
     {
-        0 => "圆形／距离环", 1 => "方形", 2 => "十字直线", 3 => "对角斜线", 4 => "朝向直线",
-        5 => "朝向扇形", 6 => "朝向斜线", 7 => "全场", _ => "朝向十字"
+        0 => "원형／거리 고리", 1 => "사각형", 2 => "십자 직선", 3 => "대각 사선", 4 => "방향 직선",
+        5 => "방향 부채꼴", 6 => "방향 사선", 7 => "전체 필드", _ => "방향 십자"
     };
 
     private static string PartPostureLabel(int index)
@@ -3547,7 +3547,7 @@ public static partial class TrainerBehaviour
             if (names != null && index >= 0 && index < names.Count && !string.IsNullOrWhiteSpace(names[index])) return names[index];
         }
         catch { }
-        return $"部位 {index + 1}";
+        return $"부위 {index + 1}";
     }
 
     private static string CustomPostureSummary(List<float> values)
@@ -3560,7 +3560,7 @@ public static partial class TrainerBehaviour
             if (text.Length > 0) text.Append("　");
             text.Append(PartPostureLabel(i)).Append(value >= 0 ? "+" : "").Append(value.ToString("0.###", CultureInfo.InvariantCulture));
         }
-        return text.Length == 0 ? "无变化" : text.ToString();
+        return text.Length == 0 ? "변화 없음" : text.ToString();
     }
 
     private static string BuildRangePreviewGrid(CustomKungfuRecord draft)
@@ -3585,7 +3585,7 @@ public static partial class TrainerBehaviour
             var damage = CustomDonorSkill(draft.DamageRangeDonorId)?.damageRangeData;
             if (damage != null) { damageType = (int)damage.rangeType; damageMin = damage.minRange; damageMax = damage.maxRange; }
         }
-        var text = new StringBuilder("【攻击范围】　　　　　　【伤害范围】\n");
+        var text = new StringBuilder("【공격 범위】　　　　　　【피해 범위】\n");
         for (var y = 4; y >= -4; y--)
         {
             for (var x = -4; x <= 4; x++)
@@ -3631,14 +3631,14 @@ public static partial class TrainerBehaviour
 
     private static void BuildCustomKungfuVisualPage(Transform parent)
     {
-        AddText(parent, "动作与战斗特效", new Vector2(10, 8), new Vector2(700, 40), 22);
-        AddText(parent, "动作、武器、弹道、特效和图标均可独立选择；“整套同步”兼容性最好。", new Vector2(10, 48), new Vector2(1100, 32), 16);
-        AddDonorRow(parent, "使用动作", "animation", 10, 100, 590);
-        AddDonorRow(parent, "显示武器", "weapon", 650, 100, 590);
-        AddDonorRow(parent, "弹道", "bullet", 10, 175, 590);
-        AddDonorRow(parent, "场景特效", "visual", 650, 175, 590);
-        AddDonorRow(parent, "功法图标", "icon", 10, 250, 590);
-        AddCustomKungfuButton(parent, "按动作来源同步整套视觉", new Vector2(650, 250), new Vector2(590, 44), () =>
+        AddText(parent, "동작과 전투 특수 효과", new Vector2(10, 8), new Vector2(700, 40), 22);
+        AddText(parent, "동작, 무기, 탄도, 특수 효과, 아이콘을 각각 고를 수 있습니다. “전체 동기화”가 호환성이 가장 좋습니다.", new Vector2(10, 48), new Vector2(1100, 32), 16);
+        AddDonorRow(parent, "사용 동작", "animation", 10, 100, 590);
+        AddDonorRow(parent, "표시 무기", "weapon", 650, 100, 590);
+        AddDonorRow(parent, "탄도", "bullet", 10, 175, 590);
+        AddDonorRow(parent, "장면 효과", "visual", 650, 175, 590);
+        AddDonorRow(parent, "무공 아이콘", "icon", 10, 250, 590);
+        AddCustomKungfuButton(parent, "동작 출처 기준으로 시각 효과 전체 동기화", new Vector2(650, 250), new Vector2(590, 44), () =>
         {
             var draft = _customDraft!;
             draft.WeaponDonorId = draft.AnimationDonorId;
@@ -3648,27 +3648,27 @@ public static partial class TrainerBehaviour
             draft.CustomIconFile = "";
             var source = GameDataController.Instance == null ? null : OriginalKungfu(GameDataController.Instance, draft.AnimationDonorId);
             if (source != null) { draft.AutoMove = source.autoHeroMove; draft.TrailId = source.trailID; }
-            _customStatus = "动作、武器、弹道、特效、图标与位移已整套同步；尚未保存。";
+            _customStatus = "동작, 무기, 탄도, 특수 효과, 아이콘, 이동을 모두 동기화했습니다. 아직 저장되지 않았습니다.";
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
         var draftIcon = _customDraft!;
         var customIconLabel = string.IsNullOrEmpty(draftIcon.CustomIconFile)
-            ? "本地图标：未选择（当前使用上方的来源图标）"
-            : "本地图标：" + draftIcon.CustomIconFile;
+            ? "로컬 아이콘: 선택 안 함(위의 출처 아이콘 사용 중)"
+            : "로컬 아이콘: " + draftIcon.CustomIconFile;
         AddText(parent, customIconLabel, new Vector2(10, 310), new Vector2(535, 42), 15);
-        AddCustomKungfuButton(parent, "选择本地图标", new Vector2(650, 310), new Vector2(265, 42), ImportCustomKungfuIcon);
-        AddCustomKungfuButton(parent, "恢复来源图标", new Vector2(925, 310), new Vector2(315, 42), RestoreCustomKungfuDonorIcon);
-        AddText(parent, "窗口无法选择？粘贴 PNG/JPG 图片完整路径后导入：", new Vector2(10, 570), new Vector2(1000, 28), 15);
+        AddCustomKungfuButton(parent, "로컬 아이콘 선택", new Vector2(650, 310), new Vector2(265, 42), ImportCustomKungfuIcon);
+        AddCustomKungfuButton(parent, "출처 아이콘 복원", new Vector2(925, 310), new Vector2(315, 42), RestoreCustomKungfuDonorIcon);
+        AddText(parent, "창에서 선택이 안 되나요? PNG/JPG 이미지 전체 경로를 붙여 넣고 가져오세요: ", new Vector2(10, 570), new Vector2(1000, 28), 15);
         var iconPath = AddInput(parent, "", new Vector2(10, 607), new Vector2(920, 38));
-        AddCustomKungfuButton(parent, "从路径导入", new Vector2(945, 607), new Vector2(295, 38), () => ImportCustomKungfuIconPath(iconPath.text));
+        AddCustomKungfuButton(parent, "경로에서 가져오기", new Vector2(945, 607), new Vector2(295, 38), () => ImportCustomKungfuIconPath(iconPath.text));
         var customIconSprite = GetCustomKungfuIconSprite(draftIcon.CustomIconFile);
         if (customIconSprite == null && !string.IsNullOrEmpty(draftIcon.CustomIconFile))
         {
             var file = NormalizeCustomKungfuIconFile(draftIcon.CustomIconFile);
-            var reason = IconLoadErrors.TryGetValue(file, out var error) ? error : "图标尚未加载，请重新加载查看诊断。";
-            AddText(parent, reason + "\n完整诊断：BepInEx/LogOutput.log", new Vector2(10, 651), new Vector2(915, 48), 14);
-            AddCustomKungfuButton(parent, "重新加载已存图标", new Vector2(945, 651), new Vector2(295, 38), () =>
+            var reason = IconLoadErrors.TryGetValue(file, out var error) ? error : "아이콘을 아직 불러오지 않았습니다. 다시 불러와 진단을 확인하세요.";
+            AddText(parent, reason + "\n전체 진단: BepInEx/LogOutput.log", new Vector2(10, 651), new Vector2(915, 48), 14);
+            AddCustomKungfuButton(parent, "보관된 아이콘 다시 불러오기", new Vector2(945, 651), new Vector2(295, 38), () =>
             {
                 IconRetryAt.Remove(file);
                 InvalidateCustomKungfuPages();
@@ -3684,12 +3684,12 @@ public static partial class TrainerBehaviour
             image.color = Color.white;
             image.raycastTarget = false;
         }
-        AddCustomKungfuButton(parent, _customBattlePreviewActive ? "返回原生战斗（不改技能栏）" : "使用当前原生装备进入试战", new Vector2(10, 375), new Vector2(1230, 48), ToggleCustomBattlePreviewFromEditor);
+        AddCustomKungfuButton(parent, _customBattlePreviewActive ? "기본 전투로 돌아가기(기술 막대 변경 없음)" : "현재 기본 장비로 시험 전투 시작", new Vector2(10, 375), new Vector2(1230, 48), ToggleCustomBattlePreviewFromEditor);
         AddText(parent, _customBattlePreviewActive
-            ? "当前是游戏原生战斗：模组没有替换、补位或重建角色技能栏；未保存的草稿不会在战斗中热更新。"
-            : "先保存并让主角习得，再通过原生功法界面装备；内功、轻功、绝技装入各自槽位。此按钮调用游戏原生试战入口。",
+            ? "현재 게임 기본 전투입니다. 모드는 캐릭터 기술 막대를 교체·보충·재구성하지 않았으며, 저장하지 않은 초안은 전투 중에 반영되지 않습니다."
+            : "먼저 저장해 주인공이 익히게 한 뒤, 게임 기본 무공 화면에서 장착하세요. 내공, 경공, 절기는 각자의 칸에 장착합니다. 이 버튼은 게임 기본 시험 전투 진입점을 호출합니다.",
             new Vector2(10, 433), new Vector2(1220, 62), 16);
-        AddText(parent, "本地图标支持 PNG/JPG/JPEG，透明背景请用 PNG；上传图标优先于来源图标。注意：某些动作依赖固定动画事件，自由混搭异常时请使用整套同步。", new Vector2(10, 500), new Vector2(1220, 58), 15);
+        AddText(parent, "로컬 아이콘은 PNG/JPG/JPEG를 지원하며, 투명 배경은 PNG를 쓰세요. 올린 아이콘이 출처 아이콘보다 우선합니다. 주의: 일부 동작은 고정 애니메이션 이벤트에 의존하므로 자유 조합이 이상하면 전체 동기화를 쓰세요.", new Vector2(10, 500), new Vector2(1220, 58), 15);
     }
 
     private static void ToggleCustomBattlePreviewFromEditor()
@@ -3699,7 +3699,7 @@ public static partial class TrainerBehaviour
             SyncCustomKungfuDraftFromInputs();
             _customVisible = false;
             if (_customUiRoot != null) _customUiRoot.SetActive(false);
-            _customStatus = "已返回原生战斗；技能栏未被模组改动。";
+            _customStatus = "기본 전투로 돌아왔습니다. 기술 막대는 모드가 바꾸지 않았습니다.";
             return;
         }
         StartCustomKungfuBattlePreview();
@@ -3710,20 +3710,20 @@ public static partial class TrainerBehaviour
         SyncCustomKungfuDraftFromInputs();
         try
         {
-            var draft = _customDraft ?? throw new InvalidOperationException("尚未创建功法草稿");
-            var battle = BattleController.Instance ?? throw new InvalidOperationException("战斗控制器尚未载入");
-            var player = Player ?? throw new InvalidOperationException("主角存档尚未载入");
+            var draft = _customDraft ?? throw new InvalidOperationException("아직 무공 초안을 만들지 않았습니다");
+            var battle = BattleController.Instance ?? throw new InvalidOperationException("전투 컨트롤러를 아직 불러오지 않았습니다");
+            var player = Player ?? throw new InvalidOperationException("주인공 세이브를 아직 불러오지 않았습니다");
             if (battle.battleState != BattleState.None && battle.battleState != BattleState.End)
-                throw new InvalidOperationException("当前已有战斗正在进行，请先结束该战斗");
+                throw new InvalidOperationException("이미 진행 중인 전투가 있습니다. 먼저 그 전투를 끝내세요");
             if (FindSavedCustomKungfu(draft.Id) == null)
-                throw new InvalidOperationException("请先保存功法修改");
+                throw new InvalidOperationException("먼저 무공 수정을 저장하세요");
             var learned = player.FindSkill(draft.Id)
-                ?? throw new InvalidOperationException("请先使用“保存并让主角习得”");
+                ?? throw new InvalidOperationException("먼저 “저장 후 주인공 습득”을 사용하세요");
             var equipped = HasEquippedKungfu(player, draft.Id);
             if (!equipped)
-                throw new InvalidOperationException("请先在游戏原生功法界面装备该功法（内功、轻功、绝技使用各自的装备槽）");
+                throw new InvalidOperationException("먼저 게임 기본 무공 화면에서 이 무공을 장착하세요(내공, 경공, 절기는 각자의 장착 칸 사용)");
             var opponent = FindCustomKungfuBattlePreviewOpponent(player)
-                ?? throw new InvalidOperationException("当前存档中没有可用的试演对手");
+                ?? throw new InvalidOperationException("현재 세이브에 시연 상대로 쓸 수 있는 캐릭터가 없습니다");
             _customBattlePreviewSkillId = draft.Id;
             _customBattlePreviewPlayer = player;
             _customBattlePreviewSkill = learned;
@@ -3742,7 +3742,7 @@ public static partial class TrainerBehaviour
                 false,
                 new BattleMapTypeData(BattleMapType.Arena, 12, 12));
 
-            _customStatus = $"已进入原生试战：{draft.Name}（ID {draft.Id}）。技能栏完全由游戏管理。";
+            _customStatus = $"기본 시험 전투에 들어갔습니다: {draft.Name}(ID {draft.Id}). 기술 막대는 전적으로 게임이 관리합니다.";
             _customVisible = false;
             if (_customUiRoot != null) _customUiRoot.SetActive(false);
             LongYinTrainerPlugin.Logger.LogInfo($"Started native StudyFight for equipped custom kungfu {draft.Id}; no hero skill lists or save records were modified.");
@@ -3752,7 +3752,7 @@ public static partial class TrainerBehaviour
             CleanupCustomKungfuBattlePreviewRuntime();
             _customBattlePreviewActive = false;
             _customBattlePreviewEnding = false;
-            _customStatus = "无法进入原生试战：" + ex.Message;
+            _customStatus = "기본 시험 전투에 들어갈 수 없습니다: " + ex.Message;
             LongYinTrainerPlugin.Logger.LogWarning($"Native custom kungfu StudyFight start failed safely: {ex.Message}");
         }
     }
@@ -3808,7 +3808,7 @@ public static partial class TrainerBehaviour
         _customBattlePreviewActive = false;
         CleanupCustomKungfuBattlePreviewRuntime();
         _customBattlePreviewReturnAt = Time.realtimeSinceStartup + 0.1f;
-        _customStatus = "原生试战已结束；模组没有改动角色技能栏或装备记录。";
+        _customStatus = "기본 시험 전투가 끝났습니다. 모드는 캐릭터 기술 막대나 장비 기록을 바꾸지 않았습니다.";
     }
 
     private static void CleanupCustomKungfuBattlePreviewRuntime()
@@ -3842,14 +3842,14 @@ public static partial class TrainerBehaviour
     {
         AddText(parent, label, new Vector2(x, y), new Vector2(130, 42), 18);
         AddText(parent, DonorDisplay(GetCustomDonor(field)), new Vector2(x + 130, y), new Vector2(width - 310, 42), 16);
-        AddCustomKungfuButton(parent, "选择来源", new Vector2(x + width - 170, y), new Vector2(170, 42), () => OpenCustomKungfuDonorPicker(field));
+        AddCustomKungfuButton(parent, "출처 선택", new Vector2(x + width - 170, y), new Vector2(170, 42), () => OpenCustomKungfuDonorPicker(field));
     }
 
     private static void AddDonorRowWithSummary(Transform parent, string label, string field, float x, float y, float width)
     {
         AddDonorRow(parent, label, field, x, y, width);
         AddText(parent, CustomKungfuDonorInlineSummary(field), new Vector2(x + 8, y + 45), new Vector2(width - 168, 62), 14, TextAnchor.UpperLeft);
-        AddCustomKungfuButton(parent, CustomEffectUsesCustom(field) ? "● 逐条自选" : "逐条自选", new Vector2(x + width - 150, y + 50), new Vector2(150, 38), () => OpenCustomKungfuEffectEntryEditor(field));
+        AddCustomKungfuButton(parent, CustomEffectUsesCustom(field) ? "● 항목별 선택" : "항목별 선택", new Vector2(x + width - 150, y + 50), new Vector2(150, 38), () => OpenCustomKungfuEffectEntryEditor(field));
     }
 
     private static bool CustomEffectUsesCustom(string field)
@@ -3902,7 +3902,7 @@ public static partial class TrainerBehaviour
         var donor = CustomDonorSkill(GetCustomDonor(field));
         if (donor == null || donor.type != draft.Type)
         {
-            _customStatus = "请先选择本类别的来源功法，再导入词条。";
+            _customStatus = "먼저 이 분류의 출처 무공을 고른 뒤 옵션을 가져오세요.";
             return;
         }
         if (field is "ratio" or "needs")
@@ -3935,7 +3935,7 @@ public static partial class TrainerBehaviour
         }
         SetCustomEffectUsesCustom(field, true);
         NormalizeCustomKungfuRecord(draft);
-        _customStatus = $"已把{CustomDonorFieldLabel(field)}来源中的词条导入逐条编辑器；尚未保存。";
+        _customStatus = $"{CustomDonorFieldLabel(field)} 출처의 옵션을 항목별 편집기로 가져왔습니다. 아직 저장되지 않았습니다.";
     }
 
     private static void AddCustomAttriList(List<CustomAttriNumSpec> destination, string kind, Il2CppSystem.Collections.Generic.List<float>? source, int count)
@@ -3949,8 +3949,8 @@ public static partial class TrainerBehaviour
     {
         var field = _customEffectEditorField;
         var attriMode = field is "ratio" or "needs";
-        AddText(parent, $"{CustomKungfuTypeName(_customDraft!.Type)} · {CustomDonorFieldLabel(field)}逐条编辑", new Vector2(10, 8), new Vector2(760, 38), 22);
-        AddCustomKungfuButton(parent, "返回效果总览", new Vector2(1020, 8), new Vector2(210, 38), () =>
+        AddText(parent, $"{CustomKungfuTypeName(_customDraft!.Type)} · {CustomDonorFieldLabel(field)} 항목별 편집", new Vector2(10, 8), new Vector2(760, 38), 22);
+        AddCustomKungfuButton(parent, "효과 개요로 돌아가기", new Vector2(1020, 8), new Vector2(210, 38), () =>
         {
             _customEffectEditorField = "";
             _customEffectSelectedKey = "";
@@ -3958,15 +3958,15 @@ public static partial class TrainerBehaviour
             ShowCustomKungfuTab();
         });
         AddText(parent, attriMode
-            ? "左侧是当前词条，右侧选类型并填写底层系数/要求值。0 可以明确覆盖为无加成；负数也允许。"
-            : "左侧是当前词条，右侧选类型并填写显示值。标有百分比的类型输入 50 即保存为 50%，不会变成 5000%。",
+            ? "왼쪽은 현재 옵션입니다. 오른쪽에서 종류를 고르고 내부 계수/요구값을 입력하세요. 0으로 보너스 없음을 명시할 수 있고 음수도 허용됩니다."
+            : "왼쪽은 현재 옵션입니다. 오른쪽에서 종류를 고르고 표시값을 입력하세요. 퍼센트 표시가 있는 종류는 50을 입력하면 50%로 저장되며 5000%가 되지 않습니다.",
             new Vector2(10, 48), new Vector2(1210, 38), 15);
 
         var current = GetCustomEffectCurrentChoices(field);
         const int currentPageSize = 6;
         var currentPageCount = Math.Max(1, (current.Count + currentPageSize - 1) / currentPageSize);
         _customEffectCurrentPage = Math.Clamp(_customEffectCurrentPage, 0, currentPageCount - 1);
-        AddText(parent, $"当前自选词条（{current.Count}）", new Vector2(10, 92), new Vector2(570, 32), 18, TextAnchor.MiddleCenter);
+        AddText(parent, $"현재 선택한 옵션({current.Count})", new Vector2(10, 92), new Vector2(570, 32), 18, TextAnchor.MiddleCenter);
         var currentStart = _customEffectCurrentPage * currentPageSize;
         for (var i = 0; i < currentPageSize && currentStart + i < current.Count; i++)
         {
@@ -3978,7 +3978,7 @@ public static partial class TrainerBehaviour
                 InvalidateCustomKungfuPages();
                 ShowCustomKungfuTab();
             });
-            AddCustomKungfuButton(parent, "删除", new Vector2(500, 132 + i * 52), new Vector2(80, 42), () =>
+            AddCustomKungfuButton(parent, "삭제", new Vector2(500, 132 + i * 52), new Vector2(80, 42), () =>
             {
                 RemoveCustomEffectEntry(field, capturedKey);
                 if (_customEffectSelectedKey == capturedKey) _customEffectSelectedKey = "";
@@ -3986,24 +3986,24 @@ public static partial class TrainerBehaviour
                 ShowCustomKungfuTab();
             });
         }
-        AddCustomKungfuButton(parent, "上一页", new Vector2(10, 450), new Vector2(125, 34), () => { _customEffectCurrentPage = Math.Max(0, _customEffectCurrentPage - 1); InvalidateCustomKungfuPages(); ShowCustomKungfuTab(); });
+        AddCustomKungfuButton(parent, "이전 페이지", new Vector2(10, 450), new Vector2(125, 34), () => { _customEffectCurrentPage = Math.Max(0, _customEffectCurrentPage - 1); InvalidateCustomKungfuPages(); ShowCustomKungfuTab(); });
         AddText(parent, $"{_customEffectCurrentPage + 1}/{currentPageCount}", new Vector2(145, 450), new Vector2(290, 34), 15, TextAnchor.MiddleCenter);
-        AddCustomKungfuButton(parent, "下一页", new Vector2(445, 450), new Vector2(135, 34), () => { _customEffectCurrentPage = Math.Min(currentPageCount - 1, _customEffectCurrentPage + 1); InvalidateCustomKungfuPages(); ShowCustomKungfuTab(); });
-        AddCustomKungfuButton(parent, "从当前来源重新导入", new Vector2(10, 520), new Vector2(270, 40), () => { ImportCustomEffectFromDonor(field); _customEffectSelectedKey = ""; InvalidateCustomKungfuPages(); ShowCustomKungfuTab(); });
-        AddCustomKungfuButton(parent, "清空全部", new Vector2(290, 520), new Vector2(140, 40), () => { ClearCustomEffectEntries(field); _customEffectSelectedKey = ""; InvalidateCustomKungfuPages(); ShowCustomKungfuTab(); });
-        AddCustomKungfuButton(parent, "改回来源模式", new Vector2(440, 520), new Vector2(140, 40), () =>
+        AddCustomKungfuButton(parent, "다음 페이지", new Vector2(445, 450), new Vector2(135, 34), () => { _customEffectCurrentPage = Math.Min(currentPageCount - 1, _customEffectCurrentPage + 1); InvalidateCustomKungfuPages(); ShowCustomKungfuTab(); });
+        AddCustomKungfuButton(parent, "현재 출처에서 다시 가져오기", new Vector2(10, 520), new Vector2(270, 40), () => { ImportCustomEffectFromDonor(field); _customEffectSelectedKey = ""; InvalidateCustomKungfuPages(); ShowCustomKungfuTab(); });
+        AddCustomKungfuButton(parent, "모두 비우기", new Vector2(290, 520), new Vector2(140, 40), () => { ClearCustomEffectEntries(field); _customEffectSelectedKey = ""; InvalidateCustomKungfuPages(); ShowCustomKungfuTab(); });
+        AddCustomKungfuButton(parent, "출처 모드로 되돌리기", new Vector2(440, 520), new Vector2(140, 40), () =>
         {
             SetCustomEffectUsesCustom(field, false);
             _customEffectEditorField = "";
             _customEffectSelectedKey = "";
-            _customStatus = $"{CustomDonorFieldLabel(field)}已改回整组来源模式；自选内容仍保留，重新进入即可继续编辑。";
+            _customStatus = $"{CustomDonorFieldLabel(field)}을(를) 그룹 전체 출처 모드로 되돌렸습니다. 선택한 내용은 남아 있어 다시 들어가면 이어서 편집할 수 있습니다.";
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
 
         var groupLabels = attriMode
-            ? new Dictionary<int, string> { [0] = "全部", [1] = "六维", [2] = "武学", [3] = "生活", [4] = "资源" }
-            : new Dictionary<int, string> { [1] = "六维", [2] = "武学", [3] = "战斗", [4] = "特殊", [5] = "全部", [6] = "自身状态", [7] = "对方状态", [8] = "攻触发", [9] = "守触发" };
+            ? new Dictionary<int, string> { [0] = "전체", [1] = "6대 속성", [2] = "무학", [3] = "생활", [4] = "자원" }
+            : new Dictionary<int, string> { [1] = "6대 속성", [2] = "무학", [3] = "전투", [4] = "특수", [5] = "전체", [6] = "자신 상태", [7] = "상대 상태", [8] = "공격 시 발동", [9] = "방어 시 발동" };
         var allGroup = attriMode ? 0 : 5;
         var allowedKeys = GetCategoryEffectKeys(field);
         var catalogs = new Dictionary<int, List<CustomEffectChoice>>();
@@ -4022,7 +4022,7 @@ public static partial class TrainerBehaviour
             _customEffectCatalogGroup = allGroup;
             _customEffectCatalogPage = 0;
         }
-        AddText(parent, $"本类原版{CustomDonorFieldLabel(field)}词条", new Vector2(650, 92), new Vector2(590, 30), 18, TextAnchor.MiddleCenter);
+        AddText(parent, $"이 분류의 원본 {CustomDonorFieldLabel(field)} 옵션", new Vector2(650, 92), new Vector2(590, 30), 18, TextAnchor.MiddleCenter);
         var groupColumns = Math.Min(5, visibleGroups.Count);
         var groupWidth = 590f / groupColumns;
         for (var i = 0; i < visibleGroups.Count; i++)
@@ -4040,7 +4040,7 @@ public static partial class TrainerBehaviour
         var catalogTop = visibleGroups.Count > groupColumns ? 202 : 166;
         var catalogPageSize = catalogTop == 166 ? 7 : 6;
         if (catalog.Count == 0)
-            AddText(parent, "本类别的这组效果没有原版可选词条。\n左侧已有词条仍可选择修改或删除。", new Vector2(650, catalogTop), new Vector2(590, 80), 16);
+            AddText(parent, "이 분류의 이 효과 그룹에는 원본에서 고를 옵션이 없습니다.\n왼쪽에 있는 옵션은 여전히 선택해 수정하거나 삭제할 수 있습니다.", new Vector2(650, catalogTop), new Vector2(590, 80), 16);
         var catalogPageCount = Math.Max(1, (catalog.Count + catalogPageSize - 1) / catalogPageSize);
         _customEffectCatalogPage = Math.Clamp(_customEffectCatalogPage, 0, catalogPageCount - 1);
         var catalogStart = _customEffectCatalogPage * catalogPageSize;
@@ -4056,23 +4056,23 @@ public static partial class TrainerBehaviour
             });
         }
         AddCustomKungfuButton(parent, "◀", new Vector2(650, 486), new Vector2(90, 32), () => { _customEffectCatalogPage = Math.Max(0, _customEffectCatalogPage - 1); InvalidateCustomKungfuPages(); ShowCustomKungfuTab(); });
-        AddText(parent, $"第 {_customEffectCatalogPage + 1}/{catalogPageCount} 页，共 {catalog.Count} 项", new Vector2(750, 486), new Vector2(380, 32), 14, TextAnchor.MiddleCenter);
+        AddText(parent, $"{_customEffectCatalogPage + 1}/{catalogPageCount} 페이지, 총 {catalog.Count}개", new Vector2(750, 486), new Vector2(380, 32), 14, TextAnchor.MiddleCenter);
         AddCustomKungfuButton(parent, "▶", new Vector2(1140, 486), new Vector2(100, 32), () => { _customEffectCatalogPage = Math.Min(catalogPageCount - 1, _customEffectCatalogPage + 1); InvalidateCustomKungfuPages(); ShowCustomKungfuTab(); });
 
         var selected = FindCustomEffectChoice(field, _customEffectSelectedKey);
-        AddText(parent, selected == null ? "先从当前词条或右侧目录选择一项" : $"当前选择：{selected.Label}", new Vector2(650, 530), new Vector2(590, 32), 15);
+        AddText(parent, selected == null ? "먼저 현재 옵션이나 오른쪽 목록에서 하나를 고르세요" : $"현재 선택: {selected.Label}", new Vector2(650, 530), new Vector2(590, 32), 15);
         var displayValue = selected == null ? "0" : GetCustomEffectDisplayValue(field, selected).ToString("0.###", CultureInfo.InvariantCulture);
-        AddText(parent, selected?.Percent == true ? "数值（%）" : "数值", new Vector2(650, 570), new Vector2(110, 38), 16);
+        AddText(parent, selected?.Percent == true ? "수치(%)" : "수치", new Vector2(650, 570), new Vector2(110, 38), 16);
         var valueInput = AddInput(parent, displayValue, new Vector2(760, 570), new Vector2(250, 38));
-        AddCustomKungfuButton(parent, "添加／更新", new Vector2(1020, 570), new Vector2(220, 38), () =>
+        AddCustomKungfuButton(parent, "추가／갱신", new Vector2(1020, 570), new Vector2(220, 38), () =>
         {
-            if (selected == null) { _customStatus = "请先选择一个词条类型。"; return; }
-            if (!float.TryParse(valueInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out var value) || !float.IsFinite(value)) { _customStatus = "词条数值无效。"; return; }
+            if (selected == null) { _customStatus = "먼저 옵션 종류를 고르세요."; return; }
+            if (!float.TryParse(valueInput.text, NumberStyles.Float, CultureInfo.InvariantCulture, out var value) || !float.IsFinite(value)) { _customStatus = "옵션 수치가 올바르지 않습니다."; return; }
             SetCustomEffectEntry(field, selected, value);
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
-        AddText(parent, attriMode ? "威力/需求表使用底层原始数值；可以用来源导入观察原版量级后再调整。" : CustomEffectRuleDescription(selected), new Vector2(650, 618), new Vector2(590, 76), 14);
+        AddText(parent, attriMode ? "위력/요건 표는 내부 원시 수치를 씁니다. 출처에서 가져와 원본 규모를 본 뒤 조정할 수 있습니다." : CustomEffectRuleDescription(selected), new Vector2(650, 618), new Vector2(590, 76), 14);
         if (!attriMode)
             AddText(parent, CustomEffectPlacementDescription(field, selected), new Vector2(10, 578), new Vector2(570, 116), 14);
     }
@@ -4128,10 +4128,10 @@ public static partial class TrainerBehaviour
             AddKind("living", LivingSkillAffixLabels);
             if (group is 0 or 4)
             {
-                result.Add(new CustomEffectChoice { Key = "hp:0", Kind = "hp", Label = "生命" });
-                result.Add(new CustomEffectChoice { Key = "mana:0", Kind = "mana", Label = "内力" });
-                result.Add(new CustomEffectChoice { Key = "power:0", Kind = "power", Label = "体力" });
-                result.Add(new CustomEffectChoice { Key = "charm:0", Kind = "charm", Label = "魅力" });
+                result.Add(new CustomEffectChoice { Key = "hp:0", Kind = "hp", Label = "생명" });
+                result.Add(new CustomEffectChoice { Key = "mana:0", Kind = "mana", Label = "내력" });
+                result.Add(new CustomEffectChoice { Key = "power:0", Kind = "power", Label = "체력" });
+                result.Add(new CustomEffectChoice { Key = "charm:0", Kind = "charm", Label = "매력" });
             }
             result.RemoveAll(choice => !allowed.Contains(choice.Key));
             return result;
@@ -4186,7 +4186,7 @@ public static partial class TrainerBehaviour
         "attri" when index >= 0 && index < AttributeAffixLabels.Length => AttributeAffixLabels[index],
         "fight" when index >= 0 && index < FightSkillAffixLabels.Length => FightSkillAffixLabels[index],
         "living" when index >= 0 && index < LivingSkillAffixLabels.Length => LivingSkillAffixLabels[index],
-        "hp" => "生命", "mana" => "内力", "power" => "体力", "charm" => "魅力", _ => kind + index
+        "hp" => "생명", "mana" => "내력", "power" => "체력", "charm" => "매력", _ => kind + index
     };
 
     private static List<CustomSpeAddSpec> CustomSpeAddSpecs(string field)
@@ -4251,7 +4251,7 @@ public static partial class TrainerBehaviour
             if (!found) source.Add(new CustomSpeAddSpec { TypeId = choice.TypeId, Value = storedValue });
         }
         NormalizeCustomKungfuRecord(draft);
-        _customStatus = $"已更新{CustomDonorFieldLabel(field)}词条：{choice.Label}；尚未保存。";
+        _customStatus = $"{CustomDonorFieldLabel(field)} 옵션을 갱신했습니다: {choice.Label}. 아직 저장되지 않았습니다.";
     }
 
     private static void RemoveCustomEffectEntry(string field, string key)
@@ -4268,7 +4268,7 @@ public static partial class TrainerBehaviour
             if (key.StartsWith("spe:", StringComparison.Ordinal) && int.TryParse(key[4..], NumberStyles.Integer, CultureInfo.InvariantCulture, out var id))
                 source.RemoveAll(value => value.TypeId == id);
         }
-        _customStatus = $"已删除{CustomDonorFieldLabel(field)}中的该词条；尚未保存。";
+        _customStatus = $"{CustomDonorFieldLabel(field)}에서 이 옵션을 삭제했습니다. 아직 저장되지 않았습니다.";
     }
 
     private static void ClearCustomEffectEntries(string field)
@@ -4278,7 +4278,7 @@ public static partial class TrainerBehaviour
         else if (field == "needs") draft.CustomNeeds.Clear();
         else CustomSpeAddSpecs(field).Clear();
         SetCustomEffectUsesCustom(field, true);
-        _customStatus = $"已清空{CustomDonorFieldLabel(field)}的全部自选词条；尚未保存。";
+        _customStatus = $"{CustomDonorFieldLabel(field)}의 선택 옵션을 모두 비웠습니다. 아직 저장되지 않았습니다.";
     }
 
     private static string CustomKungfuDonorInlineSummary(string field)
@@ -4288,23 +4288,23 @@ public static partial class TrainerBehaviour
             if (CustomEffectUsesCustom(field))
             {
                 var entries = GetCustomEffectCurrentChoices(field);
-                if (entries.Count == 0) return "自选：无（该组明确为空）";
+                if (entries.Count == 0) return "선택: 없음(이 그룹은 명시적으로 비어 있음)";
                 var summary = string.Join("；", entries.ConvertAll(entry => entry.Label));
                 if (summary.Length > 94) summary = summary[..91] + "……";
-                return "自选：" + summary;
+                return "선택: " + summary;
             }
             var skill = CustomDonorSkill(GetCustomDonor(field));
-            if (skill == null) return "内容：来源不可用";
+            if (skill == null) return "내용: 출처를 쓸 수 없음";
             var detail = CustomKungfuDonorPreviewDetail(skill, field, true)
                 .Replace("\r", "")
                 .Replace("\n", "；")
                 .Trim('；', ' ');
             if (detail.Length > 118) detail = detail[..115] + "……";
-            return "内容：" + detail;
+            return "내용: " + detail;
         }
         catch (Exception ex)
         {
-            return "内容读取失败：" + ex.Message;
+            return "내용 읽기 실패: " + ex.Message;
         }
     }
 
@@ -4314,7 +4314,7 @@ public static partial class TrainerBehaviour
         {
             var database = GameDataController.Instance;
             var skill = database == null ? null : OriginalKungfu(database, skillId);
-            return skill == null ? $"不可用（ID {skillId}）" : $"{skill.name}（ID {skillId}）";
+            return skill == null ? $"사용 불가(ID {skillId})" : $"{skill.name}（ID {skillId}）";
         }
         catch { return $"ID {skillId}"; }
     }
@@ -4344,16 +4344,16 @@ public static partial class TrainerBehaviour
         const int pageSize = 8;
         var pageCount = Math.Max(1, (choices.Count + pageSize - 1) / pageSize);
         _customPickerPage = Math.Clamp(_customPickerPage, 0, pageCount - 1);
-        AddText(parent, $"{CustomKungfuTypeName(_customDraft!.Type)} · 选择{CustomDonorFieldLabel(_customPickerField)}来源", new Vector2(10, 8), new Vector2(650, 40), 22);
-        AddText(parent, "单击左侧功法先预览，确认后才会采用。", new Vector2(700, 8), new Vector2(540, 40), 16, TextAnchor.MiddleCenter);
+        AddText(parent, $"{CustomKungfuTypeName(_customDraft!.Type)} · {CustomDonorFieldLabel(_customPickerField)} 출처 선택", new Vector2(10, 8), new Vector2(650, 40), 22);
+        AddText(parent, "왼쪽 무공을 누르면 먼저 미리보기를 보여 주며, 확인해야 적용됩니다.", new Vector2(700, 8), new Vector2(540, 40), 16, TextAnchor.MiddleCenter);
         _customPickerSearchInput = AddInput(parent, _customPickerSearch, new Vector2(10, 58), new Vector2(455, 38));
-        AddCustomKungfuButton(parent, "搜索", new Vector2(475, 58), new Vector2(100, 38), () =>
+        AddCustomKungfuButton(parent, "검색", new Vector2(475, 58), new Vector2(100, 38), () =>
         {
             _customPickerSearch = _customPickerSearchInput?.text?.Trim() ?? "";
             _customPickerPage = 0;
             ShowCustomKungfuDonorPicker();
         });
-        AddCustomKungfuButton(parent, "返回当前页", new Vector2(585, 58), new Vector2(105, 38), () =>
+        AddCustomKungfuButton(parent, "현재 페이지로 돌아가기", new Vector2(585, 58), new Vector2(105, 38), () =>
         {
             _customPickerField = "";
             InvalidateCustomKungfuPickerPages();
@@ -4364,15 +4364,15 @@ public static partial class TrainerBehaviour
         {
             var choice = choices[start + i];
             var captured = choice.Id;
-            AddCustomKungfuButton(parent, $"{choice.Name}  [ID {choice.Id}]  类{choice.Type}/稀{choice.RareLv}", new Vector2(10, 110 + i * 56), new Vector2(680, 46), () =>
+            AddCustomKungfuButton(parent, $"{choice.Name}  [ID {choice.Id}]  분류{choice.Type}/희귀{choice.RareLv}", new Vector2(10, 110 + i * 56), new Vector2(680, 46), () =>
             {
                 _customPickerPreviewSkillId = captured;
                 UpdateCustomKungfuDonorPreview();
             });
         }
-        AddCustomKungfuButton(parent, "上一页", new Vector2(10, 574), new Vector2(145, 38), () => { _customPickerPage = Math.Max(0, _customPickerPage - 1); ShowCustomKungfuDonorPicker(); });
-        AddText(parent, $"第 {_customPickerPage + 1} / {pageCount} 页，共 {choices.Count} 项", new Vector2(165, 574), new Vector2(360, 38), 16, TextAnchor.MiddleCenter);
-        AddCustomKungfuButton(parent, "下一页", new Vector2(535, 574), new Vector2(155, 38), () => { _customPickerPage = Math.Min(pageCount - 1, _customPickerPage + 1); ShowCustomKungfuDonorPicker(); });
+        AddCustomKungfuButton(parent, "이전 페이지", new Vector2(10, 574), new Vector2(145, 38), () => { _customPickerPage = Math.Max(0, _customPickerPage - 1); ShowCustomKungfuDonorPicker(); });
+        AddText(parent, $"{_customPickerPage + 1} / {pageCount} 페이지, 총 {choices.Count}개", new Vector2(165, 574), new Vector2(360, 38), 16, TextAnchor.MiddleCenter);
+        AddCustomKungfuButton(parent, "다음 페이지", new Vector2(535, 574), new Vector2(155, 38), () => { _customPickerPage = Math.Min(pageCount - 1, _customPickerPage + 1); ShowCustomKungfuDonorPicker(); });
 
         var preview = UiObject("DonorPreview", parent, new Vector2(540, 462), new Vector2(710, 108));
         var previewImage = preview.AddComponent<Image>();
@@ -4391,10 +4391,10 @@ public static partial class TrainerBehaviour
         animationFrameImage.raycastTarget = false;
         _customAnimationPreviewParent = animationFrame.transform;
         var canPreviewAnimation = _customPickerField is "animation" or "weapon" or "bullet" or "visual" or "icon";
-        AddText(animationFrame.transform, canPreviewAnimation ? "动画预演区\n选择动作后点击下方按钮" : "该项是数据元素\n完整说明显示在左侧", new Vector2(8, 82), new Vector2(180, 92), 14, TextAnchor.MiddleCenter).raycastTarget = false;
+        AddText(animationFrame.transform, canPreviewAnimation ? "애니메이션 미리보기\n동작을 고른 뒤 아래 버튼을 누르세요" : "이 항목은 데이터 요소입니다\n자세한 설명은 왼쪽에 표시됩니다", new Vector2(8, 82), new Vector2(180, 92), 14, TextAnchor.MiddleCenter).raycastTarget = false;
         if (canPreviewAnimation)
-            AddCustomKungfuButton(parent, "实时播放一次动作", new Vector2(710, 530), new Vector2(540, 40), PlayCustomKungfuAnimationPreview);
-        AddCustomKungfuButton(parent, $"确认用于：{CustomDonorFieldLabel(_customPickerField)}", new Vector2(710, 584), new Vector2(540, 46), ConfirmCustomKungfuDonorPreview);
+            AddCustomKungfuButton(parent, "동작 한 번 실시간 재생", new Vector2(710, 530), new Vector2(540, 40), PlayCustomKungfuAnimationPreview);
+        AddCustomKungfuButton(parent, $"확정: {CustomDonorFieldLabel(_customPickerField)}", new Vector2(710, 584), new Vector2(540, 46), ConfirmCustomKungfuDonorPreview);
         UpdateCustomKungfuDonorPreview();
     }
 
@@ -4424,7 +4424,7 @@ public static partial class TrainerBehaviour
         var database = GameDataController.Instance;
         if (database == null || OriginalKungfu(database, _customPickerPreviewSkillId) is not { } selectedDonor || selectedDonor.type != _customDraft?.Type)
         {
-            _customStatus = "请先从左侧选择一个可用的来源功法。";
+            _customStatus = "먼저 왼쪽에서 사용할 수 있는 출처 무공을 고르세요.";
             return;
         }
         var field = _customPickerField;
@@ -4438,7 +4438,7 @@ public static partial class TrainerBehaviour
         }
         SetCustomDonor(field, _customPickerPreviewSkillId);
         if (CustomEffectUsesCustom(field)) ImportCustomEffectFromDonor(field);
-        _customStatus = $"已选择来源：{DonorDisplay(_customPickerPreviewSkillId)}；尚未保存。";
+        _customStatus = $"선택한 출처: {DonorDisplay(_customPickerPreviewSkillId)}. 아직 저장되지 않았습니다.";
         _customPickerField = "";
         InvalidateCustomKungfuPages();
         ShowCustomKungfuTab();
@@ -4455,8 +4455,8 @@ public static partial class TrainerBehaviour
             {
                 _customPickerPreviewIcon.sprite = null;
                 _customPickerPreviewIcon.color = Color.clear;
-                _customPickerPreviewTitle.text = "请从左侧选择功法";
-                _customPickerPreviewDetail.text = "选择后会显示图标、动作、弹道、特效和当前元素的详细数据。";
+                _customPickerPreviewTitle.text = "왼쪽에서 무공을 고르세요";
+                _customPickerPreviewDetail.text = "선택하면 아이콘, 동작, 탄도, 특수 효과와 현재 요소의 상세 데이터를 표시합니다.";
                 return;
             }
             var iconName = skill.GetSkillIcon();
@@ -4470,12 +4470,12 @@ public static partial class TrainerBehaviour
             var sprite = GetItemSprite(iconName);
             _customPickerPreviewIcon.sprite = sprite;
             _customPickerPreviewIcon.color = sprite == null ? Color.clear : Color.white;
-            _customPickerPreviewTitle.text = $"{skill.name}\nID {skill.skillID}　{skill.TypeDescribe()}\n稀有度：{RarityName(skill.rareLv)}\n图标：{iconName}";
+            _customPickerPreviewTitle.text = $"{skill.name}\nID {skill.skillID}　{skill.TypeDescribe()}\n희귀도: {RarityName(skill.rareLv)}\n아이콘: {iconName}";
             _customPickerPreviewDetail.text = CustomKungfuDonorPreviewDetail(skill, _customPickerField, sprite != null);
         }
         catch (Exception ex)
         {
-            _customPickerPreviewDetail.text = "预览失败：" + ex.Message;
+            _customPickerPreviewDetail.text = "미리보기 실패: " + ex.Message;
         }
     }
 
@@ -4496,7 +4496,7 @@ public static partial class TrainerBehaviour
     internal static string NativeVisualDetails(KungfuSkillData skill)
     {
         var text = CustomKungfuDonorPreviewDetail(skill, "visual", true);
-        var last = text.IndexOf("右侧可用独立骨骼", StringComparison.Ordinal);
+        var last = text.IndexOf("오른쪽 독립 골격으로", StringComparison.Ordinal);
         return last < 0 ? text : text.Substring(0, last);
     }
     private static void PlayCustomKungfuAnimationPreview()
@@ -4506,12 +4506,12 @@ public static partial class TrainerBehaviour
             var skill = _nativeVisualPreviewSkill ?? CustomDonorSkill(_customPickerPreviewSkillId);
             if (skill == null || string.IsNullOrWhiteSpace(skill.animationName))
             {
-                _customStatus = "该来源没有可播放的使用动作。";
+                _customStatus = "이 출처에는 재생할 수 있는 사용 동작이 없습니다.";
                 return;
             }
             if (_customAnimationPreviewParent == null)
             {
-                _customStatus = "动画预演区尚未创建，请重新打开来源选择页。";
+                _customStatus = "애니메이션 미리보기 영역이 아직 없습니다. 출처 선택 페이지를 다시 여세요.";
                 return;
             }
 
@@ -4541,7 +4541,7 @@ public static partial class TrainerBehaviour
                     LongYinTrainerPlugin.Logger.LogInfo("Native preview loaded independent skeleton: " + path + "; animation=" + skill.animationName);
                     break;
                 }
-                if (asset == null) { _customStatus = "预览人物资源中没有动作：" + skill.animationName; return; }
+                if (asset == null) { _customStatus = "미리보기 인물 리소스에 동작이 없습니다: " + skill.animationName; return; }
             }
             var sourceGraphic = UnityEngine.Object.FindObjectOfType(Il2CppType.Of<SkeletonGraphic>()) as SkeletonGraphic;
             if (asset == null && sourceGraphic != null && sourceGraphic != _customAnimationPreviewGraphic)
@@ -4560,7 +4560,7 @@ public static partial class TrainerBehaviour
             }
             if (asset == null)
             {
-                _customStatus = "当前建筑场景没有可复用的角色骨骼。切换到能显示动态人物的建筑或界面后再试；数据预览仍然有效。";
+                _customStatus = "현재 건물 장면에 재사용할 수 있는 캐릭터 골격이 없습니다. 움직이는 인물이 보이는 건물이나 화면으로 바꾼 뒤 다시 시도하세요. 데이터 미리보기는 그대로 유효합니다.";
                 return;
             }
 
@@ -4583,17 +4583,17 @@ public static partial class TrainerBehaviour
             var animation = _customAnimationPreviewGraphic.SkeletonData?.FindAnimation(skill.animationName);
             if (animation == null)
             {
-                _customStatus = $"当前预览角色不包含动作“{skill.animationName}”。这表示该动作依赖另一套人物骨骼；仍可保存并在兼容角色上使用。";
+                _customStatus = $"현재 미리보기 캐릭터에 동작 “{skill.animationName}”이(가) 없습니다. 이 동작은 다른 인물 골격에 의존한다는 뜻이며, 저장해서 호환되는 캐릭터에 쓸 수는 있습니다.";
                 return;
             }
             _customAnimationPreviewGraphic.Skeleton.SetToSetupPose();
             _customAnimationPreviewGraphic.AnimationState.ClearTracks();
             _customAnimationPreviewGraphic.AnimationState.SetAnimation(0, skill.animationName, false);
-            _customStatus = $"正在独立预演动作：{skill.animationName}。未调用技能结算、弹道或伤害逻辑。";
+            _customStatus = $"동작을 독립 재생 중: {skill.animationName}. 기술 정산, 탄도, 피해 로직은 호출하지 않았습니다.";
         }
         catch (Exception ex)
         {
-            _customStatus = "动画预演失败但未影响草稿：" + ex.Message;
+            _customStatus = "애니메이션 미리보기는 실패했지만 초안에는 영향이 없습니다: " + ex.Message;
             LongYinTrainerPlugin.Logger.LogWarning($"Custom kungfu animation preview skipped safely: {ex.Message}");
         }
     }
@@ -4601,50 +4601,50 @@ public static partial class TrainerBehaviour
     private static string CustomKungfuDonorPreviewDetail(KungfuSkillData skill, string field, bool iconAvailable)
     {
         var text = new StringBuilder();
-        if (!iconAvailable) text.AppendLine("图标资源未找到，但仍可查看数据并选择。\n");
+        if (!iconAvailable) text.AppendLine("아이콘 리소스를 찾지 못했지만 데이터는 보고 선택할 수 있습니다.\n");
         if (field is "animation" or "weapon" or "bullet" or "visual" or "icon")
         {
-            text.AppendLine($"动作：{(string.IsNullOrWhiteSpace(skill.animationName) ? "无" : skill.animationName)}");
-            text.AppendLine($"武器：{(string.IsNullOrWhiteSpace(skill.weaponName) ? "无" : skill.weaponName)}");
+            text.AppendLine($"동작: {(string.IsNullOrWhiteSpace(skill.animationName) ? "없음" : skill.animationName)}");
+            text.AppendLine($"무기: {(string.IsNullOrWhiteSpace(skill.weaponName) ? "없음" : skill.weaponName)}");
             var bullet = skill.skillBullet;
             text.AppendLine(bullet == null || string.IsNullOrWhiteSpace(bullet.bulletName)
-                ? "弹道：无"
-                : $"弹道：{bullet.bulletName}｜{bullet.bulletMoveType}｜速度 {bullet.bulletSpeed:0.###}｜缩放 {bullet.bulletScale:0.###}");
+                ? "탄도: 없음"
+                : $"탄도: {bullet.bulletName}｜{bullet.bulletMoveType}｜속도 {bullet.bulletSpeed:0.###}｜크기 {bullet.bulletScale:0.###}");
             var effects = skill.skillSpeEffects;
-            if (effects == null || effects.Count == 0) text.AppendLine("场景特效：无");
+            if (effects == null || effects.Count == 0) text.AppendLine("장면 효과: 없음");
             else
             {
-                text.AppendLine($"场景特效（{effects.Count}）：");
+                text.AppendLine($"장면 효과({effects.Count}): ");
                 for (var i = 0; i < effects.Count && i < 6; i++)
                 {
                     var effect = effects[i];
                     if (effect == null) continue;
-                    text.AppendLine($"• {effect.speName}｜{LocalizeSkillEffectTarget(effect.speEffectTargetType)}｜{LocalizeSkillEffectTrigger(effect.triggerType)}{(effect.selfSpe ? "｜自身" : "")}");
+                    text.AppendLine($"• {effect.speName}｜{LocalizeSkillEffectTarget(effect.speEffectTargetType)}｜{LocalizeSkillEffectTrigger(effect.triggerType)}{(effect.selfSpe ? "｜자신" : "")}");
                 }
-                if (effects.Count > 6) text.AppendLine($"……另有 {effects.Count - 6} 项");
+                if (effects.Count > 6) text.AppendLine($"……외 {effects.Count - 6}개");
             }
-            text.AppendLine("右侧可用独立骨骼实时播放一次动作；不会驱动战斗角色，也不会触发伤害结算。若当前建筑场景没有兼容骨骼，会明确提示。");
+            text.AppendLine("오른쪽 독립 골격으로 동작을 한 번 실시간 재생합니다. 전투 캐릭터를 움직이거나 피해 정산을 일으키지 않습니다. 현재 건물 장면에 호환되는 골격이 없으면 분명히 알려 줍니다.");
         }
-        else if (field == "attackRange") text.AppendLine("攻击范围：" + skill.GetAttackRangeDescribe());
-        else if (field == "damageRange") text.AppendLine("伤害范围：" + skill.GetDamageRangeDescribe());
-        else if (field == "attackPosture") text.AppendLine("进攻姿态：" + (skill.atkPartPosture?.GetSkillDescribe() ?? "无"));
-        else if (field == "defensePosture") text.AppendLine("防御姿态：" + (skill.defPartPosture?.GetSkillDescribe() ?? "无"));
-        else if (field == "upgrade") text.AppendLine("升级效果：\n" + LocalizeAffixDescription(skill.upgradeAddData?.GetDescribe(false, true, 2, false) ?? "无"));
-        else if (field == "equip") text.AppendLine("装备效果：\n" + LocalizeAffixDescription(skill.equipAddData?.GetDescribe(false, true, 2, false) ?? "无"));
-        else if (field == "use") text.AppendLine("使用效果：\n" + LocalizeAffixDescription(skill.useAddData?.GetDescribe(false, true, 2, false) ?? "无"));
-        else if (field == "ratio") text.AppendLine("威力加成：\n" + (skill.addDamageRatio?.GetDamageRatioDescribe(1f) ?? "无"));
+        else if (field == "attackRange") text.AppendLine("공격 범위: " + skill.GetAttackRangeDescribe());
+        else if (field == "damageRange") text.AppendLine("피해 범위: " + skill.GetDamageRangeDescribe());
+        else if (field == "attackPosture") text.AppendLine("공격 자세: " + (skill.atkPartPosture?.GetSkillDescribe() ?? "없음"));
+        else if (field == "defensePosture") text.AppendLine("방어 자세: " + (skill.defPartPosture?.GetSkillDescribe() ?? "없음"));
+        else if (field == "upgrade") text.AppendLine("강화 효과:\n" + LocalizeAffixDescription(skill.upgradeAddData?.GetDescribe(false, true, 2, false) ?? "없음"));
+        else if (field == "equip") text.AppendLine("장비 효과:\n" + LocalizeAffixDescription(skill.equipAddData?.GetDescribe(false, true, 2, false) ?? "없음"));
+        else if (field == "use") text.AppendLine("사용 효과:\n" + LocalizeAffixDescription(skill.useAddData?.GetDescribe(false, true, 2, false) ?? "없음"));
+        else if (field == "ratio") text.AppendLine("위력 보너스:\n" + (skill.addDamageRatio?.GetDamageRatioDescribe(1f) ?? "없음"));
         else if (field == "needs")
         {
             var player = Player;
-            text.AppendLine("修炼需求：\n" + (player == null ? "进入存档后显示角色对应的完整需求。" : skill.skillNeeds?.GetSkillNeedsDescribe(player) ?? "无"));
+            text.AppendLine("수련 요건:\n" + (player == null ? "세이브에 들어가면 캐릭터별 전체 요건을 표시합니다." : skill.skillNeeds?.GetSkillNeedsDescribe(player) ?? "없음"));
         }
         else
         {
-            text.AppendLine($"基础伤害：{skill.baseDamage:0.###}");
-            text.AppendLine($"内力消耗：{skill.manaCost:0.###}");
-            text.AppendLine($"经验系数：{skill.expRatio:0.###}");
-            text.AppendLine("攻击范围：" + skill.GetAttackRangeDescribe());
-            text.AppendLine("伤害范围：" + skill.GetDamageRangeDescribe());
+            text.AppendLine($"기본 피해: {skill.baseDamage:0.###}");
+            text.AppendLine($"내력 소모: {skill.manaCost:0.###}");
+            text.AppendLine($"경험 계수: {skill.expRatio:0.###}");
+            text.AppendLine("공격 범위: " + skill.GetAttackRangeDescribe());
+            text.AppendLine("피해 범위: " + skill.GetDamageRangeDescribe());
         }
         var result = text.ToString();
         return result.Length <= 900 ? result : result[..897] + "……";
@@ -4652,17 +4652,17 @@ public static partial class TrainerBehaviour
 
     private static string LocalizeSkillEffectTarget(SkillSpeEffectTargetType target) => target switch
     {
-        SkillSpeEffectTargetType.Hip => "角色位置",
-        SkillSpeEffectTargetType.Grid => "地格",
-        SkillSpeEffectTargetType.Weapon => "武器",
-        _ => "未知目标"
+        SkillSpeEffectTargetType.Hip => "캐릭터 위치",
+        SkillSpeEffectTargetType.Grid => "지형 칸",
+        SkillSpeEffectTargetType.Weapon => "무기",
+        _ => "알 수 없는 대상"
     };
 
     private static string LocalizeSkillEffectTrigger(SkillSpeEffectTriggerType trigger) => trigger switch
     {
-        SkillSpeEffectTriggerType.Start => "开始时",
-        SkillSpeEffectTriggerType.Happen => "生效时",
-        _ => "未知时机"
+        SkillSpeEffectTriggerType.Start => "시작 시",
+        SkillSpeEffectTriggerType.Happen => "발동 시",
+        _ => "알 수 없는 시점"
     };
 
     private static List<SkillChoiceSnapshot> GetOriginalKungfuChoices(string search)
@@ -4675,7 +4675,7 @@ public static partial class TrainerBehaviour
             if (pair.Key < 0 || pair.Key >= CustomKungfuIdMin) continue;
             var skill = OriginalKungfu(database, pair.Key);
             if (skill == null) continue;
-            var name = skill.name ?? $"功法 {pair.Key}";
+            var name = skill.name ?? $"무공 {pair.Key}";
             if (!string.IsNullOrWhiteSpace(search) && name.IndexOf(search, StringComparison.OrdinalIgnoreCase) < 0 && !pair.Key.ToString(CultureInfo.InvariantCulture).Contains(search, StringComparison.OrdinalIgnoreCase)) continue;
             result.Add(new SkillChoiceSnapshot { Id = pair.Key, Name = name, Type = skill.type, RareLv = skill.rareLv });
         }
@@ -4685,10 +4685,10 @@ public static partial class TrainerBehaviour
 
     private static string CustomDonorFieldLabel(string field) => field switch
     {
-        "editOriginal" => "原版功法编辑", "base" => "总母版", "ratio" => "威力加成", "needs" => "修炼需求", "upgrade" => "升级效果",
-        "equip" => "装备效果", "use" => "使用效果", "attackRange" => "攻击范围", "damageRange" => "伤害范围",
-        "attackPosture" => "进攻姿态", "defensePosture" => "防御姿态", "animation" => "使用动作", "weapon" => "显示武器",
-        "bullet" => "弹道", "visual" => "场景特效", "icon" => "功法图标", _ => "元素"
+        "editOriginal" => "원본 무공 편집", "base" => "총 템플릿", "ratio" => "위력 보너스", "needs" => "수련 요건", "upgrade" => "강화 효과",
+        "equip" => "장비 효과", "use" => "사용 효과", "attackRange" => "공격 범위", "damageRange" => "피해 범위",
+        "attackPosture" => "공격 자세", "defensePosture" => "방어 자세", "animation" => "사용 동작", "weapon" => "표시 무기",
+        "bullet" => "탄도", "visual" => "장면 효과", "icon" => "무공 아이콘", _ => "요소"
     };
 
     private static int GetCustomDonor(string field)
@@ -4733,7 +4733,7 @@ public static partial class TrainerBehaviour
         var draft = _customDraft!;
         if (CustomDonorSkill(donorId)?.type != draft.Type)
         {
-            _customStatus = "总母版类别不匹配，请先选择本类别模板。";
+            _customStatus = "총 템플릿 분류가 맞지 않습니다. 먼저 이 분류의 템플릿을 고르세요.";
             return false;
         }
         draft.DamageRatioDonorId = donorId;
@@ -4823,64 +4823,64 @@ public static partial class TrainerBehaviour
     private static void BuildCustomKungfuManagePage(Transform parent)
     {
         var draft = _customDraft!;
-        AddText(parent, "保存与管理", new Vector2(10, 8), new Vector2(700, 40), 22);
-        AddText(parent, $"当前草稿：{draft.Name}　ID {(!draft.EditOriginal && draft.Id == 0 ? "未分配" : draft.Id.ToString(CultureInfo.InvariantCulture))}　母版 {draft.BaseDonorId}", new Vector2(10, 50), new Vector2(1220, 36), 17);
-        AddText(parent, "已保存的功法（原版修改／自创）", new Vector2(10, 102), new Vector2(560, 36), 19, TextAnchor.MiddleCenter);
+        AddText(parent, "저장과 관리", new Vector2(10, 8), new Vector2(700, 40), 22);
+        AddText(parent, $"현재 초안: {draft.Name}　ID {(!draft.EditOriginal && draft.Id == 0 ? "미배정" : draft.Id.ToString(CultureInfo.InvariantCulture))}　템플릿 {draft.BaseDonorId}", new Vector2(10, 50), new Vector2(1220, 36), 17);
+        AddText(parent, "저장된 무공(원본 수정／자작)", new Vector2(10, 102), new Vector2(560, 36), 19, TextAnchor.MiddleCenter);
 
         const int pageSize = 6;
         var visibleSkills = _customKungfuStore.Skills;
         var pageCount = Math.Max(1, (visibleSkills.Count + pageSize - 1) / pageSize);
         if (visibleSkills.Count == 0)
-            AddText(parent, "暂无已保存功法", new Vector2(10, 160), new Vector2(560, 48), 18, TextAnchor.MiddleCenter);
+            AddText(parent, "저장된 무공 없음", new Vector2(10, 160), new Vector2(560, 48), 18, TextAnchor.MiddleCenter);
         _customManagePage = Math.Clamp(_customManagePage, 0, pageCount - 1);
         var start = _customManagePage * pageSize;
         for (var i = 0; i < pageSize && start + i < visibleSkills.Count; i++)
         {
             var saved = visibleSkills[start + i];
             var captured = saved.Id;
-            AddCustomKungfuButton(parent, $"{(saved.EditOriginal ? "[原版] " : "[自创] ")}{saved.Name}　[ID {saved.Id}]", new Vector2(10, 150 + i * 62), new Vector2(560, 48), () =>
+            AddCustomKungfuButton(parent, $"{(saved.EditOriginal ? "[원본] " : "[자작] ")}{saved.Name}　[ID {saved.Id}]", new Vector2(10, 150 + i * 62), new Vector2(560, 48), () =>
             {
                 var record = FindSavedCustomKungfu(captured);
                 if (record == null) return;
                 if (record.RemovedContent) { OpenKungfuRemoval(record); return; }
                 _customDraft = CloneCustomKungfuRecord(record);
-                _customStatus = $"已载入 {record.Name}；修改后需再次保存。";
+                _customStatus = $"{record.Name}을(를) 불러왔습니다. 수정 후 다시 저장해야 합니다.";
                 _customTab = 0;
                 InvalidateCustomKungfuPages();
                 ShowCustomKungfuTab();
             });
         }
-        AddCustomKungfuButton(parent, "上一页", new Vector2(10, 540), new Vector2(150, 40), () =>
+        AddCustomKungfuButton(parent, "이전 페이지", new Vector2(10, 540), new Vector2(150, 40), () =>
         {
             _customManagePage = Math.Max(0, _customManagePage - 1);
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
-        AddText(parent, $"第 {_customManagePage + 1} / {pageCount} 页", new Vector2(170, 540), new Vector2(220, 40), 16, TextAnchor.MiddleCenter);
-        AddCustomKungfuButton(parent, "下一页", new Vector2(400, 540), new Vector2(170, 40), () =>
+        AddText(parent, $"{_customManagePage + 1} / {pageCount} 페이지", new Vector2(170, 540), new Vector2(220, 40), 16, TextAnchor.MiddleCenter);
+        AddCustomKungfuButton(parent, "다음 페이지", new Vector2(400, 540), new Vector2(170, 40), () =>
         {
             _customManagePage = Math.Min(pageCount - 1, _customManagePage + 1);
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
 
-        AddText(parent, "写入操作", new Vector2(650, 102), new Vector2(570, 36), 19, TextAnchor.MiddleCenter);
-        AddCustomKungfuButton(parent, "仅保存定义", new Vector2(650, 160), new Vector2(570, 52), () => SaveCustomKungfuDraft(false, false));
-        AddCustomKungfuButton(parent, "保存并让主角习得", new Vector2(650, 230), new Vector2(570, 52), () => SaveCustomKungfuDraft(true, false));
-        AddCustomKungfuButton(parent, "保存并生成一本秘籍", new Vector2(650, 300), new Vector2(570, 52), () => SaveCustomKungfuDraft(false, true));
-        AddCustomKungfuButton(parent, "新建空白草稿", new Vector2(650, 390), new Vector2(570, 48), () =>
+        AddText(parent, "쓰기 작업", new Vector2(650, 102), new Vector2(570, 36), 19, TextAnchor.MiddleCenter);
+        AddCustomKungfuButton(parent, "정의만 저장", new Vector2(650, 160), new Vector2(570, 52), () => SaveCustomKungfuDraft(false, false));
+        AddCustomKungfuButton(parent, "저장 후 주인공 습득", new Vector2(650, 230), new Vector2(570, 52), () => SaveCustomKungfuDraft(true, false));
+        AddCustomKungfuButton(parent, "저장 후 비급 한 권 생성", new Vector2(650, 300), new Vector2(570, 52), () => SaveCustomKungfuDraft(false, true));
+        AddCustomKungfuButton(parent, "빈 초안 새로 만들기", new Vector2(650, 390), new Vector2(570, 48), () =>
         {
             _customDraft = NewCustomKungfuDraft();
-            _customStatus = "已新建草稿；尚未保存。";
+            _customStatus = "새 초안을 만들었습니다. 아직 저장되지 않았습니다.";
             _customTab = 0;
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
         });
-        AddCustomKungfuButton(parent, "编辑原版功法（全部九类）", new Vector2(650, 450), new Vector2(570, 44), () => OpenCustomKungfuDonorPicker("editOriginal"));
+        AddCustomKungfuButton(parent, "원본 무공 편집(아홉 분류 모두)", new Vector2(650, 450), new Vector2(570, 44), () => OpenCustomKungfuDonorPicker("editOriginal"));
         if (FindSavedCustomKungfu(draft.Id) is { RemovedContent: false } removalTarget)
-            AddCustomKungfuButton(parent, "删除当前功法", new Vector2(10, 590), new Vector2(570, 42), () => OpenKungfuRemoval(removalTarget));
-        AddText(parent, "原版修改沿用原 ID，影响所有使用该功法的角色；保存后刷新装备与战斗效果。内功、轻功、绝技请装入各自槽位。升级效果按游戏规则在后续升级时获得。", new Vector2(650, 502), new Vector2(570, 76), 15);
-        AddText(parent, "配置每次保存自动备份 .bak；自创功法停用模组前需移除技能与秘籍。", new Vector2(650, 586), new Vector2(570, 40), 14);
+            AddCustomKungfuButton(parent, "현재 무공 삭제", new Vector2(10, 590), new Vector2(570, 42), () => OpenKungfuRemoval(removalTarget));
+        AddText(parent, "원본 수정은 원래 ID를 그대로 쓰며 이 무공을 쓰는 모든 캐릭터에 영향을 줍니다. 저장하면 장비와 전투 효과가 새로고침됩니다. 내공, 경공, 절기는 각자의 칸에 장착하세요. 강화 효과는 게임 규칙대로 이후 레벨업 때 얻습니다.", new Vector2(650, 502), new Vector2(570, 76), 15);
+        AddText(parent, "저장할 때마다 구성을 .bak로 자동 백업합니다. 모드를 끄기 전에 자작 무공의 기술과 비급을 제거하세요.", new Vector2(650, 586), new Vector2(570, 40), 14);
     }
 
     private static CustomKungfuRecord? FindSavedCustomKungfu(int id)
@@ -4896,27 +4896,27 @@ public static partial class TrainerBehaviour
         if (_customDraft == null) return;
         if (_customKungfuStoreLoadFailed)
         {
-            _customStatus = "配置文件此前读取失败，为保护原文件，本次禁止保存。";
+            _customStatus = "구성 파일을 이전에 읽지 못했습니다. 원본 파일을 보호하기 위해 이번에는 저장을 막습니다.";
             return;
         }
         var definitionSaved = false;
         try
         {
-            var database = GameDataController.Instance ?? throw new InvalidOperationException("功法数据库尚未载入");
+            var database = GameDataController.Instance ?? throw new InvalidOperationException("무공 데이터베이스를 아직 불러오지 않았습니다");
             var record = CloneCustomKungfuRecord(_customDraft);
-            if (record.RemovedContent) throw new InvalidOperationException("这是删除后的兼容记录，不可直接保存编辑；请新建功法或恢复删除前配置备份。");
+            if (record.RemovedContent) throw new InvalidOperationException("삭제 후 남은 호환 기록이라 바로 저장·편집할 수 없습니다. 새 무공을 만들거나 삭제 전 구성 백업을 복원하세요.");
             record.Name = record.Name.Trim();
-            if (string.IsNullOrWhiteSpace(record.Name)) throw new InvalidOperationException("功法名称不能为空");
+            if (string.IsNullOrWhiteSpace(record.Name)) throw new InvalidOperationException("무공 이름은 비워 둘 수 없습니다");
             if (!record.EditOriginal && record.Id == 0) record.Id = AllocateCustomKungfuId(database);
-            if (!IsEditableKungfuRecord(record)) throw new InvalidOperationException("功法 ID 与编辑模式不匹配");
+            if (!IsEditableKungfuRecord(record)) throw new InvalidOperationException("무공 ID와 편집 모드가 맞지 않습니다");
             if (record.EditOriginal && OriginalKungfu(database, record.Id) == null)
-                throw new InvalidOperationException("目标原版功法不存在，未写入配置");
+                throw new InvalidOperationException("대상 원본 무공이 없어 구성에 기록하지 않았습니다");
             ValidateKungfuCategoryChange(database, record);
             var resolvedBaseDonorId = ResolveCustomKungfuBaseDonor(database, record);
-            if (resolvedBaseDonorId < 0) throw new InvalidOperationException($"总母版 ID {record.BaseDonorId} 无效，且没有可回退的来源功法");
+            if (resolvedBaseDonorId < 0) throw new InvalidOperationException($"총 템플릿 ID {record.BaseDonorId}가 올바르지 않고 대신 쓸 출처 무공도 없습니다");
             record.BaseDonorId = resolvedBaseDonorId;
             ValidateCustomKungfuDonors(database, record);
-            SummonSkillValidation.Validate(BuildCustomKungfuDefinition(database, record) ?? throw new InvalidOperationException("无法根据当前元素组合生成定义"));
+            SummonSkillValidation.Validate(BuildCustomKungfuDefinition(database, record) ?? throw new InvalidOperationException("현재 요소 조합으로 정의를 생성할 수 없습니다"));
 
             var candidate = new CustomKungfuStore
             {
@@ -4948,20 +4948,20 @@ public static partial class TrainerBehaviour
             var followUp = "";
             if (grantToPlayer)
             {
-                var player = Player ?? throw new InvalidOperationException("定义已保存，但主角存档尚未载入，无法习得");
+                var player = Player ?? throw new InvalidOperationException("정의는 저장했지만 주인공 세이브를 불러오지 않아 습득할 수 없습니다");
                 var existing = player.FindSkill(record.Id);
                 if (existing == null) GrantCustomKungfuToPlayer(player, record.Id);
-                followUp = existing == null ? "，主角已习得" : "，主角原本已习得";
+                followUp = existing == null ? " (주인공 습득 완료)" : " (주인공은 이미 습득함)";
             }
             if (createBook)
             {
-                var player = Player ?? throw new InvalidOperationException("定义已保存，但主角存档尚未载入，无法生成秘籍");
+                var player = Player ?? throw new InvalidOperationException("정의는 저장했지만 주인공 세이브를 불러오지 않아 비급을 만들 수 없습니다");
                 var book = new ItemData(ItemType.Book).SetBookData(record.Id, record.RareLv);
-                if (book == null) throw new InvalidOperationException("定义已保存，但秘籍生成失败");
+                if (book == null) throw new InvalidOperationException("정의는 저장했지만 비급 생성에 실패했습니다");
                 player.GetItem(book, false, false, 0, true);
-                followUp = "，秘籍已放入主角背包";
+                followUp = " (비급을 주인공 가방에 넣음)";
             }
-            _customStatus = $"已保存 {record.Name}（ID {record.Id}）{followUp}。";
+            _customStatus = $"{record.Name}(ID {record.Id})을(를) 저장했습니다{followUp}.";
             _customTab = 4;
             InvalidateCustomKungfuPages();
             ShowCustomKungfuTab();
@@ -4969,7 +4969,7 @@ public static partial class TrainerBehaviour
         }
         catch (Exception ex)
         {
-            _customStatus = (definitionSaved ? "定义已保存，但后续处理失败：" : "保存失败，未写入定义：") + ex.Message;
+            _customStatus = (definitionSaved ? "정의는 저장했지만 후속 처리에 실패했습니다: " : "저장 실패, 정의를 기록하지 않았습니다: ") + ex.Message;
             LongYinTrainerPlugin.Logger.LogWarning($"Custom kungfu save failed safely: {ex}");
         }
     }
@@ -4983,7 +4983,7 @@ public static partial class TrainerBehaviour
             if (database.kungfuSkillDataBase != null && database.kungfuSkillDataBase.ContainsKey(id)) continue;
             return id;
         }
-        throw new InvalidOperationException("自创功法保留 ID 区间已经用完");
+        throw new InvalidOperationException("자작 무공용 예약 ID 구간을 모두 썼습니다");
     }
 
     private static void ValidateCustomKungfuDonors(GameDataController database, CustomKungfuRecord record)
@@ -4996,15 +4996,15 @@ public static partial class TrainerBehaviour
             record.VisualEffectDonorId, record.IconDonorId
         };
         for (var i = 0; i < donors.Length; i++)
-            if (OriginalKungfu(database, donors[i]) == null) throw new InvalidOperationException($"来源功法 ID {donors[i]} 不可用");
+            if (OriginalKungfu(database, donors[i]) == null) throw new InvalidOperationException($"출처 무공 ID {donors[i]}을(를) 쓸 수 없습니다");
         if (!float.IsFinite(record.BaseDamage) || !float.IsFinite(record.ManaCost) || !float.IsFinite(record.ExpRatio))
-            throw new InvalidOperationException("数值中包含无效浮点数");
+            throw new InvalidOperationException("수치에 올바르지 않은 부동소수점 값이 있습니다");
     }
 
     private static void WriteCustomKungfuStore(CustomKungfuStore store)
     {
         if (string.IsNullOrWhiteSpace(_customKungfuStorePath)) InitializeCustomKungfuStorage();
-        var directory = Path.GetDirectoryName(_customKungfuStorePath) ?? throw new InvalidOperationException("配置目录无效");
+        var directory = Path.GetDirectoryName(_customKungfuStorePath) ?? throw new InvalidOperationException("구성 폴더가 올바르지 않습니다");
         Directory.CreateDirectory(directory);
         var temp = _customKungfuStorePath + ".tmp";
         var backup = _customKungfuStorePath + ".bak";
@@ -5012,14 +5012,14 @@ public static partial class TrainerBehaviour
         // Verify the persisted representation, including inherited native data,
         // before replacing a working file. A valid draft alone is insufficient.
         var restored = JsonSerializer.Deserialize<CustomKungfuStore>(json, CustomKungfuJsonOptions)
-            ?? throw new InvalidOperationException("保存数据无法重新读取");
-        var database = GameDataController.Instance ?? throw new InvalidOperationException("功法数据库尚未载入");
+            ?? throw new InvalidOperationException("저장 데이터를 다시 읽을 수 없습니다");
+        var database = GameDataController.Instance ?? throw new InvalidOperationException("무공 데이터베이스를 아직 불러오지 않았습니다");
         for (var i = 0; i < restored.Skills.Count; i++)
         {
             var record = restored.Skills[i];
             if (!record.RemovedContent) ValidateCustomKungfuDonors(database, record);
             var rebuilt = BuildCustomKungfuDefinition(database, record)
-                ?? throw new InvalidOperationException($"功法 {record.Name}（ID {record.Id}）无法从保存数据重建");
+                ?? throw new InvalidOperationException($"무공 {record.Name}(ID {record.Id})을(를) 저장 데이터로 다시 만들 수 없습니다");
             SummonSkillValidation.Validate(rebuilt);
             ValidateUtilityNativeDefinition(database, record, rebuilt);
         }
@@ -5054,12 +5054,12 @@ public static partial class TrainerBehaviour
             var titleBar = UiObject("TitleBar", panel.transform, new Vector2(1250, 52), Vector2.zero);
             _uiTitleRect = titleBar.GetComponent<RectTransform>();
             titleBar.AddComponent<Image>().color = DeepInk;
-            var titleText = AddText(titleBar.transform, "江湖札记", new Vector2(18, 0), new Vector2(220, 52), 24);
+            var titleText = AddText(titleBar.transform, "강호찰기", new Vector2(18, 0), new Vector2(220, 52), 24);
             titleText.color = LightText;
-            var closeText = AddText(titleBar.transform, "H  收起", new Vector2(1090, 0), new Vector2(140, 52), 16, TextAnchor.MiddleRight);
+            var closeText = AddText(titleBar.transform, "H  접기", new Vector2(1090, 0), new Vector2(140, 52), 16, TextAnchor.MiddleRight);
             closeText.color = LightText;
 
-            var tabNames = new[] { "战斗辅助", "角色数值", "背包物品", "物品修改", "打造／炼丹", "势力／开局", "更多功能", "突破自选", "城市属性", "奇遇生成" };
+            var tabNames = new[] { "전투 보조", "캐릭터 수치", "가방 물품", "물품 수정", "제작／연단", "세력／시작", "추가 기능", "돌파 선택", "도시 속성", "기연 생성" };
             for (var i = 0; i < tabNames.Length; i++)
             {
                 var captured = i;
@@ -5079,7 +5079,7 @@ public static partial class TrainerBehaviour
         }
         catch (Exception ex)
         {
-            _status = "界面创建失败：" + ex.Message;
+            _status = "화면 생성 실패: " + ex.Message;
             LongYinTrainerPlugin.Logger.LogError($"Native UI creation failed: {ex}");
             if (_uiRoot != null) UnityEngine.Object.Destroy(_uiRoot);
             ResetNativePageCache();
@@ -5203,10 +5203,11 @@ public static partial class TrainerBehaviour
 
     private static Color ButtonSurface(string label)
     {
-        if (label.StartsWith("删除", StringComparison.Ordinal) || label.StartsWith("清空全部", StringComparison.Ordinal))
+        // Korean labels put the verb last ("현재 무공 삭제"), so match keywords anywhere in the label.
+        if (label.Contains("삭제", StringComparison.Ordinal) || label.Contains("모두 비우기", StringComparison.Ordinal))
             return new Color32(101, 58, 51, 255);
-        if (label.StartsWith("应用", StringComparison.Ordinal) || label.StartsWith("写入", StringComparison.Ordinal) ||
-            label.StartsWith("保存", StringComparison.Ordinal) || label.StartsWith("添加到", StringComparison.Ordinal))
+        if (label.Contains("적용", StringComparison.Ordinal) || label.Contains("쓰기", StringComparison.Ordinal) ||
+            label.Contains("저장", StringComparison.Ordinal) || label.Contains("에 추가", StringComparison.Ordinal))
             return new Color32(85, 72, 55, 255);
         return ControlInk;
     }
@@ -5283,7 +5284,7 @@ public static partial class TrainerBehaviour
             iconImage.sprite = semanticIcon;
             iconImage.preserveAspect = true;
             iconImage.raycastTarget = false;
-            if (label.Contains("下一页", StringComparison.Ordinal)) iconObject.GetComponent<RectTransform>().localScale = new Vector3(-1f, 1f, 1f);
+            if (label.Contains("다음 페이지", StringComparison.Ordinal)) iconObject.GetComponent<RectTransform>().localScale = new Vector3(-1f, 1f, 1f);
         }
         var buttonText = AddText(go.transform, label, new Vector2(iconSpace, 0), new Vector2(size.x - iconSpace, size.y), 17, TextAnchor.MiddleCenter);
         FitButtonLabel(buttonText);
@@ -5295,10 +5296,10 @@ public static partial class TrainerBehaviour
     private static Sprite? ButtonIcon(string label)
     {
         if (string.IsNullOrWhiteSpace(label)) return null;
-        if (label.Contains("上一页", StringComparison.Ordinal) || label.Contains("下一页", StringComparison.Ordinal)) return _pageArrowSprite;
-        if (label.Contains("删除", StringComparison.Ordinal) || label.Contains("清空", StringComparison.Ordinal)) return _deleteSprite;
-        if (label.Contains("添加", StringComparison.Ordinal)) return _addSprite;
-        if (label.Contains("应用", StringComparison.Ordinal) || label.Contains("写入", StringComparison.Ordinal) || label.Contains("设置", StringComparison.Ordinal)) return _confirmSprite;
+        if (label.Contains("이전 페이지", StringComparison.Ordinal) || label.Contains("다음 페이지", StringComparison.Ordinal)) return _pageArrowSprite;
+        if (label.Contains("삭제", StringComparison.Ordinal) || label.Contains("비우기", StringComparison.Ordinal)) return _deleteSprite;
+        if (label.Contains("추가", StringComparison.Ordinal)) return _addSprite;
+        if (label.Contains("적용", StringComparison.Ordinal) || label.Contains("쓰기", StringComparison.Ordinal) || label.Contains("설정", StringComparison.Ordinal)) return _confirmSprite;
         return null;
     }
 
@@ -5384,7 +5385,7 @@ public static partial class TrainerBehaviour
         void Refresh()
         {
             var enabled = get();
-            state.text = enabled ? "已开启" : "已关闭";
+            state.text = enabled ? "켜짐" : "꺼짐";
             state.color = enabled ? AccentInk : ControlInk;
             labelText.fontStyle = enabled ? FontStyle.Bold : FontStyle.Normal;
         }
@@ -5537,47 +5538,47 @@ public static partial class TrainerBehaviour
     private static void BuildNativeBattle()
     {
         var p = NativePageParent;
-        AddNativeToggle(p, "无限生命／体力", 0, 0, () => InfiniteHp, v => InfiniteHp = v);
-        AddNativeToggle(p, "无限内力", 0, 44, () => InfiniteMana, v => InfiniteMana = v);
-        AddNativeToggle(p, "无限气力／耐力", 0, 88, () => InfinitePower, v => InfinitePower = v);
-        AddNativeToggle(p, "外伤归零", 0, 132, () => ZeroExternal, v => ZeroExternal = v);
-        AddNativeToggle(p, "内伤归零", 0, 176, () => ZeroInternal, v => ZeroInternal = v);
-        AddNativeToggle(p, "毒伤归零", 0, 220, () => ZeroPoison, v => ZeroPoison = v);
-        AddNativeToggle(p, "战斗移动范围最大", 0, 264, () => MaxMove, v => MaxMove = v);
-        AddNativeToggle(p, "技能快速充能", 0, 308, () => FastCharge, v => FastCharge = v);
-        AddNativeToggle(p, "技能快速冷却", 0, 352, () => FastCooldown, v => FastCooldown = v);
-        AddNativeToggle(p, "在场同门亲友助战／逐人处置", 0, 410,
+        AddNativeToggle(p, "무한 생명／체력", 0, 0, () => InfiniteHp, v => InfiniteHp = v);
+        AddNativeToggle(p, "무한 내력", 0, 44, () => InfiniteMana, v => InfiniteMana = v);
+        AddNativeToggle(p, "무한 기력／지구력", 0, 88, () => InfinitePower, v => InfinitePower = v);
+        AddNativeToggle(p, "외상 0으로", 0, 132, () => ZeroExternal, v => ZeroExternal = v);
+        AddNativeToggle(p, "내상 0으로", 0, 176, () => ZeroInternal, v => ZeroInternal = v);
+        AddNativeToggle(p, "독상 0으로", 0, 220, () => ZeroPoison, v => ZeroPoison = v);
+        AddNativeToggle(p, "전투 이동 범위 최대", 0, 264, () => MaxMove, v => MaxMove = v);
+        AddNativeToggle(p, "기술 빠른 충전", 0, 308, () => FastCharge, v => FastCharge = v);
+        AddNativeToggle(p, "기술 빠른 쿨다운", 0, 352, () => FastCooldown, v => FastCooldown = v);
+        AddNativeToggle(p, "현장 동문·지인 지원 참전／한 명씩 처분", 0, 410,
             () => BuildingCombat.Enabled.Value, v => BuildingCombat.Enabled.Value = v);
-        AddText(p, "仇敌袭击：同场景同门亲友直接参战；胜后每人选择一次处置。", new Vector2(0, 452), new Vector2(500, 65));
+        AddText(p, "원수 습격: 같은 장소의 동문·지인이 바로 참전하며, 승리 후 한 명씩 처분을 고릅니다.", new Vector2(0, 452), new Vector2(500, 65));
 
-        AddNativeToggle(p, "装备重量归零", 540, 0, () => NoEquipmentWeight, v => NoEquipmentWeight = v);
-        AddNativeToggle(p, "背包重量归零", 540, 44, () => NoInventoryWeight, v => NoInventoryWeight = v);
-        AddNativeToggle(p, "技能经验 ×1000", 540, 88, () => UnlimitedSkillExp, v => UnlimitedSkillExp = v);
-        AddNativeToggle(p, "所选角色最高好感", 540, 132, () => MaxFavor, v => MaxFavor = v);
-        AddNativeToggle(p, "新开局无限点数", 540, 176, () => UnlimitedCreationPoints, v => UnlimitedCreationPoints = v);
-        AddText(p, "大地图移动速度", new Vector2(540, 240), new Vector2(480, 30));
+        AddNativeToggle(p, "장비 무게 0으로", 540, 0, () => NoEquipmentWeight, v => NoEquipmentWeight = v);
+        AddNativeToggle(p, "가방 무게 0으로", 540, 44, () => NoInventoryWeight, v => NoInventoryWeight = v);
+        AddNativeToggle(p, "기술 경험 ×1000", 540, 88, () => UnlimitedSkillExp, v => UnlimitedSkillExp = v);
+        AddNativeToggle(p, "선택 캐릭터 호감도 최대", 540, 132, () => MaxFavor, v => MaxFavor = v);
+        AddNativeToggle(p, "새 게임 무한 포인트", 540, 176, () => UnlimitedCreationPoints, v => UnlimitedCreationPoints = v);
+        AddText(p, "대지도 이동 속도", new Vector2(540, 240), new Vector2(480, 30));
         var speeds = new[] { 1f, 2f, 4f, 8f, 16f };
         for (var i = 0; i < speeds.Length; i++)
         {
             var speed = speeds[i];
             var selected = Math.Abs(WorldSpeed - speed) < 0.001f;
-            AddButton(p, (selected ? "● " : "") + speed + "倍", new Vector2(540 + i * 96, 278), new Vector2(88, 38), () =>
+            AddButton(p, (selected ? "● " : "") + speed + "배", new Vector2(540 + i * 96, 278), new Vector2(88, 38), () =>
             {
                 WorldSpeed = speed;
-                _status = $"大地图移动速度已设为 {speed} 倍，将直接作用于主角最终旅行速度。";
+                _status = $"대지도 이동 속도를 {speed}배로 설정했습니다. 주인공의 최종 여행 속도에 바로 적용됩니다.";
                 LongYinTrainerPlugin.Logger.LogInfo($"World travel speed multiplier changed to {speed}x.");
                 RequestPageRebuild();
             });
         }
-        AddText(p, "操作提示：点击背包物品图标可选物品；查看 NPC 详情后，到“角色数值”页点击“选择当前查看角色”。", new Vector2(540, 350), new Vector2(500, 80));
+        AddText(p, "조작 안내: 가방 물품 아이콘을 누르면 물품이 선택됩니다. NPC 상세를 본 뒤 “캐릭터 수치” 탭에서 “보고 있는 캐릭터 선택”을 누르세요.", new Vector2(540, 350), new Vector2(500, 80));
     }
 
     private static void BuildNativeHero()
     {
         var hero = TargetHero();
         var p = NativePageParent;
-        if (hero == null) { AddText(p, "请先载入存档。", Vector2.zero, new Vector2(600, 40)); return; }
-        AddText(p, $"当前角色：{hero.heroName}（ID {hero.heroID}）", Vector2.zero, new Vector2(800, 34), 20);
+        if (hero == null) { AddText(p, "먼저 세이브를 불러오세요.", Vector2.zero, new Vector2(600, 40)); return; }
+        AddText(p, $"현재 캐릭터: {hero.heroName}(ID {hero.heroID})", Vector2.zero, new Vector2(800, 34), 20);
         if (BuildCharacterEditor(hero)) return;
         var inputs = new Dictionary<string, InputField>();
         for (var i = 0; i < HeroKeys.Length; i++)
@@ -5586,34 +5587,34 @@ public static partial class TrainerBehaviour
             var row = i % 7;
             AddNativeField(p, HeroLabels[i], Fields[HeroKeys[i]], col * 355, 45 + row * 43, inputs, HeroKeys[i]);
         }
-        AddButton(p, "应用角色数值", new Vector2(0, 370), new Vector2(250, 40), () => { foreach (var pair in inputs) Fields[pair.Key] = pair.Value.text; ApplyHero(hero); });
-        AddButton(p, "选择当前查看角色", new Vector2(260, 370), new Vector2(210, 40), SelectCurrentViewedHero);
-        AddButton(p, "选择主角", new Vector2(480, 370), new Vector2(130, 40), () => { SelectHero(Player ?? hero); RequestPageRebuild(); });
+        AddButton(p, "캐릭터 수치 적용", new Vector2(0, 370), new Vector2(250, 40), () => { foreach (var pair in inputs) Fields[pair.Key] = pair.Value.text; ApplyHero(hero); });
+        AddButton(p, "보고 있는 캐릭터 선택", new Vector2(260, 370), new Vector2(210, 40), SelectCurrentViewedHero);
+        AddButton(p, "주인공 선택", new Vector2(480, 370), new Vector2(130, 40), () => { SelectHero(Player ?? hero); RequestPageRebuild(); });
         var heroSearch = AddInput(p, _heroSearchText, new Vector2(620, 370), new Vector2(235, 40));
-        AddButton(p, "按姓名／ID选择", new Vector2(865, 370), new Vector2(175, 40), () =>
+        AddButton(p, "이름／ID로 선택", new Vector2(865, 370), new Vector2(175, 40), () =>
         {
             _heroSearchText = heroSearch.text.Trim();
             SelectHeroBySearch(_heroSearchText);
         });
-        AddButton(p, "六维属性 · 展开编辑", new Vector2(0, 440), new Vector2(405, 34), () => OpenCharacterEditor(hero, 1));
-        AddButton(p, "武学 · 展开编辑", new Vector2(0, 485), new Vector2(405, 34), () => OpenCharacterEditor(hero, 2));
-        AddButton(p, "技艺 · 展开编辑", new Vector2(0, 530), new Vector2(405, 34), () => OpenCharacterEditor(hero, 3));
-        AddButton(p, "已学武学", new Vector2(0, 580), new Vector2(135, 38), () => OpenCharacterEditor(hero, 6));
-        AddButton(p, "外观代码", new Vector2(143, 580), new Vector2(120, 38), () => OpenCharacterEditor(hero, 4));
-        AddButton(p, "专长与喜好", new Vector2(271, 580), new Vector2(134, 38), () => OpenCharacterEditor(hero, 5));
-        AddText(p, "天赋槽位上限", new Vector2(520, 440), new Vector2(150, 34));
+        AddButton(p, "6대 속성 · 펼쳐서 편집", new Vector2(0, 440), new Vector2(405, 34), () => OpenCharacterEditor(hero, 1));
+        AddButton(p, "무학 · 펼쳐서 편집", new Vector2(0, 485), new Vector2(405, 34), () => OpenCharacterEditor(hero, 2));
+        AddButton(p, "기예 · 펼쳐서 편집", new Vector2(0, 530), new Vector2(405, 34), () => OpenCharacterEditor(hero, 3));
+        AddButton(p, "익힌 무학", new Vector2(0, 580), new Vector2(135, 38), () => OpenCharacterEditor(hero, 6));
+        AddButton(p, "외형 코드", new Vector2(143, 580), new Vector2(120, 38), () => OpenCharacterEditor(hero, 4));
+        AddButton(p, "전문과 취향", new Vector2(271, 580), new Vector2(134, 38), () => OpenCharacterEditor(hero, 5));
+        AddText(p, "천부 칸 상한", new Vector2(520, 440), new Vector2(150, 34));
         var talentSlots = AddInput(p, LongYinTrainerPlugin.PlayerTalentSlotLimit.Value.ToString(CultureInfo.InvariantCulture), new Vector2(675, 440), new Vector2(100, 34));
-        AddButton(p, "应用槽位", new Vector2(785, 440), new Vector2(150, 34), () =>
+        AddButton(p, "칸 적용", new Vector2(785, 440), new Vector2(150, 34), () =>
         {
             try
             {
                 LongYinTrainerPlugin.PlayerTalentSlotLimit.Value = LongYinTrainerPlugin.SafeTalentSlotLimit(ParseInt(talentSlots.text));
-                _status = $"主角永久天赋槽位上限已设为 {LongYinTrainerPlugin.PlayerTalentSlotLimit.Value}。重新获得天赋时立即生效。";
+                _status = $"주인공 영구 천부 칸 상한을 {LongYinTrainerPlugin.PlayerTalentSlotLimit.Value}(으)로 설정했습니다. 천부를 다시 얻을 때 바로 적용됩니다.";
             }
-            catch (Exception ex) { _status = "设置天赋槽位失败：" + ex.Message; }
+            catch (Exception ex) { _status = "천부 칸 설정 실패: " + ex.Message; }
         });
-        AddText(p, "范围 1–100。这里只提高主角的数据上限；原版天赋区域会使用已有滚动条继续显示，不修改 NPC。", new Vector2(520, 485), new Vector2(500, 70), 15);
-        AddText(p, "NPC 操作：先在左侧原版界面打开目标角色详情，再点击上面的“选择当前查看角色”；也可输入姓名或数字 ID。应用前请核对本页顶部姓名和 ID。", new Vector2(520, 555), new Vector2(510, 72), 15);
+        AddText(p, "범위 1–100. 주인공의 데이터 상한만 올립니다. 원래 천부 영역은 기존 스크롤바로 계속 표시되며 NPC는 바꾸지 않습니다.", new Vector2(520, 485), new Vector2(500, 70), 15);
+        AddText(p, "NPC 조작: 먼저 왼쪽 원래 화면에서 대상 캐릭터 상세를 연 뒤 위의 “보고 있는 캐릭터 선택”을 누르세요. 이름이나 숫자 ID를 입력해도 됩니다. 적용 전에 이 페이지 위쪽의 이름과 ID를 확인하세요.", new Vector2(520, 555), new Vector2(510, 72), 15);
     }
 
     private static void SelectCurrentViewedHero()
@@ -5623,23 +5624,23 @@ public static partial class TrainerBehaviour
             var viewed = HeroDetailController.Instance?.nowShowHero;
             if (viewed == null)
             {
-                _status = "当前没有正在查看的角色。请先在原版角色界面打开目标 NPC 的详情。";
+                _status = "지금 보고 있는 캐릭터가 없습니다. 먼저 원래 캐릭터 화면에서 대상 NPC의 상세를 여세요.";
                 return;
             }
             SelectHero(viewed);
-            _status = $"已选择当前查看角色：{viewed.heroName}（ID {viewed.heroID}）。";
+            _status = $"보고 있는 캐릭터를 선택했습니다: {viewed.heroName}(ID {viewed.heroID}).";
             RequestPageRebuild();
         }
-        catch (Exception ex) { _status = "选择当前查看角色失败：" + ex.Message; }
+        catch (Exception ex) { _status = "보고 있는 캐릭터 선택 실패: " + ex.Message; }
     }
 
     private static void SelectHeroBySearch(string search)
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(search)) { _status = "请输入角色姓名或数字 ID。"; return; }
+            if (string.IsNullOrWhiteSpace(search)) { _status = "캐릭터 이름이나 숫자 ID를 입력하세요."; return; }
             var world = GameController.Instance?.worldData;
-            if (world == null) { _status = "请先载入存档。"; return; }
+            if (world == null) { _status = "먼저 세이브를 불러오세요."; return; }
             HeroData? found = null;
             if (int.TryParse(search, NumberStyles.Integer, CultureInfo.InvariantCulture, out var id)) found = world.GetHero(id);
             else
@@ -5661,23 +5662,23 @@ public static partial class TrainerBehaviour
                 SearchList(world.Heros, false);
                 SearchList(world.TempHeros, false);
             }
-            if (found == null) { _status = $"没有找到角色：{search}。"; return; }
+            if (found == null) { _status = $"캐릭터를 찾지 못했습니다: {search}."; return; }
             SelectHero(found);
-            _status = $"已按搜索选择：{found.heroName}（ID {found.heroID}）。";
+            _status = $"검색으로 선택했습니다: {found.heroName}(ID {found.heroID}).";
             RequestPageRebuild();
         }
-        catch (Exception ex) { _status = "搜索角色失败：" + ex.Message; }
+        catch (Exception ex) { _status = "캐릭터 검색 실패: " + ex.Message; }
     }
 
     private static void BuildLegacyItemCatalog()
     {
         var p = NativePageParent;
         EnsureCatalog();
-        AddText(p, "物品图鉴", Vector2.zero, new Vector2(160, 34), 22);
+        AddText(p, "물품 도감", Vector2.zero, new Vector2(160, 34), 22);
         var search = AddInput(p, _catalogSearch, new Vector2(160, 0), new Vector2(245, 34));
-        AddButton(p, "搜索", new Vector2(415, 0), new Vector2(80, 34), () => { _catalogSearch = search.text.Trim(); _catalogPage = 0; RequestPageRebuild(); });
-        AddButton(p, "清空", new Vector2(505, 0), new Vector2(80, 34), () => { _catalogSearch = ""; _catalogPage = 0; RequestPageRebuild(); });
-        AddButton(p, "刷新数据", new Vector2(595, 0), new Vector2(100, 34), () =>
+        AddButton(p, "검색", new Vector2(415, 0), new Vector2(80, 34), () => { _catalogSearch = search.text.Trim(); _catalogPage = 0; RequestPageRebuild(); });
+        AddButton(p, "비우기", new Vector2(505, 0), new Vector2(80, 34), () => { _catalogSearch = ""; _catalogPage = 0; RequestPageRebuild(); });
+        AddButton(p, "데이터 새로고침", new Vector2(595, 0), new Vector2(100, 34), () =>
         {
             Catalog.Clear();
             _catalogSelected = null;
@@ -5718,9 +5719,9 @@ public static partial class TrainerBehaviour
                 RequestPageRebuild();
             });
         }
-        AddButton(p, "上一页", new Vector2(140, 452), new Vector2(120, 34), () => { if (_catalogPage > 0) _catalogPage--; RequestPageRebuild(); });
-        AddText(p, $"第 {_catalogPage + 1} / {pageCount} 页　共 {filtered.Count} 项", new Vector2(270, 452), new Vector2(250, 34), 16, TextAnchor.MiddleCenter);
-        AddButton(p, "下一页", new Vector2(530, 452), new Vector2(120, 34), () => { if (_catalogPage + 1 < pageCount) _catalogPage++; RequestPageRebuild(); });
+        AddButton(p, "이전 페이지", new Vector2(140, 452), new Vector2(120, 34), () => { if (_catalogPage > 0) _catalogPage--; RequestPageRebuild(); });
+        AddText(p, $"{_catalogPage + 1} / {pageCount} 페이지　총 {filtered.Count}개", new Vector2(270, 452), new Vector2(250, 34), 16, TextAnchor.MiddleCenter);
+        AddButton(p, "다음 페이지", new Vector2(530, 452), new Vector2(120, 34), () => { if (_catalogPage + 1 < pageCount) _catalogPage++; RequestPageRebuild(); });
 
         var bagItem = ResolveSelectedItem();
         BuildBookCatalogFilters(p, RequestPageRebuild, editingItem: bagItem != null)();
@@ -5731,71 +5732,71 @@ public static partial class TrainerBehaviour
         }
 
         var selected = _catalogSelected;
-        AddText(p, selected == null ? "从左侧图鉴选择物品" : selected.Name, new Vector2(730, 48), new Vector2(330, 38), 21, TextAnchor.MiddleCenter);
-        AddText(p, selected?.Detail ?? "列表直接读取当前游戏版本的数据。\n即使背包里没有，也可以直接添加。", new Vector2(730, 90), new Vector2(330, 82), 16);
-        AddText(p, "数量", new Vector2(730, 190), new Vector2(80, 34));
+        AddText(p, selected == null ? "왼쪽 도감에서 물품을 선택하세요" : selected.Name, new Vector2(730, 48), new Vector2(330, 38), 21, TextAnchor.MiddleCenter);
+        AddText(p, selected?.Detail ?? "목록은 현재 게임 버전의 데이터를 바로 읽습니다.\n가방에 없어도 바로 추가할 수 있습니다.", new Vector2(730, 90), new Vector2(330, 82), 16);
+        AddText(p, "수량", new Vector2(730, 190), new Vector2(80, 34));
         var quantity = AddInput(p, _catalogQuantity, new Vector2(815, 190), new Vector2(130, 34));
         InputField? level = null;
         InputField? rarity = null;
         var customEquipment = selected?.IsEquipment == true;
-        var usesLevel = selected != null && (customEquipment || selected.Category == "材料" || selected.Category == "宝物");
-        var usesRarity = selected != null && (customEquipment || selected.Category == "秘籍" || selected.Category == "药品" || selected.Category == "食物" || usesLevel);
+        var usesLevel = selected != null && (customEquipment || selected.Category == "재료" || selected.Category == "보물");
+        var usesRarity = selected != null && (customEquipment || selected.Category == "비급" || selected.Category == "약품" || selected.Category == "음식" || usesLevel);
         if (usesRarity)
         {
             if (usesLevel)
             {
-                AddText(p, "等级", new Vector2(730, 234), new Vector2(80, 34));
+                AddText(p, "등급", new Vector2(730, 234), new Vector2(80, 34));
                 level = AddInput(p, _catalogLevel, new Vector2(815, 234), new Vector2(130, 34));
                 _catalogLevelInput = level;
             }
             var rarityY = usesLevel ? 278 : 234;
-            AddText(p, "稀有度", new Vector2(730, rarityY), new Vector2(80, 34));
+            AddText(p, "희귀도", new Vector2(730, rarityY), new Vector2(80, 34));
             rarity = AddInput(p, _catalogRarity, new Vector2(815, rarityY), new Vector2(130, 34));
             _catalogRarityInput = rarity;
-            var current = usesLevel ? $"将生成：{LevelName(ParseIntSafe(_catalogLevel))}｜{RarityName(ParseIntSafe(_catalogRarity))}" : $"当前：{RarityName(ParseIntSafe(_catalogRarity))}";
+            var current = usesLevel ? $"생성 예정: {LevelName(ParseIntSafe(_catalogLevel))}｜{RarityName(ParseIntSafe(_catalogRarity))}" : $"현재: {RarityName(ParseIntSafe(_catalogRarity))}";
             _catalogPreviewText = AddText(p, current, new Vector2(730, 316), new Vector2(330, 28), 14);
         }
         else if (selected != null)
         {
-            AddText(p, $"原始等级　{selected.BaseLevel}", new Vector2(730, 234), new Vector2(330, 34), 16);
-            AddText(p, $"原始品质　{RarityName(selected.RareLv)}", new Vector2(730, 278), new Vector2(330, 34), 16);
-            AddText(p, "该条目从当前游戏数据库即时复制，不会持有背包或界面的原生对象。", new Vector2(730, 316), new Vector2(330, 52), 14);
+            AddText(p, $"원래 등급　{selected.BaseLevel}", new Vector2(730, 234), new Vector2(330, 34), 16);
+            AddText(p, $"원래 품질　{RarityName(selected.RareLv)}", new Vector2(730, 278), new Vector2(330, 34), 16);
+            AddText(p, "이 항목은 현재 게임 데이터베이스에서 즉시 복사하며, 가방이나 화면의 기본 객체를 붙잡고 있지 않습니다.", new Vector2(730, 316), new Vector2(330, 52), 14);
         }
-        AddButton(p, "添加到主角背包", new Vector2(730, 380), new Vector2(300, 44), () =>
+        AddButton(p, "주인공 가방에 추가", new Vector2(730, 380), new Vector2(300, 44), () =>
         {
             _catalogQuantity = quantity.text;
             if (level != null) _catalogLevel = level.text;
             if (rarity != null) _catalogRarity = rarity.text;
             AddCatalogItem(selected, _catalogQuantity, _catalogLevel, _catalogRarity);
         });
-        AddText(p, "稀有度说明\n" + BuildRarityGuide(), new Vector2(730, 438), new Vector2(330, 160), 15);
+        AddText(p, "희귀도 설명\n" + BuildRarityGuide(), new Vector2(730, 438), new Vector2(330, 160), 15);
 
     }
 
     private static void BuildSelectedItemEditor(Transform parent, ItemData item)
     {
         var editedPointer = item.Pointer;
-        AddText(parent, "编辑背包物品", new Vector2(730, 48), new Vector2(330, 34), 21, TextAnchor.MiddleCenter);
+        AddText(parent, "가방 물품 편집", new Vector2(730, 48), new Vector2(330, 34), 21, TextAnchor.MiddleCenter);
         var displayName = AddText(parent, item.Name(false), new Vector2(730, 78), new Vector2(330, 32), 16, TextAnchor.MiddleCenter);
 
-        AddText(parent, "名称", new Vector2(730, 116), new Vector2(70, 32));
+        AddText(parent, "이름", new Vector2(730, 116), new Vector2(70, 32));
         var name = AddInput(parent, _itemName, new Vector2(800, 116), new Vector2(260, 32));
-        AddText(parent, "价值", new Vector2(730, 156), new Vector2(70, 32));
+        AddText(parent, "가치", new Vector2(730, 156), new Vector2(70, 32));
         var itemValue = AddInput(parent, _itemValue, new Vector2(800, 156), new Vector2(120, 32));
-        AddText(parent, "等级", new Vector2(730, 196), new Vector2(70, 32));
+        AddText(parent, "등급", new Vector2(730, 196), new Vector2(70, 32));
         var level = AddInput(parent, _itemLevel, new Vector2(800, 196), new Vector2(120, 32));
-        AddText(parent, "稀有度", new Vector2(730, 236), new Vector2(70, 32));
+        AddText(parent, "희귀도", new Vector2(730, 236), new Vector2(70, 32));
         var rarity = AddInput(parent, _itemRare, new Vector2(800, 236), new Vector2(120, 32));
         var rarityLabel = AddText(parent, RarityName(ParseIntSafe(_itemRare)), new Vector2(930, 236), new Vector2(130, 32), 14);
-        AddText(parent, "重量", new Vector2(730, 276), new Vector2(70, 32));
+        AddText(parent, "무게", new Vector2(730, 276), new Vector2(70, 32));
         var weight = AddInput(parent, _itemWeight, new Vector2(800, 276), new Vector2(120, 32));
-        AddText(parent, "毒量", new Vector2(730, 316), new Vector2(70, 32));
+        AddText(parent, "독량", new Vector2(730, 316), new Vector2(70, 32));
         var poison = AddInput(parent, _itemPoison, new Vector2(800, 316), new Vector2(120, 32));
 
-        AddButton(parent, "应用现有物品数值", new Vector2(730, 360), new Vector2(330, 42), () =>
+        AddButton(parent, "기존 물품 수치 적용", new Vector2(730, 360), new Vector2(330, 42), () =>
         {
             var current = ResolveSelectedItem();
-            if (current == null || current.Pointer != editedPointer) { _status = "所选物品已经变化，请重新打开物品修改页。"; return; }
+            if (current == null || current.Pointer != editedPointer) { _status = "선택한 물품이 바뀌었습니다. 물품 수정 페이지를 다시 여세요."; return; }
             _itemName = name.text;
             _itemValue = itemValue.text;
             _itemLevel = level.text;
@@ -5807,14 +5808,14 @@ public static partial class TrainerBehaviour
             name.text = _itemName;
             rarityLabel.text = RarityName(current.rareLv);
         });
-        AddButton(parent, "返回图鉴生成", new Vector2(730, 410), new Vector2(330, 36), () =>
+        AddButton(parent, "도감 생성으로 돌아가기", new Vector2(730, 410), new Vector2(330, 36), () =>
         {
             ClearSelectedItem();
-            _status = "已返回物品图鉴生成。";
+            _status = "물품 도감 생성으로 돌아왔습니다.";
             _tab = 2;
             RequestPageRebuild();
         });
-        AddText(parent, "稀有度：0 普通（灰）　1 优良（绿）\n2 稀有（蓝）　3 精良（紫）\n4 完美（橙）　5 绝世（红）\n等级只修改现有字段，不会重新抽取装备词条。", new Vector2(730, 456), new Vector2(330, 130), 14);
+        AddText(parent, "희귀도: 0 보통(회색)　1 우량(녹색)\n2 희귀(파랑)　3 정량(보라)\n4 완벽(주황)　5 절세(빨강)\n등급은 기존 필드만 바꾸며 장비 옵션을 다시 뽑지 않습니다.", new Vector2(730, 456), new Vector2(330, 130), 14);
     }
 
     private static void AddItemCard(Transform parent, CatalogEntry entry, Vector2 pos, bool selected, Action action)
@@ -5837,7 +5838,7 @@ public static partial class TrainerBehaviour
             icon.preserveAspect = true;
             icon.raycastTarget = false;
         }
-        else AddText(paper.transform, "暂无图标", new Vector2(6, 26), new Vector2(112, 40), 14, TextAnchor.MiddleCenter);
+        else AddText(paper.transform, "아이콘 없음", new Vector2(6, 26), new Vector2(112, 40), 14, TextAnchor.MiddleCenter);
         var gemSprite = GetItemSprite("RareLv" + Math.Clamp(entry.RareLv, 0, 5));
         if (gemSprite != null)
         {
@@ -5878,7 +5879,7 @@ public static partial class TrainerBehaviour
         try
         {
             var list = GameDataController.Instance?.rareLvData;
-            if (list == null || list.Count == 0) return "0 普通　1 优良　2 稀有　3 珍奇　4 绝世";
+            if (list == null || list.Count == 0) return "0 보통　1 우량　2 희귀　3 진귀　4 절세";
             var text = "";
             for (var i = 0; i < list.Count && i < 8; i++)
             {
@@ -5891,7 +5892,7 @@ public static partial class TrainerBehaviour
             }
             return text.TrimEnd();
         }
-        catch { return "0 普通　1 优良　2 稀有\n3 珍奇　4 绝世（以游戏数据为准）"; }
+        catch { return "0 보통　1 우량　2 희귀\n3 진귀　4 절세(게임 데이터 기준)"; }
     }
 
     private static int ParseIntSafe(string value)
@@ -5910,25 +5911,25 @@ public static partial class TrainerBehaviour
             var levelMax = _catalogSelected != null ? CatalogLevelMax(_catalogSelected) : 999;
             var levelRaw = ParseIntSafe(_catalogLevelInput.text);
             var level = Math.Clamp(levelRaw, 0, levelMax);
-            var limited = level != levelRaw || rarity != rarityRaw ? "（已按游戏范围修正）" : "";
-            _catalogPreviewText.text = $"将生成：{LevelName(level)}｜{RarityName(rarity)}{limited}";
+            var limited = level != levelRaw || rarity != rarityRaw ? "(게임 범위에 맞게 보정됨)" : "";
+            _catalogPreviewText.text = $"생성 예정: {LevelName(level)}｜{RarityName(rarity)}{limited}";
         }
         else
         {
-            var limited = rarity != rarityRaw ? "（已按游戏范围修正）" : "";
-            _catalogPreviewText.text = $"将生成：{RarityName(rarity)}{limited}";
+            var limited = rarity != rarityRaw ? "(게임 범위에 맞게 보정됨)" : "";
+            _catalogPreviewText.text = $"생성 예정: {RarityName(rarity)}{limited}";
         }
     }
 
     private static string DefaultRarityName(int value) => value switch
     {
-        0 => "普通（灰）",
-        1 => "优良（绿）",
-        2 => "稀有（蓝）",
-        3 => "精良（紫）",
-        4 => "完美（橙）",
-        5 => "绝世（红）",
-        _ => "无效"
+        0 => "보통(회색)",
+        1 => "우량(녹색)",
+        2 => "희귀(파랑)",
+        3 => "정량(보라)",
+        4 => "완벽(주황)",
+        5 => "절세(빨강)",
+        _ => "무효"
     };
 
     private static string RarityName(int value)
@@ -5950,12 +5951,12 @@ public static partial class TrainerBehaviour
             if (list != null && value >= 0 && value < list.Count && !string.IsNullOrWhiteSpace(list[value])) return list[value];
         }
         catch { }
-        return $"等级 {value}";
+        return $"등급 {value}";
     }
 
     private static List<string> CatalogCategories() => new()
     {
-        "全部", "武器", "护甲", "头盔", "鞋靴", "药品", "食物", "秘籍", "宝物", "材料", "坐骑"
+        "전체", "무기", "호갑", "투구", "신발", "약품", "음식", "비급", "보물", "재료", "탈것"
     };
 
     private static List<CatalogEntry> FilterCatalog(string category, string search)
@@ -5964,9 +5965,9 @@ public static partial class TrainerBehaviour
         for (var i = 0; i < Catalog.Count; i++)
         {
             var entry = Catalog[i];
-            if (category != "全部" && entry.Category != category) continue;
-            if ((category is "药品" or "食物") && _consumableLevelFilter >= 0 && entry.BaseLevel != _consumableLevelFilter) continue;
-            if (category == "秘籍" && !BookCatalogRules.Matches(entry.SkillType, entry.RareLv, _bookTypeFilter, _bookRarityFilter)) continue;
+            if (category != "전체" && entry.Category != category) continue;
+            if ((category is "약품" or "음식") && _consumableLevelFilter >= 0 && entry.BaseLevel != _consumableLevelFilter) continue;
+            if (category == "비급" && !BookCatalogRules.Matches(entry.SkillType, entry.RareLv, _bookTypeFilter, _bookRarityFilter)) continue;
             if (!string.IsNullOrWhiteSpace(search) && entry.Name.IndexOf(search, StringComparison.OrdinalIgnoreCase) < 0
                 && entry.Detail.IndexOf(search, StringComparison.OrdinalIgnoreCase) < 0
                 && !(entry.Kind == CatalogKind.Book && entry.SkillId.ToString(CultureInfo.InvariantCulture) == search.Trim())) continue;
@@ -5979,7 +5980,7 @@ public static partial class TrainerBehaviour
                 var order = BookCatalogRules.Compare(a.SkillType, a.RareLv, b.SkillType, b.RareLv);
                 if (order != 0) return order;
             }
-            if (a.Category == b.Category && (a.Category is "药品" or "食物"))
+            if (a.Category == b.Category && (a.Category is "약품" or "음식"))
             {
                 var levelOrder = b.BaseLevel.CompareTo(a.BaseLevel);
                 if (levelOrder != 0) return levelOrder;
@@ -5993,26 +5994,26 @@ public static partial class TrainerBehaviour
     {
         if (Catalog.Count > 0) return;
         try { foreach (var step in BuildCatalogSteps()) { } }
-        catch (Exception ex) { Catalog.Clear(); _status="读取物品数据库失败："+ex.Message; LongYinTrainerPlugin.Logger.LogError(ex); }
+        catch (Exception ex) { Catalog.Clear(); _status="물품 데이터베이스 읽기 실패: "+ex.Message; LongYinTrainerPlugin.Logger.LogError(ex); }
     }
 
     private static System.Collections.Generic.IEnumerable<object?> BuildCatalogSteps()
     {
         var database=GameDataController.Instance;
         if(database==null) yield break;
-            AddItemDatabase("武器", database.weaponDataBase);
+            AddItemDatabase("무기", database.weaponDataBase);
             yield return null;
-            AddItemDatabase("护甲", database.armorDataBase);
+            AddItemDatabase("호갑", database.armorDataBase);
             yield return null;
-            AddItemDatabase("头盔", database.helmetDataBase);
+            AddItemDatabase("투구", database.helmetDataBase);
             yield return null;
-            AddItemDatabase("鞋靴", database.shoesDataBase);
+            AddItemDatabase("신발", database.shoesDataBase);
             yield return null;
-            AddItemDatabase("药品", database.medDataBase);
+            AddItemDatabase("약품", database.medDataBase);
             yield return null;
-            AddItemDatabase("食物", database.foodDataBase);
+            AddItemDatabase("음식", database.foodDataBase);
             yield return null;
-            AddItemDatabase("坐骑", database.horseDataBase);
+            AddItemDatabase("탈것", database.horseDataBase);
             yield return null;
 
             var batch = 0;
@@ -6027,9 +6028,9 @@ public static partial class TrainerBehaviour
                 var bookPreview = new ItemData(ItemType.Book).SetBookData(skillId, skill.rareLv);
                 Catalog.Add(new CatalogEntry
                 {
-                    Category = "秘籍",
-                    Name = skillName + "秘籍",
-                    Detail = $"{CustomKungfuTypeName(skill.type)}｜{RarityName(skill.rareLv)}｜ID {skillId}\n{(skill.hide ? "原版隐藏功法；" : "")}秘籍品级可在添加前调整。",
+                    Category = "비급",
+                    Name = skillName + "비급",
+                    Detail = $"{CustomKungfuTypeName(skill.type)}｜{RarityName(skill.rareLv)}｜ID {skillId}\n{(skill.hide ? "원본 숨김 무공. " : "")}비급 품급은 추가 전에 조정할 수 있습니다.",
                     IconName = SafeCatalogIcon(bookPreview),
                     RareLv = skill.rareLv,
                     BaseLevel = 0,
@@ -6040,10 +6041,10 @@ public static partial class TrainerBehaviour
                 });
             }
 
-            AddGeneratedCatalog("材料", CatalogKind.Material, ItemType.Material, GlobalData.MaterialTypeName);
-            AddGeneratedCatalog("宝物", CatalogKind.Treasure, ItemType.Treasure, GlobalData.TreasureTypeName);
+            AddGeneratedCatalog("재료", CatalogKind.Material, ItemType.Material, GlobalData.MaterialTypeName);
+            AddGeneratedCatalog("보물", CatalogKind.Treasure, ItemType.Treasure, GlobalData.TreasureTypeName);
 
-        _status = $"物品图鉴已读取：共 {Catalog.Count} 项。";
+        _status = $"물품 도감을 읽었습니다: 총 {Catalog.Count}개.";
     }
 
     private static void AddItemDatabase(string category, Il2CppSystem.Collections.Generic.Dictionary<int, ItemData> database)
@@ -6066,7 +6067,7 @@ public static partial class TrainerBehaviour
             {
                 Category = category,
                 Name = itemName,
-                Detail = $"{category}｜ID {itemId}\n{GlobalData.GetItemTypeString(itemType, itemSubType)}｜价值 {itemValue}",
+                Detail = $"{category}｜ID {itemId}\n{GlobalData.GetItemTypeString(itemType, itemSubType)}｜가치 {itemValue}",
                 IconName = iconName,
                 RareLv = itemRarity,
                 BaseLevel = itemLevel,
@@ -6098,7 +6099,7 @@ public static partial class TrainerBehaviour
                     Category = category,
                     // Use the native template name, not an unidentified treasure's display name.
                     Name = string.IsNullOrWhiteSpace(preview.name) ? SafeItemName(preview) : preview.name,
-                    Detail = $"{category}类型：{typeName}｜等级 {level}\n已展开原版各等级名称；等级与稀有度可调整。",
+                    Detail = $"{category} 종류: {typeName}｜등급 {level}\n원본의 등급별 이름을 펼쳐 보여 줍니다. 등급과 희귀도는 조정할 수 있습니다.",
                     IconName = SafeCatalogIcon(preview),
                     RareLv = 0,
                     BaseLevel = level,
@@ -6131,7 +6132,7 @@ public static partial class TrainerBehaviour
             var value = item.Name(false);
             return string.IsNullOrWhiteSpace(value) ? item.name : value;
         }
-        catch { return string.IsNullOrWhiteSpace(item.name) ? $"物品 {item.itemID}" : item.name; }
+        catch { return string.IsNullOrWhiteSpace(item.name) ? $"물품 {item.itemID}" : item.name; }
     }
 
     private static ItemData? ResolveDatabaseTemplate(CatalogEntry entry)
@@ -6140,13 +6141,13 @@ public static partial class TrainerBehaviour
         if (data == null || entry.Kind != CatalogKind.Database) return null;
         Il2CppSystem.Collections.Generic.Dictionary<int, ItemData>? database = entry.Category switch
         {
-            "武器" => data.weaponDataBase,
-            "护甲" => data.armorDataBase,
-            "头盔" => data.helmetDataBase,
-            "鞋靴" => data.shoesDataBase,
-            "药品" => data.medDataBase,
-            "食物" => data.foodDataBase,
-            "坐骑" => data.horseDataBase,
+            "무기" => data.weaponDataBase,
+            "호갑" => data.armorDataBase,
+            "투구" => data.helmetDataBase,
+            "신발" => data.shoesDataBase,
+            "약품" => data.medDataBase,
+            "음식" => data.foodDataBase,
+            "탈것" => data.horseDataBase,
             _ => null
         };
         if (database == null || !database.ContainsKey(entry.ItemId)) return null;
@@ -6167,9 +6168,9 @@ public static partial class TrainerBehaviour
 
     private static void AddCatalogItem(CatalogEntry? entry, string quantityText, string levelText, string rarityText)
     {
-        if (entry == null) { _status = "请先从图鉴中选择物品。"; return; }
+        if (entry == null) { _status = "먼저 도감에서 물품을 고르세요."; return; }
         var player = Player;
-        if (player == null) { _status = "存档尚未载入。"; return; }
+        if (player == null) { _status = "세이브를 아직 불러오지 않았습니다."; return; }
         try
         {
             var quantity = Math.Clamp(ParseInt(quantityText), 1, entry.IsEquipment ? 100 : 999);
@@ -6184,15 +6185,15 @@ public static partial class TrainerBehaviour
                     ? GenerateEquipment(entry, level, rarity, player)
                     : CreateCatalogItem(entry, level, rarity);
                 if (item == null) continue;
-                if (entry.Category is "药品" or "食物") item.rareLv = rarity;
+                if (entry.Category is "약품" or "음식") item.rareLv = rarity;
                 player.GetItem(item, false, false, 0, true);
                 added++;
             }
-            _status = $"已将 {entry.Name} ×{added} 添加到主角背包。";
+            _status = $"{entry.Name} ×{added}을(를) 주인공 가방에 추가했습니다.";
         }
         catch (Exception ex)
         {
-            _status = "添加物品失败：" + ex.Message;
+            _status = "물품 추가 실패: " + ex.Message;
             LongYinTrainerPlugin.Logger.LogError($"Add catalog item failed: {ex}");
         }
     }
@@ -6203,7 +6204,7 @@ public static partial class TrainerBehaviour
         var equipment = source?.equipmentData;
         var controller = GameController.Instance;
         if (source == null || equipment == null || controller == null) return null;
-        if (entry.Category == "武器")
+        if (entry.Category == "무기")
         {
             // Use the explicit weapon template overload; the value-based generator
             // can choose a different weapon and cannot guarantee the requested level.
@@ -6217,7 +6218,7 @@ public static partial class TrainerBehaviour
                 LongYinTrainerPlugin.Logger.LogInfo($"Weapon generated: template={entry.ItemId}, level={weapon.itemLv}, rarity={weapon.rareLv}, subtype={weapon.subType}, littleType={weapon.equipmentData.littleType}, attempts={attempt + 1}");
                 return weapon;
             }
-            throw new InvalidOperationException($"未生成匹配的武器（模板 {entry.ItemId}，等级 {desiredLevel}，稀有度 {desiredRarity}），未添加替代品。请重试。");
+            throw new InvalidOperationException($"일치하는 무기가 생성되지 않아(템플릿 {entry.ItemId}, 등급 {desiredLevel}, 희귀도 {desiredRarity}) 대체품을 추가하지 않았습니다. 다시 시도하세요.");
         }
         ItemData? best = null;
         var bestScore = int.MaxValue;
@@ -6263,8 +6264,8 @@ public static partial class TrainerBehaviour
         var item = ResolveSelectedItem();
         if (item == null)
         {
-            AddText(p, "请先在游戏背包中点击要修改的物品，再打开此页。", Vector2.zero, new Vector2(1040, 42), 21);
-            AddText(p, "药品、食物、材料、秘籍等可修改名称、价值、等级、稀有度、重量和毒量。装备与坐骑还有独立的词条和属性编辑。", new Vector2(0, 55), new Vector2(1000, 80), 17);
+            AddText(p, "먼저 게임 가방에서 수정할 물품을 누른 뒤 이 페이지를 여세요.", Vector2.zero, new Vector2(1040, 42), 21);
+            AddText(p, "약품, 음식, 재료, 비급 등은 이름, 가치, 등급, 희귀도, 무게, 독량을 바꿀 수 있습니다. 장비와 탈것은 옵션과 속성을 따로 편집할 수 있습니다.", new Vector2(0, 55), new Vector2(1000, 80), 17);
             return;
         }
         bool supportsAffixes = item.equipmentData != null || item.horseData != null;
@@ -6273,11 +6274,11 @@ public static partial class TrainerBehaviour
         {
             var editor = UiObject("ExistingItemFields", p, new Vector2(1080, 600), new Vector2(-700, 0));
             BuildSelectedItemEditor(editor.transform, item);
-            AddText(p, "修改的是背包中已选中的这一件物品。\n\n价值、等级和稀有度分别保存；更改等级或稀有度不会重新生成装备词条。\n\n修改后重新查看物品详情。", new Vector2(430, 110), new Vector2(610, 180), 18);
+            AddText(p, "가방에서 선택한 바로 이 물품 한 개를 수정합니다.\n\n가치, 등급, 희귀도는 따로 저장되며, 등급이나 희귀도를 바꿔도 장비 옵션은 다시 생성되지 않습니다.\n\n수정 후 물품 상세를 다시 확인하세요.", new Vector2(430, 110), new Vector2(610, 180), 18);
         }
-        AddButton(p, _showItemAffixes ? "物品数值" : "物品数值（当前）", new Vector2(0, 620), new Vector2(240, 32), () => { if (_showItemAffixes) { _showItemAffixes = false; RequestPageRebuild(); } });
+        AddButton(p, _showItemAffixes ? "물품 수치" : "물품 수치(현재)", new Vector2(0, 620), new Vector2(240, 32), () => { if (_showItemAffixes) { _showItemAffixes = false; RequestPageRebuild(); } });
         if (supportsAffixes)
-            AddButton(p, _showItemAffixes ? "装备／坐骑（当前）" : "装备／坐骑", new Vector2(260, 620), new Vector2(240, 32), () => { if (!_showItemAffixes) { _showItemAffixes = true; RequestPageRebuild(); } });
+            AddButton(p, _showItemAffixes ? "장비／탈것(현재)" : "장비／탈것", new Vector2(260, 620), new Vector2(240, 32), () => { if (!_showItemAffixes) { _showItemAffixes = true; RequestPageRebuild(); } });
     }
 
     private static void BuildNativeAffix()
@@ -6290,34 +6291,34 @@ public static partial class TrainerBehaviour
             return;
         }
         var snapshot = CaptureSelectedAffixes();
-        if (snapshot == null) { AddText(p, "请先选择武器、护甲、马匹或鞍具。", Vector2.zero, new Vector2(700, 40)); return; }
-        AddText(p, $"当前装备：{snapshot.ItemName}", Vector2.zero, new Vector2(690, 38), 21);
-        AddText(p, "点击左侧已有词条即可载入编辑器", new Vector2(720, 0), new Vector2(340, 38), 15, TextAnchor.MiddleCenter);
+        if (snapshot == null) { AddText(p, "먼저 무기, 호갑, 말 또는 마구를 고르세요.", Vector2.zero, new Vector2(700, 40)); return; }
+        AddText(p, $"현재 장비: {snapshot.ItemName}", Vector2.zero, new Vector2(690, 38), 21);
+        AddText(p, "왼쪽의 기존 옵션을 누르면 편집기로 불러옵니다", new Vector2(720, 0), new Vector2(340, 38), 15, TextAnchor.MiddleCenter);
 
-        AddText(p, $"基础词条（{snapshot.Base.Count} 条）", new Vector2(0, 50), new Vector2(330, 34), 19, TextAnchor.MiddleCenter);
-        AddText(p, $"额外词条（{snapshot.Extra.Count} 条，总计 {snapshot.Base.Count + snapshot.Extra.Count} 条）", new Vector2(350, 50), new Vector2(330, 34), 17, TextAnchor.MiddleCenter);
-        AddText(p, "词条编辑器", new Vector2(720, 50), new Vector2(340, 34), 19, TextAnchor.MiddleCenter);
-        var selectedAffixName = AddText(p, $"当前词条：{EquipmentAffixName(_affixType)}", new Vector2(720, 92), new Vector2(340, 34), 16, TextAnchor.MiddleCenter);
-        AddText(p, "数值", new Vector2(720, 136), new Vector2(100, 34));
+        AddText(p, $"기본 옵션({snapshot.Base.Count}개)", new Vector2(0, 50), new Vector2(330, 34), 19, TextAnchor.MiddleCenter);
+        AddText(p, $"부가 옵션({snapshot.Extra.Count}개, 합계 {snapshot.Base.Count + snapshot.Extra.Count}개)", new Vector2(350, 50), new Vector2(330, 34), 17, TextAnchor.MiddleCenter);
+        AddText(p, "옵션 편집기", new Vector2(720, 50), new Vector2(340, 34), 19, TextAnchor.MiddleCenter);
+        var selectedAffixName = AddText(p, $"현재 옵션: {EquipmentAffixName(_affixType)}", new Vector2(720, 92), new Vector2(340, 34), 16, TextAnchor.MiddleCenter);
+        AddText(p, "수치", new Vector2(720, 136), new Vector2(100, 34));
         var value = AddInput(p, _affixValue, new Vector2(820, 136), new Vector2(240, 34));
 
         AddAffixRows(p, snapshot.Base, 0, 92, selectedAffixName, value, false);
         AddAffixRows(p, snapshot.Extra, 350, 92, selectedAffixName, value, true);
 
-        AddButton(p, "写入基础词条", new Vector2(720, 184), new Vector2(165, 38), () => { var current = ResolveSelectedItem(); if (current?.equipmentData == null) { _status = "原装备已变化，请重新选择。"; return; } _affixValue = value.text; SetAffix(false, current); });
-        AddButton(p, "写入额外词条", new Vector2(895, 184), new Vector2(165, 38), () => { var current = ResolveSelectedItem(); if (current?.equipmentData == null) { _status = "原装备已变化，请重新选择。"; return; } _affixValue = value.text; SetAffix(true, current); });
-        AddButton(p, "删除基础中的该词条", new Vector2(720, 232), new Vector2(165, 36), () => { var current = ResolveSelectedItem(); if (current?.equipmentData == null) { _status = "原装备已变化，请重新选择。"; return; } RemoveAffix(false, _affixType, current); });
-        AddButton(p, "删除额外中的该词条", new Vector2(895, 232), new Vector2(165, 36), () => { var current = ResolveSelectedItem(); if (current?.equipmentData == null) { _status = "原装备已变化，请重新选择。"; return; } RemoveAffix(true, _affixType, current); });
+        AddButton(p, "기본 옵션에 쓰기", new Vector2(720, 184), new Vector2(165, 38), () => { var current = ResolveSelectedItem(); if (current?.equipmentData == null) { _status = "원래 장비가 바뀌었습니다. 다시 선택하세요."; return; } _affixValue = value.text; SetAffix(false, current); });
+        AddButton(p, "부가 옵션에 쓰기", new Vector2(895, 184), new Vector2(165, 38), () => { var current = ResolveSelectedItem(); if (current?.equipmentData == null) { _status = "원래 장비가 바뀌었습니다. 다시 선택하세요."; return; } _affixValue = value.text; SetAffix(true, current); });
+        AddButton(p, "기본 옵션에서 삭제", new Vector2(720, 232), new Vector2(165, 36), () => { var current = ResolveSelectedItem(); if (current?.equipmentData == null) { _status = "원래 장비가 바뀌었습니다. 다시 선택하세요."; return; } RemoveAffix(false, _affixType, current); });
+        AddButton(p, "부가 옵션에서 삭제", new Vector2(895, 232), new Vector2(165, 36), () => { var current = ResolveSelectedItem(); if (current?.equipmentData == null) { _status = "원래 장비가 바뀌었습니다. 다시 선택하세요."; return; } RemoveAffix(true, _affixType, current); });
 
         BuildEquipmentAffixPicker(p, selectedAffixName, value);
-        AddButton(p, "清空全部基础词条", new Vector2(0, 520), new Vector2(330, 38), () => { var current = ResolveSelectedItem(); if (current?.equipmentData == null) { _status = "原装备已变化，请重新选择。"; return; } current.equipmentData.baseAddData.Reset(); _baseAffixPage = 0; ItemChanged(current); _status = "基础词条已清空。"; RequestPageRebuild(); });
-        AddButton(p, "清空全部额外词条", new Vector2(350, 520), new Vector2(330, 38), () => { var current = ResolveSelectedItem(); if (current?.equipmentData == null) { _status = "原装备已变化，请重新选择。"; return; } current.equipmentData.extraAddData.Reset(); _extraAffixPage = 0; ItemChanged(current); _status = "额外词条已清空。"; RequestPageRebuild(); });
-        AddText(p, "提示：标有 % 的词条按百分数输入，输入 50 会保存为底层 0.5，并在游戏中显示 50%。速度与轻功技能是两个不同参数。", new Vector2(0, 578), new Vector2(1060, 42), 15);
+        AddButton(p, "기본 옵션 모두 비우기", new Vector2(0, 520), new Vector2(330, 38), () => { var current = ResolveSelectedItem(); if (current?.equipmentData == null) { _status = "원래 장비가 바뀌었습니다. 다시 선택하세요."; return; } current.equipmentData.baseAddData.Reset(); _baseAffixPage = 0; ItemChanged(current); _status = "기본 옵션을 비웠습니다."; RequestPageRebuild(); });
+        AddButton(p, "부가 옵션 모두 비우기", new Vector2(350, 520), new Vector2(330, 38), () => { var current = ResolveSelectedItem(); if (current?.equipmentData == null) { _status = "원래 장비가 바뀌었습니다. 다시 선택하세요."; return; } current.equipmentData.extraAddData.Reset(); _extraAffixPage = 0; ItemChanged(current); _status = "부가 옵션을 비웠습니다."; RequestPageRebuild(); });
+        AddText(p, "안내: % 표시 옵션은 퍼센트로 입력합니다. 50을 입력하면 내부적으로 0.5로 저장되고 게임에는 50%로 표시됩니다. 속도와 경공 기술은 서로 다른 수치입니다.", new Vector2(0, 578), new Vector2(1060, 42), 15);
     }
 
     private static void BuildEquipmentAffixPicker(Transform p, Text selectedName, InputField value)
     {
-        var groups = new[] { "全部", "六维", "武学", "战斗", "增益", "特殊", "生活" };
+        var groups = new[] { "전체", "6대 속성", "무학", "전투", "증익", "특수", "생활" };
         var tabs = new Button[groups.Length];
         var slots = new Button[18];
         string[] presetNames = Array.Empty<string>();
@@ -6332,15 +6333,15 @@ public static partial class TrainerBehaviour
 
         Action refresh = null!; // Click handlers run after all controls have been created.
         var query = AddInput(p, _affixCatalogQuery, new Vector2(720, 322), new Vector2(208, 32));
-        var search = AddButton(p, "按名称或ID查找", new Vector2(934, 322), new Vector2(126, 32), () =>
+        var search = AddButton(p, "이름 또는 ID 검색", new Vector2(934, 322), new Vector2(126, 32), () =>
         {
             _affixCatalogQuery = query.text.Trim();
             _affixCatalogPage = 0;
             refresh();
         });
-        var previous = AddButton(p, "上一页", new Vector2(720, 532), new Vector2(78, 30), () => { _affixCatalogPage--; refresh(); });
+        var previous = AddButton(p, "이전 페이지", new Vector2(720, 532), new Vector2(78, 30), () => { _affixCatalogPage--; refresh(); });
         var pageLabel = AddText(p, "", new Vector2(800, 532), new Vector2(180, 30), 15, TextAnchor.MiddleCenter);
-        var next = AddButton(p, "下一页", new Vector2(982, 532), new Vector2(78, 30), () => { _affixCatalogPage++; refresh(); });
+        var next = AddButton(p, "다음 페이지", new Vector2(982, 532), new Vector2(78, 30), () => { _affixCatalogPage++; refresh(); });
         for (var i = 0; i < groups.Length; i++)
         {
             var index = i;
@@ -6359,7 +6360,7 @@ public static partial class TrainerBehaviour
                 _affixType = presetTypes[index];
                 var percent = IsPercentageAffix(_affixType);
                 value.text = _affixValue = percent ? "5" : "10";
-                selectedName.text = $"当前词条：{presetNames[index]}{(percent ? " (%)" : "")}";
+                selectedName.text = $"현재 옵션: {presetNames[index]}{(percent ? " (%)" : "")}";
             });
             StylePaperChoice(slots[i]);
         }
@@ -6373,27 +6374,27 @@ public static partial class TrainerBehaviour
             switch (_affixPresetGroup)
             {
                 case 1:
-                    presetNames = new[] { "力道", "灵巧", "智力", "意志", "体质", "经脉", "力道上限", "灵巧上限", "智力上限", "意志上限", "体质上限", "经脉上限" };
+                    presetNames = new[] { "근력", "민첩", "지력", "의지", "체질", "경맥", "근력 상한", "민첩 상한", "지력 상한", "의지 상한", "체질 상한", "경맥 상한" };
                     presetTypes = new[] { "attri0", "attri1", "attri2", "attri3", "attri4", "attri5", "maxAttri0", "maxAttri1", "maxAttri2", "maxAttri3", "maxAttri4", "maxAttri5" };
                     break;
                 case 2:
-                    presetNames = new[] { "内功", "轻功", "绝技", "拳掌", "剑法", "刀法", "长兵", "奇门", "射术", "内功威力", "轻功威力", "绝技威力", "拳掌威力", "剑法威力", "刀法威力", "长兵威力", "奇门威力", "射术威力" };
+                    presetNames = new[] { "내공", "경공", "절기", "권장", "검법", "도법", "장병", "기문", "사술", "내공 위력", "경공 위력", "절기 위력", "권장 위력", "검법 위력", "도법 위력", "장병 위력", "기문 위력", "사술 위력" };
                     presetTypes = new[] { "fightSkill0", "fightSkill1", "fightSkill2", "fightSkill3", "fightSkill4", "fightSkill5", "fightSkill6", "fightSkill7", "fightSkill8", "fightSkillPower0", "fightSkillPower1", "fightSkillPower2", "fightSkillPower3", "fightSkillPower4", "fightSkillPower5", "fightSkillPower6", "fightSkillPower7", "fightSkillPower8" };
                     break;
                 case 3:
-                    presetNames = new[] { "伤害", "护甲", "护甲率", "速度", "命中", "闪避", "暴击率", "抗暴率", "反击率", "抗反击", "连击率", "抗连击", "恢复效率", "减伤率", "伤势抵抗" };
+                    presetNames = new[] { "피해", "호갑", "방어율", "속도", "명중", "회피", "치명타율", "치명 저항률", "반격률", "반격 저항", "연격률", "연격 저항", "회복 효율", "피해 감소율", "부상 저항" };
                     presetTypes = new[] { "damage", "armor", "armorRate", "speed", "acc", "evade", "critRate", "antiCrit", "counter", "antiCounter", "comboRate", "antiCombo", "recoverRate", "reduceReciveDamageRate", "woundResist" };
                     break;
                 case 4:
-                    presetNames = new[] { "伤害增加", "伤害降低", "护甲增加", "护甲降低", "速度增加", "速度降低", "命中增加", "命中降低", "闪避增加", "闪避降低", "暴击增加", "暴击降低", "连击增加", "连击降低", "负面抵抗" };
+                    presetNames = new[] { "피해 증가", "피해 감소", "호갑 증가", "호갑 감소", "속도 증가", "속도 감소", "명중 증가", "명중 감소", "회피 증가", "회피 감소", "치명타 증가", "치명타 감소", "연격 증가", "연격 감소", "부정 효과 저항" };
                     presetTypes = new[] { "addDamage", "reduceDamage", "addArmor", "reduceArmor", "addSpeed", "reduceSpeed", "addAcc", "reduceAcc", "addEvade", "reduceEvade", "addCrit", "reduceCrit", "addCombo", "reduceCombo", "addReduceDebuffRate" };
                     break;
                 case 5:
-                    presetNames = new[] { "外伤伤害", "内伤伤害", "毒伤伤害", "吸取生命", "吸取内力", "削减内力", "真实伤害", "内伤真伤", "每回合回血", "每回合回蓝", "每回合体力", "内力护盾", "伤害反弹", "无敌", "复活" };
+                    presetNames = new[] { "외상 피해", "내상 피해", "독상 피해", "생명 흡수", "내력 흡수", "내력 삭감", "고정 피해", "내상 고정 피해", "턴마다 생명 회복", "턴마다 내력 회복", "턴마다 체력 회복", "내력 보호막", "피해 반사", "무적", "부활" };
                     presetTypes = new[] { "externalDamage", "internalDamage", "poisonDamage", "suckHp", "suckMana", "killMana", "trueDamage", "internalTrueDamage", "recoverHpPerRound", "recoverManaPerRound", "recoverPowerPerRound", "manaShield", "reboundDamage", "invincible", "reborn" };
                     break;
                 case 6:
-                    presetNames = new[] { "医术", "毒术", "学识", "口才", "采伐", "木植", "锻造", "炼药", "烹饪", "医术上限", "毒术上限", "学识上限", "口才上限", "采伐上限", "木植上限", "锻造上限", "炼药上限", "烹饪上限" };
+                    presetNames = new[] { "의술", "독술", "학식", "언변", "벌채", "재배", "단조", "제약", "요리", "의술 상한", "독술 상한", "학식 상한", "언변 상한", "벌채 상한", "재배 상한", "단조 상한", "제약 상한", "요리 상한" };
                     presetTypes = new[] { "livingSkill0", "livingSkill1", "livingSkill2", "livingSkill3", "livingSkill4", "livingSkill5", "livingSkill6", "livingSkill7", "livingSkill8", "maxLivingSkill0", "maxLivingSkill1", "maxLivingSkill2", "maxLivingSkill3", "maxLivingSkill4", "maxLivingSkill5", "maxLivingSkill6", "maxLivingSkill7", "maxLivingSkill8" };
                     break;
                 default:
@@ -6404,7 +6405,7 @@ public static partial class TrainerBehaviour
                     var page = matches.Skip(_affixCatalogPage * pageSize).Take(pageSize).ToList();
                     presetNames = page.Select(entry => entry.Name).ToArray();
                     presetTypes = page.Select(entry => entry.Type).ToArray();
-                    pageLabel.text = $"{matches.Count} 项  {_affixCatalogPage + 1}/{pages} 页";
+                    pageLabel.text = $"{matches.Count}개  {_affixCatalogPage + 1}/{pages} 페이지";
                     break;
             }
             for (var i = 0; i < tabs.Length; i++)
@@ -6430,39 +6431,39 @@ public static partial class TrainerBehaviour
         var horse = selectedItem.horseData;
         if (horse == null) return;
         var isSaddle = selectedItem.subType == 1;
-        var itemKind = isSaddle ? "鞍具" : "马匹";
-        AddText(p, $"当前{itemKind}：{selectedItem.Name(false)}", Vector2.zero, new Vector2(700, 38), 21);
+        var itemKind = isSaddle ? "마구" : "말";
+        AddText(p, $"현재 {itemKind}: {selectedItem.Name(false)}", Vector2.zero, new Vector2(700, 38), 21);
         AddText(p, isSaddle
-            ? "鞍具的四项数值会作为绿色加成叠加到当前坐骑。"
-            : "这里修改坐骑本体数值；绿色加成来自已装备的鞍具。",
+            ? "마구의 네 가지 수치는 녹색 보너스로 현재 탈것에 더해집니다."
+            : "여기서는 탈것 자체의 수치를 바꿉니다. 녹색 보너스는 장착한 마구에서 옵니다.",
             new Vector2(0, 40), new Vector2(1020, 38), 16);
 
-        AddText(p, isSaddle ? "速度加成" : "速度", new Vector2(0, 100), new Vector2(150, 36));
+        AddText(p, isSaddle ? "속도 보너스" : "속도", new Vector2(0, 100), new Vector2(150, 36));
         var speed = AddInput(p, F(horse.speed), new Vector2(150, 100), new Vector2(190, 36));
-        AddText(p, isSaddle ? "冲刺加成" : "冲刺", new Vector2(390, 100), new Vector2(150, 36));
+        AddText(p, isSaddle ? "돌진 보너스" : "돌진", new Vector2(390, 100), new Vector2(150, 36));
         var sprint = AddInput(p, F(horse.sprint), new Vector2(540, 100), new Vector2(190, 36));
-        AddText(p, isSaddle ? "耐力加成" : "耐力", new Vector2(0, 154), new Vector2(150, 36));
+        AddText(p, isSaddle ? "지구력 보너스" : "지구력", new Vector2(0, 154), new Vector2(150, 36));
         var power = AddInput(p, F(horse.power), new Vector2(150, 154), new Vector2(190, 36));
-        AddText(p, isSaddle ? "坚韧加成" : "坚韧", new Vector2(390, 154), new Vector2(150, 36));
+        AddText(p, isSaddle ? "강인함 보너스" : "강인함", new Vector2(390, 154), new Vector2(150, 36));
         var resist = AddInput(p, F(horse.resist), new Vector2(540, 154), new Vector2(190, 36));
 
         InputField? nowPower = null;
         InputField? favorRate = null;
         if (!isSaddle)
         {
-            AddText(p, "当前耐力", new Vector2(0, 208), new Vector2(150, 36));
+            AddText(p, "현재 지구력", new Vector2(0, 208), new Vector2(150, 36));
             nowPower = AddInput(p, F(horse.nowPower), new Vector2(150, 208), new Vector2(190, 36));
-            AddText(p, "驯服度（%）", new Vector2(390, 208), new Vector2(150, 36));
+            AddText(p, "순화도(%)", new Vector2(390, 208), new Vector2(150, 36));
             favorRate = AddInput(p, F(horse.favorRate * 100f), new Vector2(540, 208), new Vector2(190, 36));
         }
 
         var derivedText = AddText(p, HorseDerivedDescription(selectedItem), new Vector2(0, 278), new Vector2(1020, 86), 17);
-        AddButton(p, $"应用{itemKind}数值", new Vector2(0, 390), new Vector2(340, 44), () =>
+        AddButton(p, $"{itemKind} 수치 적용", new Vector2(0, 390), new Vector2(340, 44), () =>
         {
             var current = ResolveSelectedItem();
             if (current?.horseData == null || current.subType != (isSaddle ? 1 : 0))
             {
-                _status = $"原{itemKind}已经变化，请重新选择。";
+                _status = $"원래 {itemKind}이(가) 바뀌었습니다. 다시 선택하세요.";
                 return;
             }
             if (ApplyHorseStats(current, speed.text, sprint.text, power.text, resist.text,
@@ -6470,14 +6471,14 @@ public static partial class TrainerBehaviour
                 derivedText.text = HorseDerivedDescription(current);
         });
         AddText(p, isSaddle
-            ? "已装备的鞍具会在本次按钮操作结束后同步到当前坐骑；无需卸下再装备。"
-            : "负重上限、视野范围和探索耐力是游戏根据坐骑数据计算的派生值，修改后会自动重算。",
+            ? "장착한 마구는 이번 버튼 조작이 끝난 뒤 현재 탈것에 동기화됩니다. 벗었다가 다시 장착할 필요가 없습니다."
+            : "적재 한도, 시야 범위, 탐색 지구력은 게임이 탈것 데이터로 계산하는 파생값이며, 수정하면 자동으로 다시 계산됩니다.",
             new Vector2(0, 455), new Vector2(1020, 70), 16);
     }
 
     private static string HorseDerivedDescription(ItemData item)
     {
-        if (item.horseData == null || item.subType == 1) return "鞍具属性：速度、冲刺、耐力、坚韧。";
+        if (item.horseData == null || item.subType == 1) return "마구 속성: 속도, 돌진, 지구력, 강인함.";
         try
         {
             var maxWeight = item.GetHorseMaxWeightAdd();
@@ -6485,11 +6486,11 @@ public static partial class TrainerBehaviour
             var stepRate = item.GetHorseStepAddRate();
             var seePercent = Math.Abs(seeRange) <= 5f ? seeRange * 100f : seeRange;
             var stepPercent = Math.Abs(stepRate) <= 5f ? stepRate * 100f : stepRate;
-            return $"派生属性：负重上限 {maxWeight:+0.###;-0.###;0}　视野范围 {seePercent:+0.###;-0.###;0}%　探索耐力 {stepPercent:+0.###;-0.###;0}%";
+            return $"파생 속성: 적재 한도 {maxWeight:+0.###;-0.###;0}　시야 범위 {seePercent:+0.###;-0.###;0}%　탐색 지구력 {stepPercent:+0.###;-0.###;0}%";
         }
         catch
         {
-            return "派生属性会由游戏根据坐骑数值自动计算。";
+            return "파생 속성은 게임이 탈것 수치로 자동 계산합니다.";
         }
     }
 
@@ -6507,7 +6508,7 @@ public static partial class TrainerBehaviour
         }
         catch (Exception ex)
         {
-            _status = "读取装备词条失败，请重新选择装备：" + ex.Message;
+            _status = "장비 옵션 읽기 실패, 장비를 다시 선택하세요: " + ex.Message;
             return null;
         }
     }
@@ -6543,7 +6544,7 @@ public static partial class TrainerBehaviour
     {
         if (rows.Count == 0)
         {
-            AddText(parent, "（无）", new Vector2(x, y), new Vector2(330, 36), 16, TextAnchor.MiddleCenter);
+            AddText(parent, "(없음)", new Vector2(x, y), new Vector2(330, 36), 16, TextAnchor.MiddleCenter);
             return;
         }
         const int pageSize = 8;
@@ -6561,16 +6562,16 @@ public static partial class TrainerBehaviour
                 _affixType = row.Key.ToString(CultureInfo.InvariantCulture);
                 _affixValue = (IsPercentageAffix(row.Key) ? row.Amount * 100f : row.Amount).ToString("0.###", CultureInfo.InvariantCulture);
                 value.text = _affixValue;
-                selectedAffixName.text = $"当前词条：{row.Description}";
+                selectedAffixName.text = $"현재 옵션: {row.Description}";
             });
             StylePaperChoice(buttons[i]);
         }
         Text? pageLabel = null;
         if (pageCount > 1)
         {
-            AddButton(parent, "上一页", new Vector2(x, y + pageSize * 43), new Vector2(92, 30), () => Show(page - 1));
+            AddButton(parent, "이전 페이지", new Vector2(x, y + pageSize * 43), new Vector2(92, 30), () => Show(page - 1));
             pageLabel = AddText(parent, "", new Vector2(x + 98, y + pageSize * 43), new Vector2(128, 30), 14, TextAnchor.MiddleCenter);
-            AddButton(parent, "下一页", new Vector2(x + 232, y + pageSize * 43), new Vector2(98, 30), () => Show(page + 1));
+            AddButton(parent, "다음 페이지", new Vector2(x + 232, y + pageSize * 43), new Vector2(98, 30), () => Show(page + 1));
         }
         Show(page);
 
@@ -6579,7 +6580,7 @@ public static partial class TrainerBehaviour
             page = Math.Clamp(requested, 0, pageCount - 1);
             if (extra) _extraAffixPage = page;
             else _baseAffixPage = page;
-            if (pageLabel != null) pageLabel.text = $"第 {page + 1}/{pageCount} 页";
+            if (pageLabel != null) pageLabel.text = $"{page + 1}/{pageCount} 페이지";
             for (var i = 0; i < buttons.Length; i++)
             {
                 var index = page * pageSize + i;
@@ -6602,127 +6603,127 @@ public static partial class TrainerBehaviour
     private static string DescribeAffixName(int key, string? enumName = null)
     {
         enumName ??= Enum.GetName(typeof(HeroSpeAddDataType), key);
-        if (string.IsNullOrWhiteSpace(enumName)) return "未知效果";
+        if (string.IsNullOrWhiteSpace(enumName)) return "알 수 없는 효과";
         var indexedLabel = DescribeIndexedAffix(enumName);
         if (indexedLabel.Length > 0) return indexedLabel;
         var label = enumName switch
         {
-            "maxHp" => "生命上限",
-            "maxMana" => "内力上限",
-            "maxPower" => "体力上限",
-            "damage" => "伤害",
-            "armor" => "护甲",
-            "armorRate" => "护甲率",
-            "speed" => "速度",
-            "acc" => "命中",
-            "evade" => "闪避",
-            "critRate" => "暴击率",
-            "antiCrit" => "抗暴率",
-            "counter" => "反击率",
-            "antiCounter" => "抗反击率",
-            "comboRate" => "连击率",
-            "antiCombo" => "抗连击率",
-            "expRate" => "经验效率",
-            "recoverRate" => "恢复效率",
-            "reduceReciveDamageRate" => "减伤率",
-            "addDebuffRate" => "负面施加率",
-            "reduceDebuffRate" => "负面抵抗率",
-            "woundResist" => "伤势抵抗",
-            "clearMovePower" => "清空移动力",
-            "recoverMovePower" => "恢复移动力",
-            "externalDamage" => "外伤伤害",
-            "internalDamage" => "内伤伤害",
-            "poisonDamage" => "毒伤伤害",
-            "suckHp" => "吸取生命",
-            "suckMana" => "吸取内力",
-            "killMana" => "削减内力",
-            "recoverAll" => "全部恢复",
-            "burn" => "灼烧",
-            "recoverHp" => "生命恢复",
-            "bleed" => "流血",
-            "recoverMana" => "内力恢复",
-            "elec" => "感电",
-            "recoverPower" => "体力恢复",
-            "losePower" => "体力削减",
-            "frozen" => "冰冻",
-            "hitHandPoint" => "打击手部",
-            "hitFootPoint" => "打击足部",
-            "hitChestPoint" => "打击胸部",
-            "hitBackPoint" => "打击背部",
-            "hitHeadPoint" => "打击头部",
-            "reduceDamage" => "受到伤害降低",
-            "addArmor" => "护甲增加",
-            "reduceArmor" => "护甲降低",
-            "addSpeed" => "速度增加",
-            "reduceSpeed" => "速度降低",
-            "addAcc" => "命中增加",
-            "reduceAcc" => "命中降低",
-            "addEvade" => "闪避增加",
-            "reduceEvade" => "闪避降低",
-            "reduceReciveDamage" => "受到伤害降低",
-            "addReciveDamage" => "受到伤害增加",
-            "crazy" => "狂暴",
-            "confusion" => "混乱",
-            "deathFight" => "死斗",
-            "minusArmor" => "破甲",
-            "addCrit" => "暴击增加",
-            "reduceCrit" => "暴击降低",
-            "addAntiCrit" => "抗暴增加",
-            "reduceAntiCrit" => "抗暴降低",
-            "addBlock" => "格挡增加",
-            "addAntiBlock" => "抗格挡增加",
-            "addCombo" => "连击增加",
-            "reduceCombo" => "连击降低",
-            "addAntiCombo" => "抗连击增加",
-            "reduceAntiCombo" => "抗连击降低",
-            "addDamage" => "伤害增加",
-            "addRecoverRate" => "恢复效率增加",
-            "reduceRecoverRate" => "恢复效率降低",
-            "addReduceDebuffRate" => "负面抵抗增加",
-            "reduceReduceDebuffRate" => "负面抵抗降低",
-            "internalTrueDamage" => "内伤真实伤害",
-            "trueDamage" => "真实伤害",
-            "recoverHpPerRound" => "每回合恢复生命",
-            "recoverManaPerRound" => "每回合恢复内力",
-            "recoverPowerPerRound" => "每回合恢复体力",
-            "recoverWoundPerRound" => "每回合恢复伤势",
-            "manaShield" => "内力护盾",
-            "reboundDamage" => "伤害反弹",
-            "defenceDamage" => "防御反伤",
-            "stopMove" => "无法移动",
-            "invincible" => "无敌",
-            "stun" => "眩晕",
-            "reborn" => "复活",
-            "backDamage" => "反击伤害",
-            "backSuckMana" => "反击吸取内力",
-            "backKillMana" => "反击削减内力",
-            "hitFar" => "远程攻击",
-            "hitClose" => "近战攻击",
-            "moveRange" => "移动范围",
-            "addMoveRange" => "移动范围增加",
-            "reduceMoveRange" => "移动范围降低",
-            "postureThrough" => "架势穿透",
-            "postureBlock" => "架势格挡",
-            "changeAttckTarget" => "改变攻击目标",
-            "FameGainRate" => "名气获取率",
-            "ContributionRate" => "贡献获取率",
-            "TravelSpeedRate" => "旅行速度",
-            "CureWoundRate" => "疗伤效率",
-            "SkillFightExpRate" => "战斗技能经验",
-            "SkillBookExpRate" => "读书经验",
-            "LivingSkillExpRate" => "生活技能经验",
-            "dealPriceRate" => "交易价格",
-            "horseAddAttri" => "坐骑属性加成",
-            "equipAddRate" => "装备加成率",
-            "medResistReduce" => "药物抗性降低",
-            "equipmentWeight" => "装备重量",
-            "summonDamage" => "召唤物伤害",
-            "summonSpeed" => "召唤物速度",
-            "summonHp" => "召唤物生命",
-            "defenceBuildingHp" => "防御建筑生命",
-            "favorRate" => "好感获取率",
-            "selfForceSkillPower" => "所属势力功法威力",
-            "reduceBadFame" => "恶名降低",
+            "maxHp" => "생명 상한",
+            "maxMana" => "내력 상한",
+            "maxPower" => "체력 상한",
+            "damage" => "피해",
+            "armor" => "호갑",
+            "armorRate" => "방어율",
+            "speed" => "속도",
+            "acc" => "명중",
+            "evade" => "회피",
+            "critRate" => "치명타율",
+            "antiCrit" => "치명 저항률",
+            "counter" => "반격률",
+            "antiCounter" => "반격 저항률",
+            "comboRate" => "연격률",
+            "antiCombo" => "연격 저항률",
+            "expRate" => "경험 효율",
+            "recoverRate" => "회복 효율",
+            "reduceReciveDamageRate" => "피해 감소율",
+            "addDebuffRate" => "부정 효과 부여율",
+            "reduceDebuffRate" => "부정 효과 저항률",
+            "woundResist" => "부상 저항",
+            "clearMovePower" => "이동력 비우기",
+            "recoverMovePower" => "이동력 회복",
+            "externalDamage" => "외상 피해",
+            "internalDamage" => "내상 피해",
+            "poisonDamage" => "독상 피해",
+            "suckHp" => "생명 흡수",
+            "suckMana" => "내력 흡수",
+            "killMana" => "내력 삭감",
+            "recoverAll" => "전체 회복",
+            "burn" => "작열",
+            "recoverHp" => "생명 회복",
+            "bleed" => "출혈",
+            "recoverMana" => "내력 회복",
+            "elec" => "감전",
+            "recoverPower" => "체력 회복",
+            "losePower" => "체력 삭감",
+            "frozen" => "빙결",
+            "hitHandPoint" => "손 타격",
+            "hitFootPoint" => "발 타격",
+            "hitChestPoint" => "가슴 타격",
+            "hitBackPoint" => "등 타격",
+            "hitHeadPoint" => "머리 타격",
+            "reduceDamage" => "받는 피해 감소",
+            "addArmor" => "호갑 증가",
+            "reduceArmor" => "호갑 감소",
+            "addSpeed" => "속도 증가",
+            "reduceSpeed" => "속도 감소",
+            "addAcc" => "명중 증가",
+            "reduceAcc" => "명중 감소",
+            "addEvade" => "회피 증가",
+            "reduceEvade" => "회피 감소",
+            "reduceReciveDamage" => "받는 피해 감소",
+            "addReciveDamage" => "받는 피해 증가",
+            "crazy" => "광폭",
+            "confusion" => "혼란",
+            "deathFight" => "사투",
+            "minusArmor" => "파갑",
+            "addCrit" => "치명타 증가",
+            "reduceCrit" => "치명타 감소",
+            "addAntiCrit" => "치명 저항 증가",
+            "reduceAntiCrit" => "치명 저항 감소",
+            "addBlock" => "막기 증가",
+            "addAntiBlock" => "막기 저항 증가",
+            "addCombo" => "연격 증가",
+            "reduceCombo" => "연격 감소",
+            "addAntiCombo" => "연격 저항 증가",
+            "reduceAntiCombo" => "연격 저항 감소",
+            "addDamage" => "피해 증가",
+            "addRecoverRate" => "회복 효율 증가",
+            "reduceRecoverRate" => "회복 효율 감소",
+            "addReduceDebuffRate" => "부정 효과 저항 증가",
+            "reduceReduceDebuffRate" => "부정 효과 저항 감소",
+            "internalTrueDamage" => "내상 고정 피해",
+            "trueDamage" => "고정 피해",
+            "recoverHpPerRound" => "턴마다 생명 회복",
+            "recoverManaPerRound" => "턴마다 내력 회복",
+            "recoverPowerPerRound" => "턴마다 체력 회복",
+            "recoverWoundPerRound" => "턴마다 부상 회복",
+            "manaShield" => "내력 보호막",
+            "reboundDamage" => "피해 반사",
+            "defenceDamage" => "방어 반상",
+            "stopMove" => "이동 불가",
+            "invincible" => "무적",
+            "stun" => "기절",
+            "reborn" => "부활",
+            "backDamage" => "반격 피해",
+            "backSuckMana" => "반격 내력 흡수",
+            "backKillMana" => "반격 내력 삭감",
+            "hitFar" => "원거리 공격",
+            "hitClose" => "근접 공격",
+            "moveRange" => "이동 범위",
+            "addMoveRange" => "이동 범위 증가",
+            "reduceMoveRange" => "이동 범위 감소",
+            "postureThrough" => "자세 관통",
+            "postureBlock" => "자세 막기",
+            "changeAttckTarget" => "공격 대상 변경",
+            "FameGainRate" => "명성 획득률",
+            "ContributionRate" => "공헌 획득률",
+            "TravelSpeedRate" => "여행 속도",
+            "CureWoundRate" => "치료 효율",
+            "SkillFightExpRate" => "전투 기술 경험",
+            "SkillBookExpRate" => "독서 경험",
+            "LivingSkillExpRate" => "생활 기술 경험",
+            "dealPriceRate" => "거래 가격",
+            "horseAddAttri" => "탈것 속성 보너스",
+            "equipAddRate" => "장비 보너스율",
+            "medResistReduce" => "약물 저항 감소",
+            "equipmentWeight" => "장비 무게",
+            "summonDamage" => "소환물 피해",
+            "summonSpeed" => "소환물 속도",
+            "summonHp" => "소환물 생명",
+            "defenceBuildingHp" => "방어 건물 생명",
+            "favorRate" => "호감 획득률",
+            "selfForceSkillPower" => "소속 세력 무공 위력",
+            "reduceBadFame" => "악명 감소",
             _ => ""
         };
         if (label.Length > 0) return label;
@@ -6732,7 +6733,7 @@ public static partial class TrainerBehaviour
             if (!string.IsNullOrWhiteSpace(databaseName) && !string.Equals(databaseName, enumName, StringComparison.OrdinalIgnoreCase)) return databaseName;
         }
         catch { }
-        return $"特殊效果 {key}";
+        return $"특수 효과 {key}";
     }
 
     private static string LocalizeAffixDescription(string description)
@@ -6795,21 +6796,21 @@ public static partial class TrainerBehaviour
 
     private static string DescribeIndexedAffix(string enumName)
     {
-        if (TryIndexedAffix(enumName, "maxAttri", "上限", AttributeAffixLabels, out var label)) return label;
-        if (TryIndexedAffix(enumName, "addAttri", "增加", AttributeAffixLabels, out label)) return label;
-        if (TryIndexedAffix(enumName, "reduceAttri", "降低", AttributeAffixLabels, out label)) return label;
+        if (TryIndexedAffix(enumName, "maxAttri", " 상한", AttributeAffixLabels, out var label)) return label;
+        if (TryIndexedAffix(enumName, "addAttri", " 증가", AttributeAffixLabels, out label)) return label;
+        if (TryIndexedAffix(enumName, "reduceAttri", " 감소", AttributeAffixLabels, out label)) return label;
         if (TryIndexedAffix(enumName, "attri", "", AttributeAffixLabels, out label)) return label;
 
-        if (TryIndexedAffix(enumName, "maxFightSkill", "上限", FightSkillAffixLabels, out label)) return label;
-        if (TryIndexedAffix(enumName, "fightSkillPower", "威力", FightSkillAffixLabels, out label)) return label;
+        if (TryIndexedAffix(enumName, "maxFightSkill", " 상한", FightSkillAffixLabels, out label)) return label;
+        if (TryIndexedAffix(enumName, "fightSkillPower", " 위력", FightSkillAffixLabels, out label)) return label;
         if (TryIndexedAffix(enumName, "fightSkill", "", FightSkillAffixLabels, out label)) return label;
-        if (TryIndexedRateAffix(enumName, "fightSkill", "ExpRate", "经验效率", FightSkillAffixLabels, out label)) return label;
+        if (TryIndexedRateAffix(enumName, "fightSkill", "ExpRate", " 경험 효율", FightSkillAffixLabels, out label)) return label;
 
-        if (TryIndexedAffix(enumName, "maxLivingSkill", "上限", LivingSkillAffixLabels, out label)) return label;
+        if (TryIndexedAffix(enumName, "maxLivingSkill", " 상한", LivingSkillAffixLabels, out label)) return label;
         if (TryIndexedAffix(enumName, "livingSkill", "", LivingSkillAffixLabels, out label)) return label;
-        if (TryIndexedRateAffix(enumName, "livingSkill", "ExpRate", "经验效率", LivingSkillAffixLabels, out label)) return label;
-        if (TryIndexedAffix(enumName, "recoverPartPosture", "架势恢复", PosturePartAffixLabels, out label)) return label;
-        if (TryIndexedAffix(enumName, "fightSkillRange", "攻击范围", FightSkillAffixLabels, out label)) return label;
+        if (TryIndexedRateAffix(enumName, "livingSkill", "ExpRate", " 경험 효율", LivingSkillAffixLabels, out label)) return label;
+        if (TryIndexedAffix(enumName, "recoverPartPosture", " 자세 회복", PosturePartAffixLabels, out label)) return label;
+        if (TryIndexedAffix(enumName, "fightSkillRange", " 공격 범위", FightSkillAffixLabels, out label)) return label;
         return "";
     }
 
@@ -6838,24 +6839,24 @@ public static partial class TrainerBehaviour
         if (AffixTypeByChineseName.TryGetValue(chineseName, out var cached)) return cached;
         var enumName = chineseName switch
         {
-            "生命上限" => "maxHp",
-            "内力上限" => "maxMana",
-            "体力上限" => "maxPower",
-            "伤害" => "damage",
-            "护甲" => "armor",
-            "护甲率" => "armorRate",
-            "轻功属性" or "速度" => "speed",
-            "命中" => "acc",
-            "闪避" => "evade",
-            "暴击率" => "critRate",
-            "反击率" => "counter",
-            "连击率" => "comboRate",
-            "移动范围" => "moveRange",
-            "恢复效率" => "recoverRate",
-            "战斗技能经验" => "SkillFightExpRate",
-            "读书经验" => "SkillBookExpRate",
-            "生活技能经验" => "LivingSkillExpRate",
-            "装备重量" => "equipmentWeight",
+            "생명 상한" => "maxHp",
+            "내력 상한" => "maxMana",
+            "체력 상한" => "maxPower",
+            "피해" => "damage",
+            "호갑" => "armor",
+            "방어율" => "armorRate",
+            "경공 속성" or "속도" => "speed",
+            "명중" => "acc",
+            "회피" => "evade",
+            "치명타율" => "critRate",
+            "반격률" => "counter",
+            "연격률" => "comboRate",
+            "이동 범위" => "moveRange",
+            "회복 효율" => "recoverRate",
+            "전투 기술 경험" => "SkillFightExpRate",
+            "독서 경험" => "SkillBookExpRate",
+            "생활 기술 경험" => "LivingSkillExpRate",
+            "장비 무게" => "equipmentWeight",
             _ => ""
         };
         if (enumName.Length > 0 && Enum.TryParse<HeroSpeAddDataType>(enumName, true, out _))
@@ -6871,47 +6872,47 @@ public static partial class TrainerBehaviour
     {
         try
         {
-            var equipment = item.equipmentData ?? throw new InvalidOperationException("所选物品已不再是装备");
+            var equipment = item.equipmentData ?? throw new InvalidOperationException("선택한 물품이 더 이상 장비가 아닙니다");
             var data = extra ? equipment.extraAddData : equipment.baseAddData;
             var key = int.TryParse(typeText, NumberStyles.Integer, CultureInfo.InvariantCulture, out var numeric)
                 ? numeric
                 : (int)Enum.Parse<HeroSpeAddDataType>(typeText, true);
             data.heroSpeAddData.Remove(key);
             ItemChanged(item);
-            _status = "已删除当前词条。";
+            _status = "현재 옵션을 삭제했습니다.";
             RequestPageRebuild();
         }
-        catch (Exception ex) { _status = "删除词条失败：" + ex.Message; }
+        catch (Exception ex) { _status = "옵션 삭제 실패: " + ex.Message; }
     }
 
     private static void BuildNativeCraft()
     {
         var p = NativePageParent;
-        AddText(p, "打造与炼制辅助", Vector2.zero, new Vector2(900, 38), 22);
-        AddText(p, "锁定的是游戏用于生成成品的实际价值预算，预览与结算会使用同一数值。", new Vector2(0, 38), new Vector2(1000, 45), 16);
+        AddText(p, "제작과 연단 보조", Vector2.zero, new Vector2(900, 38), 22);
+        AddText(p, "잠그는 값은 게임이 완성품을 만들 때 쓰는 실제 가치 예산이며, 미리보기와 정산에 같은 수치가 쓰입니다.", new Vector2(0, 38), new Vector2(1000, 45), 16);
 
-        AddNativeToggle(p, "锁定装备打造价值", 0, 90, () => LongYinTrainerPlugin.LockEquipmentCraftValue.Value, v => LongYinTrainerPlugin.LockEquipmentCraftValue.Value = v);
-        AddText(p, "目标价值", new Vector2(505, 90), new Vector2(100, 38));
+        AddNativeToggle(p, "장비 제작 가치 잠금", 0, 90, () => LongYinTrainerPlugin.LockEquipmentCraftValue.Value, v => LongYinTrainerPlugin.LockEquipmentCraftValue.Value = v);
+        AddText(p, "목표 가치", new Vector2(505, 90), new Vector2(100, 38));
         var equipValue = AddInput(p, F(LongYinTrainerPlugin.EquipmentCraftValue.Value), new Vector2(610, 90), new Vector2(180, 38));
 
-        AddNativeToggle(p, "锁定炼丹价值", 0, 142, () => LongYinTrainerPlugin.LockMedicineCraftValue.Value, v => LongYinTrainerPlugin.LockMedicineCraftValue.Value = v);
-        AddText(p, "目标价值", new Vector2(505, 142), new Vector2(100, 38));
+        AddNativeToggle(p, "연단 가치 잠금", 0, 142, () => LongYinTrainerPlugin.LockMedicineCraftValue.Value, v => LongYinTrainerPlugin.LockMedicineCraftValue.Value = v);
+        AddText(p, "목표 가치", new Vector2(505, 142), new Vector2(100, 38));
         var medicineValue = AddInput(p, F(LongYinTrainerPlugin.MedicineCraftValue.Value), new Vector2(610, 142), new Vector2(180, 38));
 
-        AddNativeToggle(p, "锁定烹饪价值", 0, 194, () => LongYinTrainerPlugin.LockFoodCraftValue.Value, v => LongYinTrainerPlugin.LockFoodCraftValue.Value = v);
-        AddText(p, "目标价值", new Vector2(505, 194), new Vector2(100, 38));
+        AddNativeToggle(p, "요리 가치 잠금", 0, 194, () => LongYinTrainerPlugin.LockFoodCraftValue.Value, v => LongYinTrainerPlugin.LockFoodCraftValue.Value = v);
+        AddText(p, "목표 가치", new Vector2(505, 194), new Vector2(100, 38));
         var foodValue = AddInput(p, F(LongYinTrainerPlugin.FoodCraftValue.Value), new Vector2(610, 194), new Vector2(180, 38));
 
-        AddText(p, "已解除 3200 上限：接受任意非负有限值。5000 会原样用于预览与结算；极端大值可能使原游戏公式溢出。", new Vector2(0, 250), new Vector2(1050, 38), 16);
+        AddText(p, "3200 상한을 해제했습니다. 음수가 아닌 유한한 값은 무엇이든 받습니다. 5000은 그대로 미리보기와 정산에 쓰이며, 너무 큰 값은 원래 게임 공식이 넘칠 수 있습니다.", new Vector2(0, 250), new Vector2(1050, 38), 16);
 
-        AddNativeToggle(p, "锁定制作天数", 0, 296, () => LongYinTrainerPlugin.LockCraftTime.Value, v => LongYinTrainerPlugin.LockCraftTime.Value = v);
-        AddText(p, "天数（可填 0）", new Vector2(505, 296), new Vector2(150, 38));
+        AddNativeToggle(p, "제작 일수 잠금", 0, 296, () => LongYinTrainerPlugin.LockCraftTime.Value, v => LongYinTrainerPlugin.LockCraftTime.Value = v);
+        AddText(p, "일수(0 가능)", new Vector2(505, 296), new Vector2(150, 38));
         var craftTime = AddInput(p, LongYinTrainerPlugin.CraftTimeValue.Value.ToString(CultureInfo.InvariantCulture), new Vector2(660, 296), new Vector2(130, 38));
 
-        AddText(p, "成品最低品质（0 关闭，1 绿，2 蓝，3 紫，4 橙，5 红）", new Vector2(0, 348), new Vector2(470, 38), 16);
+        AddText(p, "완성품 최저 품질(0 끔, 1 녹, 2 파, 3 보, 4 주, 5 빨)", new Vector2(0, 348), new Vector2(470, 38), 16);
         var rarity = AddInput(p, LongYinTrainerPlugin.MinimumCraftRarity.Value.ToString(), new Vector2(475, 348), new Vector2(120, 38));
 
-        AddButton(p, "应用制作设置", new Vector2(0, 410), new Vector2(330, 44), () =>
+        AddButton(p, "제작 설정 적용", new Vector2(0, 410), new Vector2(330, 44), () =>
         {
             try
             {
@@ -6922,13 +6923,13 @@ public static partial class TrainerBehaviour
                 LongYinTrainerPlugin.InstantCraft.Value = LongYinTrainerPlugin.LockCraftTime.Value && LongYinTrainerPlugin.CraftTimeValue.Value == 0;
                 var rarityMax = Math.Max(0, (GameDataController.Instance?.rareLvData?.Count ?? 6) - 1);
                 LongYinTrainerPlugin.MinimumCraftRarity.Value = Math.Clamp(ParseInt(rarity.text), 0, rarityMax);
-                _status = $"制作设置已应用：装备 {LongYinTrainerPlugin.EquipmentCraftValue.Value:0.##}，炼丹 {LongYinTrainerPlugin.MedicineCraftValue.Value:0.##}，烹饪 {LongYinTrainerPlugin.FoodCraftValue.Value:0.##}，天数 {LongYinTrainerPlugin.CraftTimeValue.Value}，最低品质 {LongYinTrainerPlugin.MinimumCraftRarity.Value}。";
+                _status = $"제작 설정을 적용했습니다: 장비 {LongYinTrainerPlugin.EquipmentCraftValue.Value:0.##}, 연단 {LongYinTrainerPlugin.MedicineCraftValue.Value:0.##}, 요리 {LongYinTrainerPlugin.FoodCraftValue.Value:0.##}, 일수 {LongYinTrainerPlugin.CraftTimeValue.Value}, 최저 품질 {LongYinTrainerPlugin.MinimumCraftRarity.Value}.";
             }
-            catch (Exception ex) { _status = "制作设置应用失败：" + ex.Message; }
+            catch (Exception ex) { _status = "제작 설정 적용 실패: " + ex.Message; }
         });
 
-        AddText(p, "成功率与制作效率已完全交还游戏原版计算；修改器不再挂接或改写该数值。天数范围为 0–3650。", new Vector2(0, 475), new Vector2(1020, 45), 16);
-        AddText(p, "修改器不会主动调用制作界面的内部方法；游戏在实际预览与结算时读取锁定值。设置会保存到 BepInEx 配置。", new Vector2(0, 525), new Vector2(1020, 70), 16);
+        AddText(p, "성공률과 제작 효율은 완전히 원래 게임 계산으로 돌려놓았습니다. 트레이너는 더 이상 이 수치에 연결하거나 고쳐 쓰지 않습니다. 일수 범위는 0–3650입니다.", new Vector2(0, 475), new Vector2(1020, 45), 16);
+        AddText(p, "트레이너는 제작 화면의 내부 메서드를 직접 호출하지 않습니다. 게임이 실제 미리보기와 정산 때 잠금 값을 읽습니다. 설정은 BepInEx 구성에 저장됩니다.", new Vector2(0, 525), new Vector2(1020, 70), 16);
     }
 
     private static void BuildNativeFaction()
@@ -6936,8 +6937,8 @@ public static partial class TrainerBehaviour
         var p = NativePageParent;
         var hero = TargetHero();
         var force = hero?.GetForce(true);
-        AddText(p, force == null ? "当前角色没有所属势力。" : $"当前势力：{force.forceName}（ID {force.forceID}，跟随所选角色；未选时为主角）", Vector2.zero, new Vector2(1050, 36), 18);
-        AddText(p, "势力金钱", new Vector2(0, 55), new Vector2(150, 34));
+        AddText(p, force == null ? "현재 캐릭터에게 소속 세력이 없습니다." : $"현재 세력: {force.forceName}(ID {force.forceID}, 선택한 캐릭터를 따르며 선택이 없으면 주인공)", Vector2.zero, new Vector2(1050, 36), 18);
+        AddText(p, "세력 자금", new Vector2(0, 55), new Vector2(150, 34));
         if (force != null && _resourceForceId != force.forceID)
         {
             _resourceForceId = force.forceID;
@@ -6954,37 +6955,37 @@ public static partial class TrainerBehaviour
         {
             var resourceName = i < GlobalData.ResourceName.Count && !string.IsNullOrWhiteSpace(GlobalData.ResourceName[i])
                 ? GlobalData.ResourceName[i]
-                : $"资源 {i + 1}";
+                : $"자원 {i + 1}";
             AddText(p, resourceName, new Vector2(0, 105 + i * 45), new Vector2(150, 34));
             resources[i] = AddInput(p, ResourceValues[i], new Vector2(160, 105 + i * 45), new Vector2(180, 34));
         }
         var applyY = Math.Max(390, 115 + resourceCount * 45);
-        AddButton(p, "应用势力数值", new Vector2(0, applyY), new Vector2(340, 40), () => { _forceMoney = money.text; for (var i = 0; i < resources.Length; i++) ResourceValues[i] = resources[i].text; ApplyForce(force); });
-        var lockButton = AddButton(p, IsForceLocked(force) ? "解除资源锁定" : "锁定当前资源", new Vector2(0, applyY + 50), new Vector2(340, 40), () => ToggleForceLock(force));
+        AddButton(p, "세력 수치 적용", new Vector2(0, applyY), new Vector2(340, 40), () => { _forceMoney = money.text; for (var i = 0; i < resources.Length; i++) ResourceValues[i] = resources[i].text; ApplyForce(force); });
+        var lockButton = AddButton(p, IsForceLocked(force) ? "자원 잠금 해제" : "현재 자원 잠금", new Vector2(0, applyY + 50), new Vector2(340, 40), () => ToggleForceLock(force));
         _forceLockButtonText = lockButton.GetComponentInChildren<Text>();
         _forceLockPageId = force?.forceID ?? int.MinValue;
-        AddText(p, "先应用数值，再锁定。锁定金钱及上方全部资源。\n关闭面板仍生效；换存档或重启后自动解除。", new Vector2(0, applyY + 98), new Vector2(490, 64), 15);
-        AddNativeToggle(p, "新建角色无限分配点", 540, 55, () => UnlimitedCreationPoints, v => UnlimitedCreationPoints = v);
-        AddNativeToggle(p, "解锁全部传承天赋", 540, 105,
+        AddText(p, "먼저 수치를 적용한 뒤 잠그세요. 돈과 위의 모든 자원을 잠급니다.\n패널을 닫아도 유지되며, 세이브를 바꾸거나 재시작하면 자동으로 해제됩니다.", new Vector2(0, applyY + 98), new Vector2(490, 64), 15);
+        AddNativeToggle(p, "새 캐릭터 분배 포인트 무한", 540, 55, () => UnlimitedCreationPoints, v => UnlimitedCreationPoints = v);
+        AddNativeToggle(p, "전승 천부 모두 해제", 540, 105,
             () => LongYinTrainerPlugin.UnlockInheritedTalents.Value,
             SetUnlockInheritedTalents);
-        AddNativeToggle(p, "开局允许高级天赋", 540, 155,
+        AddNativeToggle(p, "시작 시 고급 천부 허용", 540, 155,
             () => LongYinTrainerPlugin.UnlockAdvancedStartTalents.Value,
             SetUnlockAdvancedStartTalents);
-        AddText(p, "开局天赋上限", new Vector2(540, 210), new Vector2(150, 36));
+        AddText(p, "시작 천부 상한", new Vector2(540, 210), new Vector2(150, 36));
         var startTalentLimit = AddInput(p, LongYinTrainerPlugin.StartTalentSlotLimit.Value.ToString(CultureInfo.InvariantCulture), new Vector2(700, 210), new Vector2(120, 36));
-        AddButton(p, "应用上限", new Vector2(835, 210), new Vector2(165, 36), () =>
+        AddButton(p, "상한 적용", new Vector2(835, 210), new Vector2(165, 36), () =>
         {
             try
             {
                 LongYinTrainerPlugin.StartTalentSlotLimit.Value = LongYinTrainerPlugin.SafeStartTalentSlotLimit(ParseInt(startTalentLimit.text));
                 RefreshStartTalentMenu();
-                _status = $"新建角色的初始天赋上限已设为 {LongYinTrainerPlugin.StartTalentSlotLimit.Value}。";
+                _status = $"새 캐릭터의 초기 천부 상한을 {LongYinTrainerPlugin.StartTalentSlotLimit.Value}(으)로 설정했습니다.";
             }
-            catch (Exception ex) { _status = "设置开局天赋上限失败：" + ex.Message; }
+            catch (Exception ex) { _status = "시작 천부 상한 설정 실패: " + ex.Message; }
         });
         AddText(p,
-            "无限分配点会把天赋点、属性、战斗技能、生活技能的剩余点数锁定为 999。允许高级天赋仅放宽本次开局的初始领悟与前置条件；不会改变进入游戏后的领悟规则。天赋上限范围 1–1000。",
+            "분배 포인트 무한은 천부점, 속성, 전투 기술, 생활 기술의 남은 포인트를 999로 고정합니다. 고급 천부 허용은 이번 시작 때의 초기 깨달음과 선행 조건만 완화하며, 게임에 들어간 뒤의 깨달음 규칙은 바꾸지 않습니다. 천부 상한 범위는 1–1000입니다.",
             new Vector2(540, 265), new Vector2(490, 145), 16);
         BuildOtherSectMerit(p);
     }
@@ -6994,8 +6995,8 @@ public static partial class TrainerBehaviour
         LongYinTrainerPlugin.UnlockInheritedTalents.Value = enabled;
         RefreshStartTalentMenu();
         _status = enabled
-            ? "传承天赋已在开局界面临时解锁；不会写入 Steam／WeGame 成就。"
-            : "传承天赋恢复使用原版结局解锁条件。";
+            ? "전승 천부를 시작 화면에서 임시로 해제했습니다. Steam／WeGame 업적에는 기록되지 않습니다."
+            : "전승 천부가 원래 엔딩 해제 조건으로 돌아갔습니다.";
     }
 
     private static void SetUnlockAdvancedStartTalents(bool enabled)
@@ -7003,8 +7004,8 @@ public static partial class TrainerBehaviour
         LongYinTrainerPlugin.UnlockAdvancedStartTalents.Value = enabled;
         RefreshStartTalentMenu();
         _status = enabled
-            ? "高级天赋已允许在新建角色阶段直接领悟。"
-            : "高级天赋已恢复原版的初始领悟与前置条件。";
+            ? "새 캐릭터 생성 단계에서 고급 천부를 바로 깨달을 수 있습니다."
+            : "고급 천부의 초기 깨달음과 선행 조건을 원래대로 되돌렸습니다.";
     }
 
     private static void RefreshStartTalentMenu()
@@ -7024,61 +7025,61 @@ public static partial class TrainerBehaviour
     private static void BuildNativeExtras()
     {
         var p = NativePageParent;
-        AddText(p, "扩展功能", Vector2.zero, new Vector2(320, 36), 22);
-        AddText(p, "来自 longyin_plus 已验证玩法钩子的独立兼容实现", new Vector2(350, 2), new Vector2(690, 34), 15, TextAnchor.MiddleRight);
+        AddText(p, "확장 기능", Vector2.zero, new Vector2(320, 36), 22);
+        AddText(p, "longyin_plus의 검증된 게임 훅을 바탕으로 따로 구현한 호환 기능", new Vector2(350, 2), new Vector2(690, 34), 15, TextAnchor.MiddleRight);
 
-        AddNativeToggle(p, "探索移动不消耗体力", 0, 45,
+        AddNativeToggle(p, "탐색 이동 시 체력 소모 없음", 0, 45,
             () => LongYinTrainerPlugin.LockExploreStamina.Value,
             value => LongYinTrainerPlugin.LockExploreStamina.Value = value);
-        AddNativeToggle(p, "冻结日期推进", 540, 45,
+        AddNativeToggle(p, "날짜 진행 멈춤", 540, 45,
             () => DateFreezeControl.Enabled,
             value =>
             {
                 try
                 {
                     DateFreezeControl.SetEnabled(value);
-                    _status = value ? "日期冻结已开启。" : "日期冻结已关闭，换日拦截已移除。";
+                    _status = value ? "날짜 멈춤을 켰습니다." : "날짜 멈춤을 껐습니다. 날짜 넘김 가로채기를 제거했습니다.";
                 }
-                catch (Exception ex) { _status = "日期开关处理失败（已停止拦截）：" + ex.Message; }
+                catch (Exception ex) { _status = "날짜 스위치 처리 실패(가로채기 중지): " + ex.Message; }
             });
-        AddNativeToggle(p, "新建角色无限分配点", 0, 89,
+        AddNativeToggle(p, "새 캐릭터 분배 포인트 무한", 0, 89,
             () => UnlimitedCreationPoints,
             value => UnlimitedCreationPoints = value);
-        AddNativeToggle(p, "下次启动跳过片头", 540, 89,
+        AddNativeToggle(p, "다음 실행 시 오프닝 건너뛰기", 540, 89,
             () => LongYinTrainerPlugin.SkipStartupIntro.Value,
             value => LongYinTrainerPlugin.SkipStartupIntro.Value = value);
-        AddNativeToggle(p, "技能满级奖励天赋点", 0, 133,
+        AddNativeToggle(p, "기술 만렙 시 천부점 보상", 0, 133,
             () => LongYinTrainerPlugin.EnableSkillTalentGrant.Value,
             value => LongYinTrainerPlugin.EnableSkillTalentGrant.Value = value);
-        AddNativeToggle(p, "主角全地图视野", 540, 133,
+        AddNativeToggle(p, "주인공 전체 지도 시야", 540, 133,
             () => LongYinTrainerPlugin.ShowAllBigMapEvents.Value,
             SetShowAllBigMapEvents);
 
-        AddText(p, "读书经验倍率", new Vector2(0, 195), new Vector2(180, 34));
+        AddText(p, "독서 경험 배율", new Vector2(0, 195), new Vector2(180, 34));
         var bookExp = AddInput(p, LongYinTrainerPlugin.BookExpMultiplier.Value.ToString(CultureInfo.InvariantCulture), new Vector2(190, 195), new Vector2(150, 34));
-        AddText(p, "战斗技能经验倍率", new Vector2(0, 237), new Vector2(180, 34));
+        AddText(p, "전투 기술 경험 배율", new Vector2(0, 237), new Vector2(180, 34));
         var battleExp = AddInput(p, LongYinTrainerPlugin.BattleSkillExpMultiplier.Value.ToString(CultureInfo.InvariantCulture), new Vector2(190, 237), new Vector2(150, 34));
-        AddText(p, "开局点数倍率", new Vector2(0, 279), new Vector2(180, 34));
+        AddText(p, "시작 포인트 배율", new Vector2(0, 279), new Vector2(180, 34));
         var creationPoints = AddInput(p, LongYinTrainerPlugin.CreationPointMultiplier.Value.ToString(CultureInfo.InvariantCulture), new Vector2(190, 279), new Vector2(150, 34));
-        AddText(p, "战斗倍速倍率", new Vector2(0, 321), new Vector2(180, 34));
+        AddText(p, "전투 배속 배율", new Vector2(0, 321), new Vector2(180, 34));
         var battleSpeed = AddInput(p, LongYinTrainerPlugin.BattleSpeedMultiplier.Value.ToString("0.###", CultureInfo.InvariantCulture), new Vector2(190, 321), new Vector2(150, 34));
-        AddText(p, "天赋奖励触发等级", new Vector2(0, 363), new Vector2(180, 34));
+        AddText(p, "천부 보상 발동 레벨", new Vector2(0, 363), new Vector2(180, 34));
         var talentLevel = AddInput(p, LongYinTrainerPlugin.SkillTalentLevelThreshold.Value.ToString(CultureInfo.InvariantCulture), new Vector2(190, 363), new Vector2(150, 34));
-        AddText(p, "每阶奖励天赋点", new Vector2(0, 405), new Vector2(180, 34));
+        AddText(p, "단계마다 보상 천부점", new Vector2(0, 405), new Vector2(180, 34));
         var talentPoints = AddInput(p, LongYinTrainerPlugin.SkillTalentTierPointMultiplier.Value.ToString("0.###", CultureInfo.InvariantCulture), new Vector2(190, 405), new Vector2(150, 34));
 
-        AddText(p, "坐骑基础速度倍率", new Vector2(540, 195), new Vector2(190, 34));
+        AddText(p, "탈것 기본 속도 배율", new Vector2(540, 195), new Vector2(190, 34));
         var horseBase = AddInput(p, LongYinTrainerPlugin.HorseBaseSpeedMultiplier.Value.ToString("0.###", CultureInfo.InvariantCulture), new Vector2(745, 195), new Vector2(150, 34));
-        AddText(p, "坐骑冲刺速度倍率", new Vector2(540, 237), new Vector2(190, 34));
+        AddText(p, "탈것 돌진 속도 배율", new Vector2(540, 237), new Vector2(190, 34));
         var horseSprint = AddInput(p, LongYinTrainerPlugin.HorseSprintSpeedMultiplier.Value.ToString("0.###", CultureInfo.InvariantCulture), new Vector2(745, 237), new Vector2(150, 34));
-        AddText(p, "冲刺持续时间倍率", new Vector2(540, 279), new Vector2(190, 34));
+        AddText(p, "돌진 지속 시간 배율", new Vector2(540, 279), new Vector2(190, 34));
         var horseDuration = AddInput(p, LongYinTrainerPlugin.HorseSprintDurationMultiplier.Value.ToString("0.###", CultureInfo.InvariantCulture), new Vector2(745, 279), new Vector2(150, 34));
-        AddText(p, "冲刺冷却倍率", new Vector2(540, 321), new Vector2(190, 34));
+        AddText(p, "돌진 쿨다운 배율", new Vector2(540, 321), new Vector2(190, 34));
         var horseCooldown = AddInput(p, LongYinTrainerPlugin.HorseSprintCooldownMultiplier.Value.ToString("0.###", CultureInfo.InvariantCulture), new Vector2(745, 321), new Vector2(150, 34));
-        AddText(p, "坐骑耐力倍率", new Vector2(540, 363), new Vector2(190, 34));
+        AddText(p, "탈것 지구력 배율", new Vector2(540, 363), new Vector2(190, 34));
         var horseStamina = AddInput(p, LongYinTrainerPlugin.HorseStaminaMultiplier.Value.ToString("0.###", CultureInfo.InvariantCulture), new Vector2(745, 363), new Vector2(150, 34));
 
-        AddButton(p, "应用扩展设置", new Vector2(540, 405), new Vector2(355, 40), () =>
+        AddButton(p, "확장 설정 적용", new Vector2(540, 405), new Vector2(355, 40), () =>
         {
             try
             {
@@ -7093,13 +7094,13 @@ public static partial class TrainerBehaviour
                 LongYinTrainerPlugin.HorseStaminaMultiplier.Value = LongYinTrainerPlugin.SafeHorseMultiplier(ParseFloat(horseStamina.text));
                 LongYinTrainerPlugin.SkillTalentLevelThreshold.Value = LongYinTrainerPlugin.SafeSkillLevelThreshold(ParseInt(talentLevel.text));
                 LongYinTrainerPlugin.SkillTalentTierPointMultiplier.Value = LongYinTrainerPlugin.SafeTalentPointMultiplier(ParseFloat(talentPoints.text));
-                _status = $"扩展设置已应用：读书 ×{LongYinTrainerPlugin.BookExpMultiplier.Value}，战斗经验 ×{LongYinTrainerPlugin.BattleSkillExpMultiplier.Value}，开局点数 ×{LongYinTrainerPlugin.CreationPointMultiplier.Value}。";
+                _status = $"확장 설정을 적용했습니다: 독서 ×{LongYinTrainerPlugin.BookExpMultiplier.Value}, 전투 경험 ×{LongYinTrainerPlugin.BattleSkillExpMultiplier.Value}, 시작 포인트 ×{LongYinTrainerPlugin.CreationPointMultiplier.Value}.";
             }
-            catch (Exception ex) { _status = "扩展设置应用失败：" + ex.Message; }
+            catch (Exception ex) { _status = "확장 설정 적용 실패: " + ex.Message; }
         });
 
         AddText(p,
-            "说明：全地图视野使用原生发现机制，已发现状态可能写入存档；关闭后不撤销发现。交互距离不变。战斗倍速是在游戏内点击倍速按钮后追加倍率；冲刺冷却低于 1 会缩短冷却。所有新功能默认关闭或 1 倍。",
+            "설명: 전체 지도 시야는 게임 기본 발견 방식을 쓰며 발견 상태가 세이브에 기록될 수 있습니다. 꺼도 발견은 취소되지 않습니다. 상호작용 거리는 그대로입니다. 전투 배속은 게임 안에서 배속 버튼을 누른 뒤 배율을 더 곱합니다. 돌진 쿨다운을 1보다 낮추면 쿨다운이 짧아집니다. 모든 새 기능은 기본적으로 꺼짐 또는 1배입니다.",
             new Vector2(0, 475), new Vector2(1025, 68), 15);
     }
 
@@ -7114,7 +7115,7 @@ public static partial class TrainerBehaviour
                 _breakChoiceArmed = false;
                 _breakChoicePage = 0;
             }
-            _status = $"已识别突破功法：{skill.Name(false)}。打开“突破自选”页选择最终效果。";
+            _status = $"돌파 무공을 인식했습니다: {skill.Name(false)}. “돌파 선택” 탭을 열어 최종 효과를 고르세요.";
             InvalidatePages(7);
         }
         catch (Exception ex)
@@ -7142,7 +7143,7 @@ public static partial class TrainerBehaviour
         }
         catch (Exception ex)
         {
-            _status = "读取突破候选失败：" + ex.Message;
+            _status = "돌파 후보 읽기 실패: " + ex.Message;
         }
         return result;
     }
@@ -7165,7 +7166,7 @@ public static partial class TrainerBehaviour
         else if (description.EndsWith("+0", StringComparison.Ordinal)) description = description[..^2];
         if (!string.IsNullOrWhiteSpace(description) && !description.StartsWith("其他：", StringComparison.Ordinal)) return description;
         if (!string.IsNullOrWhiteSpace(definition?.name)) return definition.name;
-        return $"候选效果 ID {id}";
+        return $"후보 효과 ID {id}";
     }
 
     private static string BreakChoiceValue(HeroSpeAddDataBase definition, float multiplier, bool includeSign = true)
@@ -7180,17 +7181,17 @@ public static partial class TrainerBehaviour
     private static string BreakChoiceLabel(int id, float multiplier = 1f)
     {
         var definition = FindSpeAddDefinition(id);
-        if (definition == null) return $"候选效果 ID {id}";
+        if (definition == null) return $"후보 효과 ID {id}";
         return $"{BreakChoiceName(id, definition)}{BreakChoiceValue(definition, multiplier)}";
     }
 
     private static string BreakChoiceButtonLabel(int id)
     {
         var definition = FindSpeAddDefinition(id);
-        if (definition == null) return $"候选效果 ID {id}";
+        if (definition == null) return $"후보 효과 ID {id}";
         var name = BreakChoiceName(id, definition);
-        if (definition.noAutoUpgrade) return $"{name}：固定 {BreakChoiceValue(definition, 1f)}";
-        return $"{name}：每阶 {BreakChoiceValue(definition, 1f)}｜红卡 {BreakChoiceValue(definition, 5f)}";
+        if (definition.noAutoUpgrade) return $"{name}: 고정 {BreakChoiceValue(definition, 1f)}";
+        return $"{name}: 단계마다 {BreakChoiceValue(definition, 1f)}｜빨강 카드 {BreakChoiceValue(definition, 5f)}";
     }
 
     private static string BreakChoiceLockSummary(int id)
@@ -7199,19 +7200,19 @@ public static partial class TrainerBehaviour
         if (definition == null) return BreakChoiceLabel(id);
         var name = BreakChoiceName(id, definition);
         return definition.noAutoUpgrade
-            ? $"{name}：固定 {BreakChoiceValue(definition, 1f)}（不随卡牌稀有度变化）"
-            : $"{name}：每阶 {BreakChoiceValue(definition, 1f)}；最终数值取决于所点卡牌（红卡 {BreakChoiceValue(definition, 5f)}）";
+            ? $"{name}: 고정 {BreakChoiceValue(definition, 1f)}(카드 희귀도와 무관)"
+            : $"{name}: 단계마다 {BreakChoiceValue(definition, 1f)}. 최종 수치는 고른 카드에 따라 정해집니다(빨강 카드 {BreakChoiceValue(definition, 5f)})";
     }
 
     private static void BuildNativeBreakThroughChoice()
     {
         var p = NativePageParent;
         var skill = CurrentBreakThroughSkill();
-        AddText(p, "功法突破自选", Vector2.zero, new Vector2(400, 38), 22);
+        AddText(p, "무공 돌파 선택", Vector2.zero, new Vector2(400, 38), 22);
         if (skill == null)
         {
-            AddText(p, "请先在游戏的功法界面点击“突破”，打开图一所示的突破准备页。", new Vector2(0, 55), new Vector2(1020, 48), 18);
-            AddText(p, "然后重新点击本页签刷新；模组会读取该功法真正允许出现的完整候选池。", new Vector2(0, 105), new Vector2(1020, 48), 17);
+            AddText(p, "먼저 게임의 무공 화면에서 “돌파”를 눌러 그림 1과 같은 돌파 준비 화면을 여세요.", new Vector2(0, 55), new Vector2(1020, 48), 18);
+            AddText(p, "그다음 이 탭을 다시 눌러 새로고침하세요. 모드가 이 무공에 실제로 나올 수 있는 전체 후보 풀을 읽습니다.", new Vector2(0, 105), new Vector2(1020, 48), 17);
             return;
         }
 
@@ -7229,11 +7230,11 @@ public static partial class TrainerBehaviour
             _breakChoiceArmed = false;
         }
 
-        AddText(p, $"当前功法：{skill.Name(false)}　等级 {skill.lv}　完整候选 {choices.Count} 项", new Vector2(0, 44), new Vector2(1020, 38), 18);
+        AddText(p, $"현재 무공: {skill.Name(false)}　레벨 {skill.lv}　전체 후보 {choices.Count}개", new Vector2(0, 44), new Vector2(1020, 38), 18);
         var selectedText = AddText(p,
             _selectedBreakChoiceId == int.MinValue
-                ? "尚未指定；选择下方一项即可锁定下一次突破。"
-                : $"已{(_breakChoiceArmed ? "锁定" : "选择")}：{BreakChoiceLockSummary(_selectedBreakChoiceId)}",
+                ? "아직 지정하지 않았습니다. 아래에서 하나를 고르면 다음 돌파가 잠깁니다."
+                : $"{(_breakChoiceArmed ? "잠금" : "선택")} 완료: {BreakChoiceLockSummary(_selectedBreakChoiceId)}",
             new Vector2(0, 82), new Vector2(1020, 38), 17);
 
         const int pageSize = 15;
@@ -7254,8 +7255,8 @@ public static partial class TrainerBehaviour
                 _selectedBreakChoiceId = localId;
                 _breakChoiceArmed = true;
                 var summary = BreakChoiceLockSummary(localId);
-                selectedText.text = $"已锁定：{summary}";
-                _status = $"突破效果已锁定为“{summary}”。进入三张卡页面后，最终数值继承你所点击卡牌的稀有度。";
+                selectedText.text = $"잠김: {summary}";
+                _status = $"돌파 효과를 “{summary}”(으)로 잠갔습니다. 세 장의 카드 화면에 들어가면 최종 수치는 누른 카드의 희귀도를 따릅니다.";
             });
             if (choiceId == _selectedBreakChoiceId)
             {
@@ -7263,18 +7264,18 @@ public static partial class TrainerBehaviour
             }
         }
 
-        AddButton(p, "上一页", new Vector2(0, 424), new Vector2(160, 38), () => { if (_breakChoicePage > 0) _breakChoicePage--; RequestPageRebuild(); });
-        AddText(p, $"第 {_breakChoicePage + 1} / {pageCount} 页", new Vector2(175, 424), new Vector2(180, 38), 17, TextAnchor.MiddleCenter);
-        AddButton(p, "下一页", new Vector2(370, 424), new Vector2(160, 38), () => { if (_breakChoicePage + 1 < pageCount) _breakChoicePage++; RequestPageRebuild(); });
-        AddButton(p, "取消锁定", new Vector2(720, 424), new Vector2(340, 38), () =>
+        AddButton(p, "이전 페이지", new Vector2(0, 424), new Vector2(160, 38), () => { if (_breakChoicePage > 0) _breakChoicePage--; RequestPageRebuild(); });
+        AddText(p, $"{_breakChoicePage + 1} / {pageCount} 페이지", new Vector2(175, 424), new Vector2(180, 38), 17, TextAnchor.MiddleCenter);
+        AddButton(p, "다음 페이지", new Vector2(370, 424), new Vector2(160, 38), () => { if (_breakChoicePage + 1 < pageCount) _breakChoicePage++; RequestPageRebuild(); });
+        AddButton(p, "잠금 취소", new Vector2(720, 424), new Vector2(340, 38), () =>
         {
             _breakChoiceArmed = false;
             _selectedBreakChoiceId = int.MinValue;
-            selectedText.text = "已取消；本次突破使用游戏原始随机结果。";
-            _status = "已取消突破自选。";
+            selectedText.text = "취소했습니다. 이번 돌파는 게임의 원래 무작위 결과를 씁니다.";
+            _status = "돌파 선택을 취소했습니다.";
         });
         AddText(p,
-            "突破效率决定三张卡会生成的稀有度，不会把候选预先固定为 5 阶。这里显示“每阶值”和“红卡值”；锁定只替换词条种类，最终数值继承你实际点击的卡牌（例如每阶 1%，点红卡就是 5%）。伤势代价和原版结算不变。当前版本不改卡面文字，以状态栏和日志中的最终数值为准。",
+            "돌파 효율은 세 장의 카드가 어떤 희귀도로 나올지를 정하며, 후보를 미리 5단계로 고정하지 않습니다. 여기서는 “단계당 값”과 “빨강 카드 값”을 보여 줍니다. 잠금은 옵션 종류만 바꾸고, 최종 수치는 실제로 누른 카드를 따릅니다(예: 단계당 1%면 빨강 카드는 5%). 부상 대가와 원래 정산은 그대로입니다. 현재 버전은 카드 문구를 바꾸지 않으므로 상태 표시줄과 로그의 최종 수치를 기준으로 하세요.",
             new Vector2(0, 485), new Vector2(1060, 92), 15);
     }
 
@@ -7284,18 +7285,18 @@ public static partial class TrainerBehaviour
         try
         {
             var skill = CurrentBreakThroughSkill();
-            if (skill == null) throw new InvalidOperationException("当前突破功法已失效");
+            if (skill == null) throw new InvalidOperationException("현재 돌파 무공이 더 이상 유효하지 않습니다");
             var available = CurrentBreakThroughChoices(skill);
-            if (!available.Contains(_selectedBreakChoiceId)) throw new InvalidOperationException("所选效果不在当前功法的候选池中");
-            var data = choice.extraAddData ?? throw new InvalidOperationException("突破卡没有可替换的效果数据");
+            if (!available.Contains(_selectedBreakChoiceId)) throw new InvalidOperationException("선택한 효과가 현재 무공의 후보 풀에 없습니다");
+            var data = choice.extraAddData ?? throw new InvalidOperationException("돌파 카드에 바꿀 효과 데이터가 없습니다");
             var keys = data.GetKeys();
-            if (keys == null || keys.Count == 0) throw new InvalidOperationException("突破卡效果为空");
+            if (keys == null || keys.Count == 0) throw new InvalidOperationException("돌파 카드 효과가 비어 있습니다");
 
             var originalId = keys[0];
             var originalValue = data.Get(originalId);
             var originalDefinition = FindSpeAddDefinition(originalId);
             var selectedDefinition = FindSpeAddDefinition(_selectedBreakChoiceId)
-                ?? throw new InvalidOperationException("找不到所选效果定义");
+                ?? throw new InvalidOperationException("선택한 효과 정의를 찾을 수 없습니다");
             var cardMultiplier = Math.Max(1f, choice.rareLv);
             if (originalDefinition != null && !originalDefinition.noAutoUpgrade && Math.Abs(originalDefinition.speValue) > 0.000001f)
             {
@@ -7304,22 +7305,22 @@ public static partial class TrainerBehaviour
             }
             var selectedMultiplier = selectedDefinition.noAutoUpgrade ? 1f : cardMultiplier;
             var selectedValue = selectedDefinition.speValue * selectedMultiplier;
-            if (!float.IsFinite(selectedValue)) throw new InvalidOperationException("计算出的突破效果数值无效");
+            if (!float.IsFinite(selectedValue)) throw new InvalidOperationException("계산된 돌파 효과 수치가 올바르지 않습니다");
 
             data.Reset();
             data.Set(_selectedBreakChoiceId, selectedValue);
             var label = BreakChoiceLabel(_selectedBreakChoiceId, selectedMultiplier);
             _breakChoiceArmed = false;
             _status = selectedDefinition.noAutoUpgrade
-                ? $"突破自选已应用：{label}（该词条为固定值，不随卡牌稀有度升级）。"
-                : $"突破自选已应用：{label}（卡牌稀有度倍率 ×{cardMultiplier:0.###}）。";
+                ? $"돌파 선택을 적용했습니다: {label}(고정값 옵션이라 카드 희귀도에 따라 오르지 않음)."
+                : $"돌파 선택을 적용했습니다: {label}(카드 희귀도 배율 ×{cardMultiplier:0.###}).";
             LongYinTrainerPlugin.Logger.LogInfo($"Break-through choice overridden safely: skillID={skill.skillID}, originalID={originalId}, selectedID={_selectedBreakChoiceId}, cardMultiplier={cardMultiplier}, selectedMultiplier={selectedMultiplier}, storedValue={selectedValue}.");
             InvalidatePages(7);
         }
         catch (Exception ex)
         {
             _breakChoiceArmed = false;
-            _status = "突破自选失败，已保留原卡效果：" + ex.Message;
+            _status = "돌파 선택 실패, 원래 카드 효과를 유지했습니다: " + ex.Message;
             LongYinTrainerPlugin.Logger.LogWarning($"Break-through choice override skipped safely: {ex.Message}");
         }
     }
@@ -7352,7 +7353,7 @@ public static partial class TrainerBehaviour
         }
         catch (Exception ex)
         {
-            _status = "界面错误：" + ex.Message;
+            _status = "화면 오류: " + ex.Message;
         }
         GUI.Box(new Rect(28, height - 48, width - 56, 30), _status);
     }
@@ -7452,9 +7453,9 @@ public static partial class TrainerBehaviour
             h.loyal = V("Loyal"); h.evil = V("Evil"); h.chaos = V("Chaos"); h.nature = I("Nature");
             h.CheckHeroDetailDirty(true);
             RefreshHero(h);
-            _status = "角色数值已应用。";
+            _status = "캐릭터 수치를 적용했습니다.";
         }
-        catch (Exception ex) { _status = "角色数值应用失败：" + ex.Message; }
+        catch (Exception ex) { _status = "캐릭터 수치 적용 실패: " + ex.Message; }
     }
 
     private static void DrawItem()
@@ -7488,14 +7489,14 @@ public static partial class TrainerBehaviour
         try
         {
             var rarity = ParseInt(_itemRare);
-            if (rarity < 0 || rarity > 5) throw new InvalidOperationException("稀有度只能填写 0–5");
+            if (rarity < 0 || rarity > 5) throw new InvalidOperationException("희귀도는 0–5만 입력할 수 있습니다");
             var level = ParseInt(_itemLevel);
-            if (level < 0 || level > 999) throw new InvalidOperationException("等级只能填写 0–999");
+            if (level < 0 || level > 999) throw new InvalidOperationException("등급은 0–999만 입력할 수 있습니다");
             // Validate every input before changing the native item.
             var value = Math.Max(0, ParseInt(_itemValue));
             var weight = ParseFloat(_itemWeight);
             var poison = ParseFloat(_itemPoison);
-            if (!float.IsFinite(weight) || !float.IsFinite(poison)) throw new InvalidOperationException("重量和毒量必须是有限数字");
+            if (!float.IsFinite(weight) || !float.IsFinite(poison)) throw new InvalidOperationException("무게와 독량은 유한한 숫자여야 합니다");
             var oldName = item.Name(false);
             var requestedName = _itemName.Trim();
             if (requestedName != oldName)
@@ -7518,42 +7519,42 @@ public static partial class TrainerBehaviour
             ItemChanged(item);
             _itemName = item.Name(false);
             _status = requestedName.Length > 0 && requestedName != _itemName
-                ? $"数值已应用，游戏仍显示名称「{_itemName}」。"
-                : $"已应用「{_itemName}」：等级 {level}，稀有度 {RarityName(rarity)}。";
+                ? $"수치를 적용했습니다. 게임에는 여전히 이름 「{_itemName}」(으)로 표시됩니다."
+                : $"「{_itemName}」 적용 완료: 등급 {level}, 희귀도 {RarityName(rarity)}.";
         }
-        catch (Exception ex) { _status = "物品数值应用失败：" + ex.Message; }
+        catch (Exception ex) { _status = "물품 수치 적용 실패: " + ex.Message; }
     }
 
     private static void DuplicateItem(ItemData item)
     {
         try
         {
-            var player = Player ?? throw new InvalidOperationException("尚未载入主角数据");
+            var player = Player ?? throw new InvalidOperationException("주인공 데이터를 아직 불러오지 않았습니다");
             var count = Math.Clamp(ParseInt(_duplicateCount), 1, 99);
             for (var i = 0; i < count; i++)
             {
-                var clone = item.Clone()?.TryCast<ItemData>() ?? throw new InvalidOperationException("物品克隆失败");
+                var clone = item.Clone()?.TryCast<ItemData>() ?? throw new InvalidOperationException("물품 복제 실패");
                 clone.isNew = true;
                 player.GetItem(clone, false, false, 0, true);
             }
             RefreshHero(player);
-            _status = $"已复制 {count} 件物品到主角背包。";
+            _status = $"물품 {count}개를 주인공 가방에 복사했습니다.";
         }
-        catch (Exception ex) { _status = "复制物品失败：" + ex.Message; }
+        catch (Exception ex) { _status = "물품 복사 실패: " + ex.Message; }
     }
 
     private static void DeleteItem(ItemData item)
     {
         try
         {
-            var player = Player ?? throw new InvalidOperationException("尚未载入主角数据");
-            if (item.Equiped()) throw new InvalidOperationException("请先卸下该装备");
+            var player = Player ?? throw new InvalidOperationException("주인공 데이터를 아직 불러오지 않았습니다");
+            if (item.Equiped()) throw new InvalidOperationException("먼저 이 장비를 해제하세요");
             player.itemListData.LoseItem(item, false);
             ClearSelectedItem();
             RefreshHero(player);
-            _status = "所选物品已从主角背包删除。";
+            _status = "선택한 물품을 주인공 가방에서 삭제했습니다.";
         }
-        catch (Exception ex) { _status = "删除物品失败：" + ex.Message; }
+        catch (Exception ex) { _status = "물품 삭제 실패: " + ex.Message; }
     }
 
     private static void DrawAffix()
@@ -7591,15 +7592,15 @@ public static partial class TrainerBehaviour
         {
             if (Time.realtimeSinceStartup < _nextAffixWriteAt)
             {
-                _status = "操作过快：请稍等片刻再写入，避免游戏连续重算装备。";
+                _status = "조작이 너무 빠릅니다. 게임이 장비를 연달아 다시 계산하지 않도록 잠시 뒤에 쓰세요.";
                 return;
             }
-            var equipment = item.equipmentData ?? throw new InvalidOperationException("所选物品已不再是装备");
+            var equipment = item.equipmentData ?? throw new InvalidOperationException("선택한 물품이 더 이상 장비가 아닙니다");
             var data = extra ? equipment.extraAddData : equipment.baseAddData;
             int id;
             if (!int.TryParse(_affixType, out id))
             {
-                if (!Enum.TryParse<HeroSpeAddDataType>(_affixType, true, out var parsed)) throw new InvalidOperationException("未知的词条类型");
+                if (!Enum.TryParse<HeroSpeAddDataType>(_affixType, true, out var parsed)) throw new InvalidOperationException("알 수 없는 옵션 종류");
                 id = (int)parsed;
             }
             var displayValue = ParseFloat(_affixValue);
@@ -7620,7 +7621,7 @@ public static partial class TrainerBehaviour
 
             if (exists && !duplicateOnOtherSide && Math.Abs(data.Get(id) - value) < 0.0001f)
             {
-                _status = "该词条已经是这个数值，没有重复写入。";
+                _status = "이 옵션은 이미 이 수치라 다시 쓰지 않았습니다.";
                 return;
             }
 
@@ -7628,11 +7629,11 @@ public static partial class TrainerBehaviour
             if (duplicateOnOtherSide) otherData.heroSpeAddData.Remove(id);
             data.Set(id, value);
             ItemChanged(item);
-            _status = $"已将{(extra ? "额外" : "基础")}词条 {_affixType} 设为 {_affixValue}{(percent ? "%（底层保存 " + value.ToString("0.###", CultureInfo.InvariantCulture) + "）" : "")}{(duplicateOnOtherSide ? "，并移除另一栏的同名词条" : "")}。";
+            _status = $"{(extra ? "부가" : "기본")} 옵션 {_affixType}을(를) {_affixValue}{(percent ? "%(내부 저장값 " + value.ToString("0.###", CultureInfo.InvariantCulture) + ")" : "")}(으)로 설정했습니다{(duplicateOnOtherSide ? ". 다른 칸의 같은 옵션은 제거했습니다" : "")}.";
             LongYinTrainerPlugin.Logger.LogInfo($"Affix write completed safely: itemID={_selectedItemId}, extra={extra}, key={id}, displayValue={displayValue}, storedValue={value}.");
             RequestPageRebuild();
         }
-        catch (Exception ex) { _status = "词条修改失败：" + ex.Message; }
+        catch (Exception ex) { _status = "옵션 수정 실패: " + ex.Message; }
     }
 
     private static bool ApplyHorseStats(ItemData item, string speedText, string sprintText, string powerText,
@@ -7640,7 +7641,7 @@ public static partial class TrainerBehaviour
     {
         try
         {
-            var horse = item.horseData ?? throw new InvalidOperationException("所选物品已不再是马匹或鞍具");
+            var horse = item.horseData ?? throw new InvalidOperationException("선택한 물품이 더 이상 말이나 마구가 아닙니다");
             horse.speed = Math.Clamp(ParseFloat(speedText), -100000f, 100000f);
             horse.sprint = Math.Clamp(ParseFloat(sprintText), -100000f, 100000f);
             horse.power = Math.Clamp(ParseFloat(powerText), -100000f, 100000f);
@@ -7654,14 +7655,14 @@ public static partial class TrainerBehaviour
                 horse.RefreshState();
             }
             ItemChanged(item);
-            var itemKind = item.subType == 1 ? "鞍具" : "马匹";
-            _status = $"{itemKind}数值已写入；装备状态将在本次操作结束后安全刷新。";
+            var itemKind = item.subType == 1 ? "마구" : "말";
+            _status = $"{itemKind} 수치를 기록했습니다. 장비 상태는 이번 조작이 끝난 뒤 안전하게 새로고침됩니다.";
             LongYinTrainerPlugin.Logger.LogInfo($"Horse data write completed safely: itemID={item.itemID}, subType={item.subType}, speed={horse.speed}, sprint={horse.sprint}, power={horse.power}, resist={horse.resist}.");
             return true;
         }
         catch (Exception ex)
         {
-            _status = "马匹／鞍具修改失败：" + ex.Message;
+            _status = "말／마구 수정 실패: " + ex.Message;
             return false;
         }
     }
@@ -7737,27 +7738,27 @@ public static partial class TrainerBehaviour
     {
         try
         {
-            if (force == null) throw new InvalidOperationException("没有选中的势力");
+            if (force == null) throw new InvalidOperationException("선택한 세력이 없습니다");
             if (GameController.Instance?.worldData?.GetForce(force.forceID)?.Pointer != force.Pointer)
-                throw new InvalidOperationException("势力已改变，请重新打开势力页面。");
+                throw new InvalidOperationException("세력이 바뀌었습니다. 세력 페이지를 다시 여세요.");
             var moneyValue = ParseInt(_forceMoney);
-            if (moneyValue < 0) throw new InvalidOperationException("金钱不能为负数");
+            if (moneyValue < 0) throw new InvalidOperationException("돈은 음수일 수 없습니다");
             var resourceStore = force.resourceStore;
             var count = Math.Min(ResourceValues.Count, resourceStore?.Count ?? 0);
             var values = new float[count];
             for (var i = 0; i < count; i++)
             {
                 values[i] = ParseFloat(ResourceValues[i]);
-                if (!float.IsFinite(values[i]) || values[i] < 0) throw new InvalidOperationException("资源必须是非负有限数值");
+                if (!float.IsFinite(values[i]) || values[i] < 0) throw new InvalidOperationException("자원은 음수가 아닌 유한한 수치여야 합니다");
             }
             if (force.forceStorage != null) force.forceStorage.money = moneyValue;
             if (resourceStore != null)
                 for (var i = 0; i < count; i++) resourceStore[i] = values[i];
             if (IsForceLocked(force)) CaptureForceLock(force);
             force.forceDetailDirty = true;
-            _status = "势力数值已应用。";
+            _status = "세력 수치를 적용했습니다.";
         }
-        catch (Exception ex) { _status = "势力数值应用失败：" + ex.Message; }
+        catch (Exception ex) { _status = "세력 수치 적용 실패: " + ex.Message; }
     }
 
     private static void SetAll(Il2CppSystem.Collections.Generic.List<float> baseValues, Il2CppSystem.Collections.Generic.List<float> caps, string text)
@@ -7769,9 +7770,9 @@ public static partial class TrainerBehaviour
             for (var i = 0; i < caps.Count; i++) caps[i] = value;
             TargetHero()?.CheckHeroDetailDirty(true);
             RefreshHero(TargetHero());
-            _status = $"已将 {baseValues.Count} 项基础值和 {caps.Count} 项上限设为 {value}。";
+            _status = $"기본값 {baseValues.Count}개와 상한 {caps.Count}개를 {value}(으)로 설정했습니다.";
         }
-        catch (Exception ex) { _status = "批量修改失败：" + ex.Message; }
+        catch (Exception ex) { _status = "일괄 수정 실패: " + ex.Message; }
     }
 
     private static void RefreshHero(HeroData? hero)
@@ -7793,7 +7794,7 @@ public static partial class TrainerBehaviour
     private static float ParseFloat(string value)
     {
         var result = float.Parse(value, NumberStyles.Float, CultureInfo.InvariantCulture);
-        if (!float.IsFinite(result)) throw new FormatException("数值不能是 NaN 或无穷大");
+        if (!float.IsFinite(result)) throw new FormatException("수치는 NaN이나 무한대일 수 없습니다");
         return result;
     }
     private static int ParseInt(string value) => int.Parse(value, NumberStyles.Integer, CultureInfo.InvariantCulture);

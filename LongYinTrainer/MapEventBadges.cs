@@ -52,9 +52,9 @@ public static partial class TrainerBehaviour
             }
             badge.Anchor=anchor;
             var rare=e.GetEventRareLv();
-            badge.Rarity.text=rare<0 ? "品质未知" : RarityName(rare);
+            badge.Rarity.text=rare<0 ? "품질 알 수 없음" : RarityName(rare);
             badge.Rarity.color=rare<0 ? Color.white : RarityColor(rare);
-            badge.Name.text=e.Name()+"\n"+(e.seen ? "已发现" : "未发现");
+            badge.Name.text=e.Name()+"\n"+(e.seen ? "발견됨" : "미발견");
             badge.Name.color=Color.white;
             badge.Icon.sprite=GetItemSprite(e.spriteName); badge.Icon.enabled=badge.Icon.sprite!=null;
         }
