@@ -1,0 +1,52 @@
+# LongYinTrainer 한국어화 문맥 규칙: 파일<TAB>줄 정규식<TAB>원문(* = 줄의 모든 문자열)<TAB>번역(= 은 원문 유지)
+# 위에서부터 처음 맞는 규칙을 쓴다. 맞는 규칙이 없으면 ko-KR.tsv 를 쓴다. 파일은 경로 끝부분이 같으면 맞는 것으로 본다(* = 모든 파일).
+#
+# --- 게임 데이터·게임 UI 글자와 비교하는 값: 번역하면 기능이 깨짐 (LongYinKorean은 화면에 그릴 때만 번역하므로 게임 내부 값은 계속 중국어) ---
+BuildingCombat.cs	choices\.Add\(	*	=
+#   ↑ 게임 원본 선택지 문구와 똑같아야 함(CombatRegression 검사). 화면에서는 LongYinKorean이 번역
+LongYinTrainer.cs	definition\.category	高级	=
+#   ↑ 게임 천부 데이터의 category 값
+LongYinTrainer.cs	label\.text\.StartsWith	初始上限	=
+#   ↑ 게임 시작 화면 라벨과 비교
+LongYinTrainer.cs	data\.name	*	=
+#   ↑ 게임 건물 이름(藏经阁, 书房)과 비교
+LongYinTrainer.cs	FindNativeSprite\(	*	=
+#   ↑ 게임 스프라이트 리소스 이름
+LongYinTrainer.cs	localized\.Replace\(|description\.StartsWith\(	*	=
+#   ↑ 게임이 만드는 효과 설명 문자열(其他：...)과 비교
+NativeKungfuFields.cs	text\.text\.StartsWith\(	基础伤害	=
+#   ↑ 게임 무공 창설 화면 라벨과 비교
+NativeSkillDetailRefresh.cs	createHeroName	模组	=
+#   ↑ 게임 세이브 데이터에 들어가는 제작자 이름
+#
+# --- 회귀 테스트 안의 가짜 게임 데이터(게임 이름이라 그대로) ---
+*	.	中元鬼市	=
+*	.	元宵	=
+*	.	吐纳法	=
+*	.	拍卖大会	=
+*	.	星落九天	=
+*	.	武学奇才	=
+*	.	门派大比	=
+*	.	龙胤归藏功	=
+#
+# --- 같은 원문이지만 문맥에 따라 번역이 다른 곳 ---
+LongYinTrainer.cs	TryIndexed(Rate)?Affix\(	上限	 상한
+LongYinTrainer.cs	TryIndexed(Rate)?Affix\(	经验效率	 경험 효율
+LongYinTrainer.cs	TryIndexed(Rate)?Affix\(	攻击范围	 공격 범위
+#   ↑ "근력" + 접미사로 이어 붙이므로 앞에 띄어쓰기
+NativeKungfuFields.cs	Begin\("选择"	选择	선택: 
+LongYinTrainer.cs	extra \?	基础	기본
+#   ↑ 기본 옵션/부가 옵션(그 밖의 基础 는 비급 등급 "기초")
+#
+# --- 한자가 없는 전각 괄호를 반각으로 (번역문 안에 남지 않게) ---
+LongYinTrainer.cs	底层保存	）	)
+NativeKungfuEditor.cs	GetSpeAddDataCount	）	)
+#
+# --- 회귀 테스트에서만 나오는 짧은 비교 문자열 ---
+CategoryRegression/Program.cs	_customStatus\.Contains	失败	실패
+EventRegression/Program.cs	_spawnTypeLabel	江湖传闻	강호 소문
+#
+# --- 문장 조각을 이어 붙이는 곳의 한자 없는 조각 ---
+CityEditor.cs	IsLocked\(world, area\) \?	。	했습니다. 
+CombatRegression/Program.cs	tips\[	*	=
+#   ↑ 게임 원본 선택지 문구와 같은지 검사하는 테스트

@@ -1,4 +1,6 @@
-# LongYinTrainer 한국어 번역표: 원문(zh-CN)<TAB>번역(ko-KR). 상위 저장소 업데이트 시 재적용용 참고 자료.
+# LongYinTrainer 한국어 번역표 (원문 zh-CN <TAB> 번역 ko-KR)
+# 소스에 나오는 순서대로 정렬. 같은 원문은 어디서나 같은 번역이 쓰인다. 문맥에 따라 달라야 하면 ko-KR.context.tsv 에 적는다.
+# 원문과 번역은 C# 소스 표기 그대로다(\n 등 이스케이프 포함). 보간 구멍 {...} 은 원문과 똑같이 둔다.
 药品	약품
 食物	음식
 全部等级	모든 등급
@@ -73,8 +75,8 @@
 本城：未锁定	이 도시: 잠금 해제
 存档或城市数据已变化，请重新打开城市页面。	세이브 또는 도시 데이터가 바뀌었습니다. 도시 페이지를 다시 여세요.
 {labels[i]}请输入有效数字。	{labels[i]}: 올바른 숫자를 입력하세요.
-{area.GetAreaName()}的属性已应用	{area.GetAreaName()}의 속성을 적용했습니다
-并锁定。	 그리고 잠갔습니다.
+{area.GetAreaName()}的属性已应用	{area.GetAreaName()}의 속성을 적용
+并锁定。	하고 잠갔습니다. 
 请在游戏中保存数值。	게임에서 저장하세요.
 修改城市失败：	도시 수정 실패: 
 查找名称／ID	이름／ID 검색
@@ -108,6 +110,9 @@
 动态持续时间（原生规则）	동적 지속 시간(기본 규칙)
 触发方自身	발동자 자신
 交互对方（攻守阶段决定）	상호작용 상대(공수 단계로 결정)
+可叠层	중첩 가능
+不叠层	중첩 불가
+{trigger}；对象：{target}\n{duration}；{(rule.stackable ? "可叠层" : "不叠层")}；特殊效果仍走专用规则\n这里编辑词条值，非持续时间；冷却、概率判定和到期由原版处理。	{trigger}; 대상: {target}\n{duration}; {(rule.stackable ? "可叠层" : "不叠层")}; 특수 효과는 전용 규칙을 따릅니다\n여기서는 옵션 값을 편집하며 지속 시간이 아닙니다. 쿨다운, 확률 판정, 만료는 원본이 처리합니다.
 升级效果：升级属性表，不等于持续挂状态。	강화 효과: 강화 속성표이며 지속 상태와는 다릅니다.
 装备效果：装备后提供词条，按原生条件触发。	장비 효과: 장착 후 옵션을 제공하며 기본 조건에 따라 발동합니다.
 此类使用效果不走攻击功法的通用合并分支，需对照原版配置。	이 종류의 사용 효과는 공격 무공의 공통 병합 분기를 거치지 않으므로 원본 구성과 대조해야 합니다.
@@ -498,16 +503,19 @@ Unity Sprite.Create 返回空对象	Unity Sprite.Create가 빈 객체를 반환�
 正在独立预演动作：{skill.animationName}。未调用技能结算、弹道或伤害逻辑。	동작을 독립 재생 중: {skill.animationName}. 기술 정산, 탄도, 피해 로직은 호출하지 않았습니다.
 动画预演失败但未影响草稿：	애니메이션 미리보기는 실패했지만 초안에는 영향이 없습니다: 
 图标资源未找到，但仍可查看数据并选择。\n	아이콘 리소스를 찾지 못했지만 데이터는 보고 선택할 수 있습니다.\n
+无	없음
+动作：{(string.IsNullOrWhiteSpace(skill.animationName) ? "无" : skill.animationName)}	동작: {(string.IsNullOrWhiteSpace(skill.animationName) ? "无" : skill.animationName)}
+武器：{(string.IsNullOrWhiteSpace(skill.weaponName) ? "无" : skill.weaponName)}	무기: {(string.IsNullOrWhiteSpace(skill.weaponName) ? "无" : skill.weaponName)}
 弹道：无	탄도: 없음
 弹道：{bullet.bulletName}｜{bullet.bulletMoveType}｜速度 {bullet.bulletSpeed:0.###}｜缩放 {bullet.bulletScale:0.###}	탄도: {bullet.bulletName}｜{bullet.bulletMoveType}｜속도 {bullet.bulletSpeed:0.###}｜크기 {bullet.bulletScale:0.###}
 场景特效：无	장면 효과: 없음
 场景特效（{effects.Count}）：	장면 효과({effects.Count}): 
+｜自身	｜자신
 ……另有 {effects.Count - 6} 项	……외 {effects.Count - 6}개
 右侧可用独立骨骼实时播放一次动作；不会驱动战斗角色，也不会触发伤害结算。若当前建筑场景没有兼容骨骼，会明确提示。	오른쪽 독립 골격으로 동작을 한 번 실시간 재생합니다. 전투 캐릭터를 움직이거나 피해 정산을 일으키지 않습니다. 현재 건물 장면에 호환되는 골격이 없으면 분명히 알려 줍니다.
 攻击范围：	공격 범위: 
 伤害范围：	피해 범위: 
 进攻姿态：	공격 자세: 
-无	없음
 防御姿态：	방어 자세: 
 升级效果：\n	강화 효과:\n
 装备效果：\n	장비 효과:\n
@@ -533,8 +541,12 @@ Unity Sprite.Create 返回空对象	Unity Sprite.Create가 빈 객체를 반환�
 元素	요소
 总母版类别不匹配，请先选择本类别模板。	총 템플릿 분류가 맞지 않습니다. 먼저 이 분류의 템플릿을 고르세요.
 保存与管理	저장과 관리
+未分配	미배정
+当前草稿：{draft.Name}　ID {(!draft.EditOriginal && draft.Id == 0 ? "未分配" : draft.Id.ToString(CultureInfo.InvariantCulture))}　母版 {draft.BaseDonorId}	현재 초안: {draft.Name}　ID {(!draft.EditOriginal && draft.Id == 0 ? "未分配" : draft.Id.ToString(CultureInfo.InvariantCulture))}　템플릿 {draft.BaseDonorId}
 已保存的功法（原版修改／自创）	저장된 무공(원본 수정／자작)
 暂无已保存功法	저장된 무공 없음
+[原版] 	[원본] 
+[自创] 	[자작] 
 已载入 {record.Name}；修改后需再次保存。	{record.Name}을(를) 불러왔습니다. 수정 후 다시 저장해야 합니다.
 第 {_customManagePage + 1} / {pageCount} 页	{_customManagePage + 1} / {pageCount} 페이지
 写入操作	쓰기 작업
@@ -585,7 +597,9 @@ H  收起	H  접기
 应用	적용
 写入	쓰기
 保存	저장
-添加到	추가
+添加到	에 추가
+添加	추가
+设置	설정
 已开启	켜짐
 已关闭	꺼짐
 无限生命／体力	무한 생명／체력
@@ -664,6 +678,8 @@ NPC 操作：先在左侧原版界面打开目标角色详情，再点击上面�
 鞋靴	신발
 坐骑	탈것
 读取物品数据库失败：	물품 데이터베이스 읽기 실패: 
+原版隐藏功法；	원본 숨김 무공. 
+{CustomKungfuTypeName(skill.type)}｜{RarityName(skill.rareLv)}｜ID {skillId}\n{(skill.hide ? "原版隐藏功法；" : "")}秘籍品级可在添加前调整。	{CustomKungfuTypeName(skill.type)}｜{RarityName(skill.rareLv)}｜ID {skillId}\n{(skill.hide ? "原版隐藏功法；" : "")}비급 품급은 추가 전에 조정할 수 있습니다.
 物品图鉴已读取：共 {Catalog.Count} 项。	물품 도감을 읽었습니다: 총 {Catalog.Count}개.
 {category}｜ID {itemId}\n{GlobalData.GetItemTypeString(itemType, itemSubType)}｜价值 {itemValue}	{category}｜ID {itemId}\n{GlobalData.GetItemTypeString(itemType, itemSubType)}｜가치 {itemValue}
 {category}类型：{typeName}｜等级 {level}\n已展开原版各等级名称；等级与稀有度可调整。	{category} 종류: {typeName}｜등급 {level}\n원본의 등급별 이름을 펼쳐 보여 줍니다. 등급과 희귀도는 조정할 수 있습니다.
@@ -699,6 +715,7 @@ NPC 操作：先在左侧原版界面打开目标角色详情，再点击上面�
 提示：标有 % 的词条按百分数输入，输入 50 会保存为底层 0.5，并在游戏中显示 50%。速度与轻功技能是两个不同参数。	안내: % 표시 옵션은 퍼센트로 입력합니다. 50을 입력하면 내부적으로 0.5로 저장되고 게임에는 50%로 표시됩니다. 속도와 경공 기술은 서로 다른 수치입니다.
 增益	증익
 按名称或ID查找	이름 또는 ID 검색
+当前词条：{presetNames[index]}{(percent ? " (%)" : "")}	현재 옵션: {presetNames[index]}{(percent ? " (%)" : "")}
 力道上限	근력 상한
 灵巧上限	민첩 상한
 智力上限	지력 상한
@@ -936,6 +953,9 @@ NPC 操作：先在左侧原版界面打开目标角色详情，再点击上面�
 然后重新点击本页签刷新；模组会读取该功法真正允许出现的完整候选池。	그다음 이 탭을 다시 눌러 새로고침하세요. 모드가 이 무공에 실제로 나올 수 있는 전체 후보 풀을 읽습니다.
 当前功法：{skill.Name(false)}　等级 {skill.lv}　完整候选 {choices.Count} 项	현재 무공: {skill.Name(false)}　레벨 {skill.lv}　전체 후보 {choices.Count}개
 尚未指定；选择下方一项即可锁定下一次突破。	아직 지정하지 않았습니다. 아래에서 하나를 고르면 다음 돌파가 잠깁니다.
+锁定	잠금
+选择	선택
+已{(_breakChoiceArmed ? "锁定" : "选择")}：{BreakChoiceLockSummary(_selectedBreakChoiceId)}	{(_breakChoiceArmed ? "锁定" : "选择")} 완료: {BreakChoiceLockSummary(_selectedBreakChoiceId)}
 已锁定：{summary}	잠김: {summary}
 突破效果已锁定为“{summary}”。进入三张卡页面后，最终数值继承你所点击卡牌的稀有度。	돌파 효과를 “{summary}”(으)로 잠갔습니다. 세 장의 카드 화면에 들어가면 최종 수치는 누른 카드의 희귀도를 따릅니다.
 第 {_breakChoicePage + 1} / {pageCount} 页	{_breakChoicePage + 1} / {pageCount} 페이지
@@ -971,6 +991,11 @@ NPC 操作：先在左侧原版界面打开目标角色详情，再点击上面�
 操作过快：请稍等片刻再写入，避免游戏连续重算装备。	조작이 너무 빠릅니다. 게임이 장비를 연달아 다시 계산하지 않도록 잠시 뒤에 쓰세요.
 未知的词条类型	알 수 없는 옵션 종류
 该词条已经是这个数值，没有重复写入。	이 옵션은 이미 이 수치라 다시 쓰지 않았습니다.
+额外	부가
+基础	기초
+%（底层保存 	%(내부 저장값 
+，并移除另一栏的同名词条	. 다른 칸의 같은 옵션은 제거했습니다
+已将{(extra ? "额外" : "基础")}词条 {_affixType} 设为 {_affixValue}{(percent ? "%（底层保存 " + value.ToString("0.###", CultureInfo.InvariantCulture) + "）" : "")}{(duplicateOnOtherSide ? "，并移除另一栏的同名词条" : "")}。	{(extra ? "额外" : "基础")} 옵션 {_affixType}을(를) {_affixValue}{(percent ? "%（底层保存 " + value.ToString("0.###", CultureInfo.InvariantCulture) + "）" : "")}(으)로 설정했습니다{(duplicateOnOtherSide ? "，并移除另一栏的同名词条" : "")}.
 词条修改失败：	옵션 수정 실패: 
 所选物品已不再是马匹或鞍具	선택한 물품이 더 이상 말이나 마구가 아닙니다
 {itemKind}数值已写入；装备状态将在本次操作结束后安全刷新。	{itemKind} 수치를 기록했습니다. 장비 상태는 이번 조작이 끝난 뒤 안전하게 새로고침됩니다.
@@ -1071,7 +1096,6 @@ NPC 操作：先在左侧原版界面打开目标角色详情，再点击上面�
 服装 	의상 
 返回	돌아가기
 自定义稀有度 · 当前：	사용자 희귀도 · 현재: 
-基础	기초
 进阶	진급
 上乘	상승
 秘传	비전
@@ -1089,7 +1113,6 @@ NPC 操作：先在左侧原版界面打开目标角色详情，再点击上面�
 图标	아이콘
 基础功法	기반 무공
 整套视觉	시각 효과 전체
-选择	선택: 
  项　　第 	개　　
  页	 페이지
 重置	초기화
@@ -1116,6 +1139,12 @@ NPC 操作：先在左侧原版界面打开目标角色详情，再点击上面�
 当前人物不支持此动作；	현재 인물은 이 동작을 지원하지 않습니다. 
 动作播放；	동작 재생 중. 
 蓝格=释放范围，红格=作用范围。效果按展示时序播放。	파란 칸=시전 범위, 빨간 칸=작용 범위. 효과는 연출 순서대로 재생합니다.
+游戏时间暂停，原生特效也会暂停；可退出暂停后重播	게임 시간이 멈추면 기본 특수 효과도 멈춥니다. 일시정지를 풀고 다시 재생하세요
+起手	기수식
+出招/收招	출수/수세
+无出招事件，估算时机	출수 이벤트 없음, 시점 추정
+按原生出招事件同步	기본 출수 이벤트에 동기화
+{(nextShoot == 0 ? "起手" : "出招/收招")} · {(fallbackTiming ? "无出招事件，估算时机" : "按原生出招事件同步")} · 粒子 {count}	{(nextShoot == 0 ? "起手" : "出招/收招")} · {(fallbackTiming ? "无出招事件，估算时机" : "按原生出招事件同步")} · 입자 {count}
 功法缓存刷新失败：	무공 캐시 새로고침 실패: 
 原版功法 ID {record.Id} 不存在	원본 무공 ID {record.Id}가 없습니다
 更换功法类别前，请先让装备该功法的角色卸下它，再保存并按新类别装备	무공 분류를 바꾸기 전에 이 무공을 장착한 캐릭터가 먼저 해제하게 한 뒤, 저장하고 새 분류로 장착하세요
@@ -1156,3 +1185,5 @@ NPC 操作：先在左侧原版界面打开目标角色详情，再点击上面�
 JSON 升级表	JSON 강화표
 JSON 装备表	JSON 장비표
 JSON 使用表	JSON 사용표
+失败	실패
+江湖传闻	강호 소문
