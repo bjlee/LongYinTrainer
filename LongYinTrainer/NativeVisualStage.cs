@@ -65,10 +65,10 @@ internal static class NativeVisualStage
     {
         Close();
         try {
-            var hero = GameController.Instance?.worldData?.Player() ?? throw new InvalidOperationException("请先载入存档");
+            var hero = GameController.Instance?.worldData?.Player() ?? throw new InvalidOperationException("먼저 세이브를 불러오세요");
             root = new GameObject("KungfuVisualOnlyStage"); root.transform.position = Origin;
             actor = hero.GenerateHeroSkeleton(root, Vector3.one);
-            if (actor == null) throw new InvalidOperationException("原生人物生成失败");
+            if (actor == null) throw new InvalidOperationException("게임 기본 인물 생성 실패");
             foreach (var component in actor.GetComponentsInChildren<MonoBehaviour>(true))
                 if (component.TryCast<SkeletonAnimation>() == null) component.enabled = false;
             actor.Initialize(false); actor.UnscaledTime = false; actorHome = actor.transform.localPosition;
@@ -107,8 +107,8 @@ internal static class NativeVisualStage
             activeSkill = skill;
             Layer(root.transform); started = Time.realtimeSinceStartup; moveActor = skill.autoHeroMove;
             LongYinTrainerPlugin.Logger.LogInfo($"Visual stage: animation={skill.animationName}, skin={skin}, weapon={skill.weaponName}, outfits={Outfits.Count}");
-            return (animation == null ? "当前人物不支持此动作；" : "动作播放；") + "蓝格=释放范围，红格=作用范围。效果按展示时序播放。";
-        } catch (Exception ex) { Close(); LongYinTrainerPlugin.Logger.LogWarning("Visual stage: " + ex); return "预览失败：" + ex.Message; }
+            return (animation == null ? "현재 인물은 이 동작을 지원하지 않습니다. " : "동작 재생 중. ") + "파란 칸=시전 범위, 빨간 칸=작용 범위. 효과는 연출 순서대로 재생합니다.";
+        } catch (Exception ex) { Close(); LongYinTrainerPlugin.Logger.LogWarning("Visual stage: " + ex); return "미리보기 실패: " + ex.Message; }
     }
     private static GameObject? Spawn(string name)
     {
@@ -270,7 +270,7 @@ internal static class NativeVisualStage
         foreach (var ps in particles) if (ps != null && ps.gameObject.activeInHierarchy) {
             count += ps.particleCount; systems++;
         }
-        PlaybackStatus = Time.timeScale == 0 ? "游戏时间暂停，原生特效也会暂停；可退出暂停后重播" : $"{(nextShoot == 0 ? "起手" : "出招/收招")} · {(fallbackTiming ? "无出招事件，估算时机" : "按原生出招事件同步")} · 粒子 {count}";
+        PlaybackStatus = Time.timeScale == 0 ? "게임 시간이 멈추면 기본 특수 효과도 멈춥니다. 일시정지를 풀고 다시 재생하세요" : $"{(nextShoot == 0 ? "기수식" : "출수/수세")} · {(fallbackTiming ? "출수 이벤트 없음, 시점 추정" : "기본 출수 이벤트에 동기화")} · 입자 {count}";
         if (diagnostics < 2 && Time.realtimeSinceStartup - started > .5f + diagnostics) {
             diagnostics++;
             LongYinTrainerPlugin.Logger.LogInfo($"Preview render check: timeScale={Time.timeScale}, systems={systems}, liveParticles={count}, heroHeight={height}, cameraSize={camera.orthographicSize}, camera={camera.transform.position}");

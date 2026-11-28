@@ -246,7 +246,7 @@ internal static class BuildingCombat
             choices.Add("施以惩戒;NpcAttackPlayerResultHurt");
             choices.Add("放你一马;NpcAttackPlayerResultRelease");
         }
-        return new SinglePlotData($"我#$TargetInteractName#技不如人，听凭处置！\n（逐人处置：此人之后还有 {remaining} 人）", choices, PlotTargetHeroType.HeroID, hero.heroID.ToString());
+        return new SinglePlotData($"나 #$TargetInteractName#, 실력이 모자랐소. 처분에 따르겠소!\n(한 명씩 처분: 이 사람 뒤로 {remaining}명 남음)", choices, PlotTargetHeroType.HeroID, hero.heroID.ToString());
     }
 
     private static bool ShowNext(PlotController plot)

@@ -21,7 +21,7 @@ public static partial class TrainerBehaviour
             var a = expected?.Get(key) ?? 0f;
             var b = actual?.Get(key) ?? 0f;
             if (!float.IsFinite(a) || !float.IsFinite(b) || Math.Abs(a - b) > 0.00001f * Math.Max(1f, Math.Abs(a)))
-                throw new InvalidOperationException($"{label}词条 {key} 重建不一致：{a} / {b}");
+                throw new InvalidOperationException($"{label} 옵션 {key} 재구성 불일치: {a} / {b}");
         }
     }
 
@@ -33,7 +33,7 @@ public static partial class TrainerBehaviour
         var definitions = database.kungfuSkillDataBase;
         var probeId = CustomKungfuIdMax;
         while (probeId >= CustomKungfuIdMin && (definitions.ContainsKey(probeId) || FindSavedCustomKungfu(probeId) != null)) probeId--;
-        if (probeId < CustomKungfuIdMin) throw new InvalidOperationException("没有空闲功法 ID 可用于原生验证");
+        if (probeId < CustomKungfuIdMin) throw new InvalidOperationException("게임 기본 검증에 쓸 빈 무공 ID가 없습니다");
         definitions[probeId] = definition;
         try
         {
@@ -46,22 +46,22 @@ public static partial class TrainerBehaviour
                 level.activeTimeLeft = 0f;
                 KungfuSkillRefresh.RefreshSkill(level);
                 if (level.DataBase()?.Pointer != definition.Pointer)
-                    throw new InvalidOperationException("原生等级实例未读取到修改后的定义");
+                    throw new InvalidOperationException("기본 레벨 인스턴스가 수정된 정의를 읽지 못했습니다");
                 var equip = definition.GetSpeEquipData(lv);
-                AssertEffectTable(equip, level.speEquipData, "装备缓存");
-                AssertEffectTable(definition.GetSpeUseData(lv), level.speUseData, "使用缓存");
-                AssertEffectTable(equip, level.GetSpeEquipData(), "未激活装备效果");
+                AssertEffectTable(equip, level.speEquipData, "장비 캐시");
+                AssertEffectTable(definition.GetSpeUseData(lv), level.speUseData, "사용 캐시");
+                AssertEffectTable(equip, level.GetSpeEquipData(), "장비 효과가 활성화되지 않음");
                 var duration = level.GetActiveTime();
                 if (!float.IsFinite(duration) || duration <= 0f || !float.IsFinite(level.MaxPower()) || level.MaxPower() <= 0f)
-                    throw new InvalidOperationException("原生激活或充能参数无效");
+                    throw new InvalidOperationException("기본 활성화 또는 충전 수치가 올바르지 않습니다");
                 level.activeTimeLeft = duration;
-                AssertEffectTable(equip * 2f, level.GetSpeEquipData(), "原生激活装备效果");
+                AssertEffectTable(equip * 2f, level.GetSpeEquipData(), "기본 장비 효과 활성화");
                 // The native caller supplies a negative delta to this method.
                 level.ManageCdTimeLeft(-duration);
-                if (level.activeTimeLeft != 0f) throw new InvalidOperationException("原生激活时间未正常结束");
-                AssertEffectTable(equip, level.GetSpeEquipData(), "原生激活结束恢复");
+                if (level.activeTimeLeft != 0f) throw new InvalidOperationException("기본 활성화 시간이 정상적으로 끝나지 않았습니다");
+                AssertEffectTable(equip, level.GetSpeEquipData(), "기본 활성화 종료 후 복원");
                 foreach (var cost in new[] { level.equipUseSpeAddValue, level.damageUseSpeAddValue, level.selfUseSpeAddValue, level.enemyUseSpeAddValue })
-                    if (!float.IsFinite(cost)) throw new InvalidOperationException("原生效果消耗计算产生非有限数值");
+                    if (!float.IsFinite(cost)) throw new InvalidOperationException("기본 효과 소모 계산에서 유한하지 않은 수치가 나왔습니다");
             }
         }
         finally { definitions.Remove(probeId); }
@@ -92,7 +92,7 @@ public static partial class TrainerBehaviour
                 {
                     var source = OriginalKungfu(database, id)!;
                     _customDraft = new CustomKungfuRecord { Type = source.type, BaseDonorId = id, Name = source.name, Description = source.describe };
-                    if (!ApplyFullKungfuDonor(id, true)) throw new InvalidOperationException("同类模板复制失败");
+                    if (!ApplyFullKungfuDonor(id, true)) throw new InvalidOperationException("같은 종류 템플릿 복사 실패");
                     _customDraft.Id = CustomKungfuIdMax;
                     // Use the actual UI import and record serializer, then alter
                     // every nonzero native effect to verify edits survive reload.
@@ -104,9 +104,9 @@ public static partial class TrainerBehaviour
                     var restored = CloneCustomKungfuRecord(_customDraft);
                     var before = BuildCustomKungfuDefinition(database, _customDraft)!;
                     var after = BuildCustomKungfuDefinition(database, restored)!;
-                    AssertEffectTable(before.upgradeAddData, after.upgradeAddData, "JSON 升级表");
-                    AssertEffectTable(before.equipAddData, after.equipAddData, "JSON 装备表");
-                    AssertEffectTable(before.useAddData, after.useAddData, "JSON 使用表");
+                    AssertEffectTable(before.upgradeAddData, after.upgradeAddData, "JSON 강화표");
+                    AssertEffectTable(before.equipAddData, after.equipAddData, "JSON 장비표");
+                    AssertEffectTable(before.useAddData, after.useAddData, "JSON 사용표");
                     ValidateUtilityNativeDefinition(database, restored, after);
                     report.AppendLine($"PASS type={source.type} id={id} {source.name}");
                     passed++;

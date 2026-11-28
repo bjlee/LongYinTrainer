@@ -20,29 +20,29 @@ public static partial class TrainerBehaviour
 
     private static string CustomEffectRuleDescription(CustomEffectChoice? choice)
     {
-        if (choice == null) return "选中词条后查看原生触发、对象和持续规则；仅显示本类别原版配置中的可选词条。";
+        if (choice == null) return "옵션을 선택하면 기본 발동, 대상, 지속 규칙을 봅니다. 이 분류의 원본 구성에 있는 옵션만 표시합니다.";
         var rule = FindSpeAddDefinition(choice.TypeId);
-        if (rule == null) return "未找到原生规则；保留原有数值格式，不推断触发方式。";
-        var trigger = (int)rule.triggerType switch { 1 => "攻触发", 2 => "守触发", _ => "无攻守标签（依具体效果）" };
+        if (rule == null) return "기본 규칙을 찾지 못했습니다. 기존 수치 형식을 유지하며 발동 방식은 추측하지 않습니다.";
+        var trigger = (int)rule.triggerType switch { 1 => "공격 시 발동", 2 => "방어 시 발동", _ => "공수 표지 없음(효과에 따름)" };
         if (rule.lastTime == 0)
-            return $"{trigger}；非持续状态词条\n数值按原版显示单位编辑；具体属性或效果由原版处理。";
-        var duration = rule.lastTime > 0 ? $"持续参数 {rule.lastTime} 回合" : "动态持续时间（原生规则）";
-        var target = rule.selfBuff ? "触发方自身" : "交互对方（攻守阶段决定）";
-        return $"{trigger}；对象：{target}\n{duration}；{(rule.stackable ? "可叠层" : "不叠层")}；特殊效果仍走专用规则\n这里编辑词条值，非持续时间；冷却、概率判定和到期由原版处理。";
+            return $"{trigger}; 지속 상태가 아닌 옵션\n수치는 원본 표시 단위로 편집하며, 구체적인 속성이나 효과는 원본이 처리합니다.";
+        var duration = rule.lastTime > 0 ? $"지속 {rule.lastTime}턴" : "동적 지속 시간(기본 규칙)";
+        var target = rule.selfBuff ? "발동자 자신" : "상호작용 상대(공수 단계로 결정)";
+        return $"{trigger}; 대상: {target}\n{duration}; {(rule.stackable ? "중첩 가능" : "중첩 불가")}; 특수 효과는 전용 규칙을 따릅니다\n여기서는 옵션 값을 편집하며 지속 시간이 아닙니다. 쿨다운, 확률 판정, 만료는 원본이 처리합니다.";
     }
 
     private static string CustomEffectPlacementDescription(string field, CustomEffectChoice? choice)
     {
         var placement = field switch
         {
-            "upgrade" => "升级效果：升级属性表，不等于持续挂状态。",
-            "equip" => "装备效果：装备后提供词条，按原生条件触发。",
-            "use" when _customDraft?.Type < 3 => "此类使用效果不走攻击功法的通用合并分支，需对照原版配置。",
-            _ => "使用效果：施放阶段提供词条，仍需满足原生触发条件。"
+            "upgrade" => "강화 효과: 강화 속성표이며 지속 상태와는 다릅니다.",
+            "equip" => "장비 효과: 장착 후 옵션을 제공하며 기본 조건에 따라 발동합니다.",
+            "use" when _customDraft?.Type < 3 => "이 종류의 사용 효과는 공격 무공의 공통 병합 분기를 거치지 않으므로 원본 구성과 대조해야 합니다.",
+            _ => "사용 효과: 시전 단계에 옵션을 제공하며 기본 발동 조건을 충족해야 합니다."
         };
         if (choice == null) return placement;
         var database = GameDataController.Instance;
-        if (database?.kungfuSkillDataBase == null) return placement + "\n原版配置尚未加载。";
+        if (database?.kungfuSkillDataBase == null) return placement + "\n원본 구성을 아직 불러오지 않았습니다.";
         // Read immutable donor snapshots, not edited live definitions. Prefer the
         // current category only; never suggest another category as a fallback.
         var same = new List<string>();
@@ -59,7 +59,7 @@ public static partial class TrainerBehaviour
         }
         var samples = same;
         return placement + "\n" + (samples.Count == 0
-            ? "该表未找到原版非零配置示例；不代表已验证可触发。"
-            : "同类原版示例：" + string.Join("、", samples));
+            ? "이 표에서 0이 아닌 원본 구성 예시를 찾지 못했습니다. 발동이 검증되었다는 뜻은 아닙니다."
+            : "같은 종류 원본 예시: " + string.Join("、", samples));
     }
 }

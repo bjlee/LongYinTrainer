@@ -22,7 +22,7 @@ public static partial class TrainerBehaviour
             _loadingTab=_tab; _loadingFrame=Time.frameCount; _loadingPhase=0; _loadingStarted=Time.realtimeSinceStartup;
             _loadingOverlay=UiObject("LoadingPage",_uiContent!.transform,new Vector2(1080,654),Vector2.zero);
             var bg=_loadingOverlay.AddComponent<Image>(); bg.color=PanelPaper;
-            _loadingText=AddText(_loadingOverlay.transform,"正在准备页面…",new Vector2(320,240),new Vector2(440,50),22,TextAnchor.MiddleCenter);
+            _loadingText=AddText(_loadingOverlay.transform,"페이지 준비 중…",new Vector2(320,240),new Vector2(440,50),22,TextAnchor.MiddleCenter);
             var track=UiObject("LoadingTrack",_loadingOverlay.transform,new Vector2(280,4),new Vector2(400,308));
             track.AddComponent<Image>().color=new Color(.2f,.17f,.1f,.25f);
             _loadingBar=UiObject("LoadingSweep",track.transform,new Vector2(70,4),Vector2.zero).AddComponent<Image>();
@@ -33,14 +33,14 @@ public static partial class TrainerBehaviour
         if(Time.frameCount<_loadingFrame+2) return false;
         try {
             if(_tab==2 && _loadingPhase==0) {
-                _loadingText!.text="正在读取物品目录…";
+                _loadingText!.text="물품 목록 읽는 중…";
                 if(Catalog.Count==0 && _catalogSteps==null) _catalogSteps=BuildCatalogSteps().GetEnumerator();
                 if(_catalogSteps!=null && _catalogSteps.MoveNext()) return false;
                 _catalogSteps?.Dispose(); _catalogSteps=null; _loadingPhase=1;
                 return false;
             }
             if(_tab==2 && _loadingPhase==1) {
-                _loadingText!.text="正在准备游戏图标…";
+                _loadingText!.text="게임 아이콘 준비 중…";
                 if(!_runtimeIconsLoaded) RefreshRuntimeIconIndex();
                 _loadingPhase=2; return false;
             }
@@ -48,7 +48,7 @@ public static partial class TrainerBehaviour
         }
         catch(Exception ex) {
             _catalogSteps?.Dispose(); _catalogSteps=null; Catalog.Clear(); _loadingPhase=2;
-            _status="页面准备失败："+ex.Message;
+            _status="페이지 준비 실패: "+ex.Message;
             LongYinTrainerPlugin.Logger.LogError(ex);
             return true;
         }

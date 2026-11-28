@@ -21,7 +21,7 @@ public static partial class TrainerBehaviour
         }
         catch (Exception ex)
         {
-            _customStatus = "功法缓存刷新失败：" + ex.Message;
+            _customStatus = "무공 캐시 새로고침 실패: " + ex.Message;
             LongYinTrainerPlugin.Logger.LogWarning($"Edited kungfu cache refresh failed for hero {hero.heroID}: {ex}");
         }
     }
@@ -69,7 +69,7 @@ public static partial class TrainerBehaviour
         {
             if (!record.EditOriginal) continue;
             if (!IsEditableKungfuRecord(record) || !definitions.ContainsKey(record.Id))
-                throw new InvalidOperationException($"原版功法 ID {record.Id} 不存在");
+                throw new InvalidOperationException($"원본 무공 ID {record.Id}가 없습니다");
             if (OriginalKungfuSources.ContainsKey(record.Id)) continue;
             var snapshot = new KungfuSkillData();
             CopyKungfuDefinition(definitions[record.Id], snapshot);
@@ -115,13 +115,13 @@ public static partial class TrainerBehaviour
         if (definitions == null || !definitions.ContainsKey(record.Id) || definitions[record.Id].type == record.Type) return;
         foreach (var hero in KungfuHeroes())
             if (HasEquippedKungfu(hero, record.Id))
-                throw new InvalidOperationException("更换功法类别前，请先让装备该功法的角色卸下它，再保存并按新类别装备");
+                throw new InvalidOperationException("무공 분류를 바꾸기 전에 이 무공을 장착한 캐릭터가 먼저 해제하게 한 뒤, 저장하고 새 분류로 장착하세요");
     }
 
     private static void LoadOriginalKungfuDraft(int skillId)
     {
-        var database = GameDataController.Instance ?? throw new InvalidOperationException("功法数据库尚未载入");
-        var source = OriginalKungfu(database, skillId) ?? throw new InvalidOperationException("原版功法不存在");
+        var database = GameDataController.Instance ?? throw new InvalidOperationException("무공 데이터베이스를 아직 불러오지 않았습니다");
+        var source = OriginalKungfu(database, skillId) ?? throw new InvalidOperationException("원본 무공이 없습니다");
         var saved = FindSavedCustomKungfu(skillId);
         if (saved?.EditOriginal == true) _customDraft = CloneCustomKungfuRecord(saved);
         else
@@ -132,11 +132,11 @@ public static partial class TrainerBehaviour
             _customDraft.BaseDonorId = skillId;
             _customDraft.Name = source.name;
             _customDraft.Description = source.describe;
-            if (!ApplyFullKungfuDonor(skillId, true)) throw new InvalidOperationException("原版功法模板类别不匹配，未载入");
+            if (!ApplyFullKungfuDonor(skillId, true)) throw new InvalidOperationException("원본 무공 템플릿 분류가 맞지 않아 불러오지 않았습니다");
         }
         _customTab = 0;
         _customEffectEditorField = "";
         _customBasicChoiceField = "";
-        _customStatus = $"已载入原版功法 {source.name}（ID {skillId}）；保存后覆盖该功法，已习得角色会刷新。";
+        _customStatus = $"원본 무공 {source.name}(ID {skillId})을(를) 불러왔습니다. 저장하면 이 무공을 덮어쓰며, 이미 익힌 캐릭터는 새로고침됩니다.";
     }
 }

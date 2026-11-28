@@ -83,25 +83,25 @@ public static partial class TrainerBehaviour
             "spawn coordinates remain within map boundary");
         BuildNativeEventSpawner();
         for(var id=60;id<69;id++) { database.templates[id]=new() {id=id,eventName="Type"+id}; database.bigMapRandomEventID.Add(id); }
-        uiActions["刷新类型"]();
+        uiActions["종류 새로고침"]();
         var retainedSlot=SpawnEventSlots[0];
         var retainedRarity=SpawnRarityLabels[5];
         var retainedObjects=uiObjects;
         _spawnEventRarity=5;
         _spawnEventType=20;
-        uiActions["下一页"]();
+        uiActions["다음 페이지"]();
         Check(_spawnEventPage==1 && uiObjects==retainedObjects && ReferenceEquals(retainedSlot,SpawnEventSlots[0]) &&
             ReferenceEquals(retainedRarity,SpawnRarityLabels[5]) && _spawnEventRarity==5 && _spawnEventType==20,
             "next page reuses all UI objects and retains rarity/type selections");
         SpawnEventSlots[0]!.action();
         Check(_spawnEventType==66, "reused row click resolves current page ID rather than previous page ID");
         Check(!SpawnEventSlots[3]!.gameObject.activeInHierarchy, "last page hides unused rows");
-        uiActions["下一页"]();
+        uiActions["다음 페이지"]();
         Check(_spawnEventPage==1 && uiObjects==retainedObjects, "next at final page is stable");
-        uiActions["上一页"]();
+        uiActions["이전 페이지"]();
         Check(_spawnEventPage==0 && SpawnEventSlots[3]!.gameObject.activeInHierarchy && uiObjects==retainedObjects,
             "previous page restores rows without UI rebuild");
-        uiActions["随机类型"]();
+        uiActions["무작위 종류"]();
         Check(_spawnEventType==null && uiObjects==retainedObjects, "random selection updates in place");
         RunWorldEventTests(Check);
         Console.WriteLine("All event spawning regression checks passed (mock game; native runtime requires in-game verification).");
@@ -171,10 +171,10 @@ public static partial class TrainerBehaviour
         SpawnMapEventNearPlayer();
         check(world.BigMapRandomEventDatas.Last().Name()=="B" && world.WorldEventDatas.Count==worldCount,
             "normal event with overlapping ID still resolves original template and stays out of world registry");
-        uiActions["刷新类型"]();
+        uiActions["종류 새로고침"]();
         _spawnEventType=~20;
         RefreshSpawnEventPage();
-        check(_spawnTypeLabel!.text.Contains("武学奇才") && _spawnTypeLabel.text.Contains("江湖传闻"),
+        check(_spawnTypeLabel!.text.Contains("武学奇才") && _spawnTypeLabel.text.Contains("강호 소문"),
             "world selection label uses correct namespace");
     }
 }

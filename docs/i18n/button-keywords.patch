@@ -1,0 +1,17 @@
+--- a/LongYinTrainer/LongYinTrainer.cs
++++ b/LongYinTrainer/LongYinTrainer.cs
+@@ -5203,10 +5203,11 @@
+ 
+     private static Color ButtonSurface(string label)
+     {
+-        if (label.StartsWith("삭제", StringComparison.Ordinal) || label.StartsWith("모두 비우기", StringComparison.Ordinal))
++        // Korean labels put the verb last ("현재 무공 삭제"), so match keywords anywhere in the label.
++        if (label.Contains("삭제", StringComparison.Ordinal) || label.Contains("모두 비우기", StringComparison.Ordinal))
+             return new Color32(101, 58, 51, 255);
+-        if (label.StartsWith("적용", StringComparison.Ordinal) || label.StartsWith("쓰기", StringComparison.Ordinal) ||
+-            label.StartsWith("저장", StringComparison.Ordinal) || label.StartsWith("에 추가", StringComparison.Ordinal))
++        if (label.Contains("적용", StringComparison.Ordinal) || label.Contains("쓰기", StringComparison.Ordinal) ||
++            label.Contains("저장", StringComparison.Ordinal) || label.Contains("에 추가", StringComparison.Ordinal))
+             return new Color32(85, 72, 55, 255);
+         return ControlInk;
+     }

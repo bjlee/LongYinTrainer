@@ -55,3 +55,5 @@ dist/
 !CharacterAudit/
 !CharacterAudit/*.cs
 !CharacterAudit/*.csproj
+docs/i18n/untranslated.tsv
+__pycache__/

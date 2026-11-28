@@ -20,8 +20,8 @@ public static partial class TrainerBehaviour
         ? RandomEventController.Instance?.GetWorldEventDataBase(~key) : null;
     private static EventData? SpawnEventTemplate(int key) => key < 0
         ? SpawnWorldDefinition(key)?.eventData : RandomEventController.Instance?.GetRandomEventDataBase(key);
-    private static string SpawnEventLabel(int key) => (SpawnEventTemplate(key)?.Name() ?? "类型不可用") +
-        (key < 0 ? "  [江湖传闻]" : "  [" + key + "]");
+    private static string SpawnEventLabel(int key) => (SpawnEventTemplate(key)?.Name() ?? "사용할 수 없는 종류") +
+        (key < 0 ? "  [강호 소문]" : "  [" + key + "]");
 
     private static void RefreshSpawnEventPage(int delta = 0)
     {
@@ -29,10 +29,10 @@ public static partial class TrainerBehaviour
         _spawnEventPage = Math.Clamp(_spawnEventPage + delta, 0, pages - 1);
         if (_spawnEventType.HasValue && !_spawnEventIds.Contains(_spawnEventType.Value)) _spawnEventType = null;
         if (_spawnTypeLabel != null)
-            _spawnTypeLabel.text = "当前类型：" + (_spawnEventType.HasValue
-                ? SpawnEventLabel(_spawnEventType.Value) : "随机类型");
+            _spawnTypeLabel.text = "현재 종류: " + (_spawnEventType.HasValue
+                ? SpawnEventLabel(_spawnEventType.Value) : "무작위 종류");
         if (_spawnPageLabel != null)
-            _spawnPageLabel.text = $"{_spawnEventPage + 1} / {pages} 页 · {_spawnEventIds.Count} 种大地图奇遇";
+            _spawnPageLabel.text = $"{_spawnEventPage + 1} / {pages} 페이지 · 대지도 기연 {_spawnEventIds.Count}종";
         for (var row = 0; row < SpawnEventPageSize; row++)
         {
             var slot = SpawnEventSlots[row];
@@ -94,8 +94,8 @@ public static partial class TrainerBehaviour
     private static void BuildNativeEventSpawner()
     {
         var p = NativePageParent;
-        AddText(p, "大地图 · 手动生成奇遇", Vector2.zero, new Vector2(720, 36), 22);
-        AddText(p, "选择品质", new Vector2(0, 48), new Vector2(160, 30), 18);
+        AddText(p, "대지도 · 기연 직접 생성", Vector2.zero, new Vector2(720, 36), 22);
+        AddText(p, "품질 선택", new Vector2(0, 48), new Vector2(160, 30), 18);
         for (var i = 0; i <= 5; i++)
         {
             var rarity = i;
@@ -107,7 +107,7 @@ public static partial class TrainerBehaviour
         RefreshSpawnRarityLabels();
         _spawnEventIds = SpawnableMapEventIds();
         _spawnTypeLabel = AddText(p, "", new Vector2(0, 140), new Vector2(750, 34), 18);
-        AddButton(p, "随机类型", new Vector2(820, 140), new Vector2(225, 36), () =>
+        AddButton(p, "무작위 종류", new Vector2(820, 140), new Vector2(225, 36), () =>
         { _spawnEventType = null; RefreshSpawnEventPage(); });
 
         // Fixed slots retain their objects and click handlers across pagination.
@@ -119,16 +119,16 @@ public static partial class TrainerBehaviour
                 new Vector2((row % 2) * 540, 188 + (row / 2) * 48), new Vector2(505, 40), () =>
                 SelectSpawnEventSlot(slot));
         }
-        AddButton(p, "上一页", new Vector2(0, 394), new Vector2(160, 36), () =>
+        AddButton(p, "이전 페이지", new Vector2(0, 394), new Vector2(160, 36), () =>
             RefreshSpawnEventPage(-1));
         _spawnPageLabel = AddText(p, "",
             new Vector2(180, 394), new Vector2(470, 36), 16);
-        AddButton(p, "下一页", new Vector2(690, 394), new Vector2(160, 36), () =>
+        AddButton(p, "다음 페이지", new Vector2(690, 394), new Vector2(160, 36), () =>
             RefreshSpawnEventPage(1));
-        AddButton(p, "刷新类型", new Vector2(880, 394), new Vector2(165, 36), () =>
+        AddButton(p, "종류 새로고침", new Vector2(880, 394), new Vector2(165, 36), () =>
         { _spawnEventIds = SpawnableMapEventIds(); RefreshSpawnEventPage(); });
-        AddButton(p, "在主角身边生成一个", new Vector2(0, 451), new Vector2(1045, 44), SpawnMapEventNearPlayer);
-        AddText(p, "包含武学奇才等世界奇遇及大地图中元鬼市，手动生成不受出现日期限制；不含城镇或门派内部事件。\n品质同时决定难度；奖励按原版规则结算。世界奇遇同步登记江湖传闻，保留原版有效期。",
+        AddButton(p, "주인공 곁에 하나 생성", new Vector2(0, 451), new Vector2(1045, 44), SpawnMapEventNearPlayer);
+        AddText(p, "무학 기재 같은 세계 기연과 대지도의 중원귀시를 포함하며, 직접 생성하면 출현 날짜 제한을 받지 않습니다. 도시나 문파 내부 사건은 포함하지 않습니다.\n품질이 난이도도 함께 정하며, 보상은 원래 규칙대로 정산됩니다. 세계 기연은 강호 소문에도 함께 등록되며 원래 유효 기간을 유지합니다.",
             new Vector2(0, 514), new Vector2(1045, 100), 16);
         RefreshSpawnEventPage();
     }
@@ -147,30 +147,30 @@ public static partial class TrainerBehaviour
             var player = world?.Player();
             map = BigMapController.Instance;
             if (world == null || player?.bigMapPos == null)
-                throw new InvalidOperationException("请先载入存档。");
+                throw new InvalidOperationException("먼저 세이브를 불러오세요.");
             if (map == null || !map.gameObject.activeInHierarchy || map.bigmapRoot == null ||
                 !map.bigmapRoot.activeInHierarchy || map.playerArmy == null || !map.playerArmy.activeInHierarchy ||
                 player.atAreaID >= 0 || BattleController.Instance?.BattleObj?.activeInHierarchy == true)
-                throw new InvalidOperationException("请离开城市、结束战斗，回到大地图行走状态。");
+                throw new InvalidOperationException("도시를 떠나고 전투를 끝낸 뒤 대지도를 걷는 상태로 돌아가세요.");
 
             var ids = SpawnableMapEventIds();
-            if (ids.Count == 0) throw new InvalidOperationException("大地图奇遇类型尚未载入，请刷新类型。");
+            if (ids.Count == 0) throw new InvalidOperationException("대지도 기연 종류를 아직 불러오지 않았습니다. 종류를 새로고침하세요.");
             var id = _spawnEventType ?? ids[UnityEngine.Random.Range(0, ids.Count)];
-            if (!ids.Contains(id)) throw new InvalidOperationException("所选类型已不可用，请刷新类型。");
+            if (!ids.Contains(id)) throw new InvalidOperationException("선택한 종류를 더 이상 쓸 수 없습니다. 종류를 새로고침하세요.");
             var definition = SpawnWorldDefinition(id);
             var template = SpawnEventTemplate(id)
-                ?? throw new InvalidOperationException("所选奇遇模板已不可用，请刷新类型。");
+                ?? throw new InvalidOperationException("선택한 기연 템플릿을 더 이상 쓸 수 없습니다. 종류를 새로고침하세요.");
             var worldController = id < 0 ? WorldEventController.Instance : null;
             if (id < 0)
             {
                 if (definition == null || worldController == null)
-                    throw new InvalidOperationException("世界奇遇控制器尚未准备好。");
-                worldEvents = world.WorldEventDatas ?? throw new InvalidOperationException("江湖传闻列表不可用。");
+                    throw new InvalidOperationException("세계 기연 컨트롤러가 아직 준비되지 않았습니다.");
+                worldEvents = world.WorldEventDatas ?? throw new InvalidOperationException("강호 소문 목록을 쓸 수 없습니다.");
             }
             created = template.Clone().Cast<EventData>();
             created.difficulty = _spawnEventRarity * 2f;
             if (created.GetEventRareLv() != _spawnEventRarity)
-                throw new InvalidOperationException("当前游戏的品质计算规则已变化，未生成奇遇。");
+                throw new InvalidOperationException("현재 게임의 품질 계산 규칙이 바뀌어 기연을 생성하지 않았습니다.");
 
             // Clone preserves plot payload and native expiry. Only initialize the
             // occurrence state, difficulty and position for this new instance.
@@ -198,7 +198,7 @@ public static partial class TrainerBehaviour
             // Native GetPosText indexes DirectionName even for a vague location.
             created.nearAreaDirection = 0;
             created.inaccuracyPosText = true;
-            events = world.BigMapRandomEventDatas ?? throw new InvalidOperationException("存档奇遇列表不可用。");
+            events = world.BigMapRandomEventDatas ?? throw new InvalidOperationException("세이브의 기연 목록을 쓸 수 없습니다.");
             events.Add(created);
             registered = true;
             map.CreateBigMapRandomEventIcon(created);
@@ -212,9 +212,9 @@ public static partial class TrainerBehaviour
                 found = true;
                 break;
             }
-            if (!found) throw new InvalidOperationException("原生奇遇图标未创建成功。");
+            if (!found) throw new InvalidOperationException("게임 기본 기연 아이콘을 만들지 못했습니다.");
             if (definition != null) worldController!.AddNewWorldEvent(created);
-            _status = $"已在主角附近生成：{created.Name()} · {RarityName(_spawnEventRarity)}。收起面板后点击奇遇图标前往。";
+            _status = $"주인공 근처에 생성했습니다: {created.Name()} · {RarityName(_spawnEventRarity)}. 패널을 접은 뒤 기연 아이콘을 눌러 이동하세요.";
             LongYinTrainerPlugin.Logger.LogInfo($"Spawned map event id={id}, rarity={created.GetEventRareLv()}, difficulty={created.difficulty}, pos={created.bigMapPos.x},{created.bigMapPos.y}");
         }
         catch (Exception ex)
@@ -234,7 +234,7 @@ public static partial class TrainerBehaviour
                         UnityEngine.Object.Destroy(icon);
                     }
             }
-            _status = "生成奇遇失败：" + ex.Message;
+            _status = "기연 생성 실패: " + ex.Message;
             LongYinTrainerPlugin.Logger.LogWarning("Map event spawn: " + ex);
         }
     }
